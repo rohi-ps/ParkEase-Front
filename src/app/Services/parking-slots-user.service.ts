@@ -11,10 +11,6 @@ export class ParkingSlotsUserService {
   asciiValue = 65;
   tCount = 0;
 
-  
-
-
-
   constructor() {
     const slots = localStorage.getItem('slots');
     const rows = localStorage.getItem('rows');

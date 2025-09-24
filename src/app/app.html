@@ -2,7 +2,7 @@
   <app-homepage></app-homepage>
 </div> -->
 
-<div class="app-container">
+ <div class="app-container">
   <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
@@ -23,7 +23,6 @@
     <div *ngIf="isDisplay === 'Billing & Payment'">
       <app-billing></app-billing>
     </div> 
-    
   </div> 
 </div>
 

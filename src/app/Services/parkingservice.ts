@@ -1,72 +1,31 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, timer, combineLatest  } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Invoice, ParkingRecord } from '../model/billing';
 
-export interface ParkingRecord {
-  id: number;
-  vehicleNumber: string;
-  vehicleType: '4W' | '2W';
-  customerName: string;
-  slotId: string;
-  entryTime: Date;
-  exitTime: Date | null;
-  status: 'Parked' | 'Completed' | 'Reserved';
-}
-export interface Invoice {
-  invoiceNumber: string;
-  parkingRecordId: number;
-  customerName: string;
-  vehicleNumber: string;
-  slotId: string;
-  durationMinutes: number;
-  rate: number; 
-  subtotal: number;
-  tax: number;
-  total: number;
-  paymentStatus: 'Paid' | 'Pending';
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class Parkingservice {
-  private readonly _parkingRecords = new BehaviorSubject<ParkingRecord[]>([]);
-  public readonly parkingRecords$: Observable<ParkingRecord[]> = this._parkingRecords.asObservable();
-
-  private readonly _invoices = new BehaviorSubject<Invoice[]>([]);
-  public readonly invoices$: Observable<Invoice[]> = this._invoices.asObservable();
+  // Use simple private arrays for data storage
+  private _parkingRecords: ParkingRecord[] = [];
+  private _invoices: Invoice[] = [];
   
   private nextId = 1;
   private nextInvoiceId = 1;
 
-  constructor() {
-    
-    const minuteTimer$ = timer(0, 60000);
-    this.parkingRecords$ = combineLatest([
-      this._parkingRecords.asObservable(),
-      minuteTimer$                     
-    ]).pipe(
-      map(([records, _tick]) => records)
-    );
-
-    const initialData: ParkingRecord[] = [];
-    this._parkingRecords.next(initialData);
-
+  constructor() {}
+  
+  public getParkingRecords(): ParkingRecord[] {
+    return [...this._parkingRecords]; // Return a copy to prevent mutation
   }
 
-  public get totalRevenue$(): Observable<number> {
-    return this.invoices$.pipe(
-      map(invoices => invoices
-        
-        .filter(inv => inv.paymentStatus === 'Paid')
-       
-        .reduce((sum, inv) => sum + inv.total, 0)
-      )
-    );
+  public getInvoices(): Invoice[] {
+    return [...this._invoices]; // Return a copy
   }
 
-
-private generateInvoice(record: ParkingRecord): void {
+  private generateInvoice(record: ParkingRecord): void {
     if (!record.exitTime) return;
 
     const durationMs = new Date(record.exitTime).getTime() - new Date(record.entryTime).getTime();
@@ -78,77 +37,54 @@ private generateInvoice(record: ParkingRecord): void {
     const total = subtotal + tax;
 
     const newInvoice: Invoice = {
-      invoiceNumber: `INV-${String(this.nextInvoiceId++).padStart(3, '0')}`,
-      parkingRecordId: record.id,
-      customerName: record.customerName,
-      vehicleNumber: record.vehicleNumber,
-      slotId: record.slotId,
-      durationMinutes,
-      rate: ratePerMinute,
-      subtotal,
-      tax,
-      total,
-      paymentStatus: 'Pending', 
+        invoiceNumber: `INV-${String(this.nextInvoiceId++).padStart(3, '0')}`,
+        parkingRecordId: record.id,
+        customerName: record.customerName,
+        vehicleNumber: record.vehicleNumber,
+        slotId: record.slotId,
+        durationMinutes,
+        rate: ratePerMinute,
+        subtotal,
+        tax,
+        total,
+        paymentStatus: 'Pending',
     };
 
-    const currentInvoices = this._invoices.getValue();
-    this._invoices.next([...currentInvoices, newInvoice]);
+    this._invoices.push(newInvoice);
   }
 
-
   markAsPaid(invoiceNumber: string): void {
-    const currentInvoices = this._invoices.getValue();
-    const invoiceToPay = currentInvoices.find(inv => inv.invoiceNumber === invoiceNumber);
-
+    const invoiceToPay = this._invoices.find(inv => inv.invoiceNumber === invoiceNumber);
     if (invoiceToPay) {
       invoiceToPay.paymentStatus = 'Paid';
-      this._invoices.next([...currentInvoices]);
     }
   }
 
-
-  
   logEntry(entryData: { vehicleNumber: string; vehicleType: '4W' | '2W'; customerName: string; slotId: string; }): void {
-    const currentRecords = this._parkingRecords.getValue();
-
     const newRecord: ParkingRecord = {
       id: this.nextId++,
-      vehicleNumber: entryData.vehicleNumber,
-      vehicleType: entryData.vehicleType,
-      customerName: entryData.customerName,
-      slotId: entryData.slotId,
+      ...entryData,
       entryTime: new Date(),
       exitTime: null,
       status: 'Parked'
     };
 
-    this._parkingRecords.next([...currentRecords, newRecord]);
+    this._parkingRecords.push(newRecord);
     console.log('Service: Vehicle Entered:', newRecord);
   }
 
-
   logExit(vehicleNumber: string): void {
-    const currentRecords = this._parkingRecords.getValue();
-    const recordToUpdate = currentRecords.find(
+    const recordToUpdate = this._parkingRecords.find(
       record => record.vehicleNumber === vehicleNumber && record.status === 'Parked'
     );
 
     if (recordToUpdate) {
       recordToUpdate.status = 'Completed';
       recordToUpdate.exitTime = new Date();
-      this._parkingRecords.next([...currentRecords]);
       this.generateInvoice(recordToUpdate);
     }
   }
-
-  calculateDuration(entryTime: Date, exitTime: Date | null): string {
-    const endTime = exitTime ? new Date(exitTime) : new Date();
-    const startTime = new Date(entryTime);
-    let diffMs = endTime.getTime() - startTime.getTime();
-    if (diffMs < 0) return '0m';
-    const totalMinutes = Math.floor(diffMs / 60000);
-    return this.formatDurationFromMinutes(totalMinutes);
-  }
+  
   formatDurationFromMinutes(totalMinutes: number): string {
     if (totalMinutes < 0) return '0m';
     const hours = Math.floor(totalMinutes / 60);
@@ -158,7 +94,6 @@ private generateInvoice(record: ParkingRecord): void {
     }
     return `${minutes}m`;
   }
-
   
   
 }
