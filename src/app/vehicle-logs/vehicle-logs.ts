@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Subscription , Observable } from 'rxjs';
 import { Parkingservice } from '../Services/parkingservice';
-import { ParkingRecord } from '../model/parkingRecords';
-
+import { ParkingRecord } from '../model/billing';
 @Component({
   selector: 'app-vehicle-logs',
   standalone: true, 

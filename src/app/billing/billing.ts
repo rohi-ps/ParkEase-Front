@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Parkingservice } from "../Services/parkingservice";
-import { Invoice } from '../model/invoices';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Parkingservice } from '../Services/parkingservice';
+import { Invoice } from '../model/billing';
+
 @Component({
   selector: 'app-billing',
   standalone: true, 
