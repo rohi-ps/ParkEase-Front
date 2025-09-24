@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ParkingSlot } from '../parking-slots/parking-slots-module';
+import { ParkingSlot } from '../model/parking-slots-module';
 
 @Injectable({
   providedIn: 'root'
