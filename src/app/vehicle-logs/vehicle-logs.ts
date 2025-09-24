@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription , Observable } from 'rxjs';
@@ -11,33 +11,18 @@ import { ParkingRecord } from '../model/billing';
   templateUrl: './vehicle-logs.html',
   styleUrls: ['./vehicle-logs.css']
 })
-export class VehicleLogs implements OnInit, OnDestroy {
+export class VehicleLogs implements OnInit {
   
-
   public parkingRecords: ParkingRecord[] = [];
-  private recordsSubscription: Subscription | undefined;
-  private timer:any;
-  public totalRevenue$!: Observable<number>;
-
-  constructor(public parkingService: Parkingservice) {
-    this.totalRevenue$ = this.parkingService.totalRevenue$;
-
-  }
+  constructor(public parkingService: Parkingservice) {}
 
   ngOnInit() {
-    this.timer = setInterval(() => {},60000)
-    this.recordsSubscription = this.parkingService.parkingRecords$.subscribe(records => {
-      this.parkingRecords = records;
-    });
+    // Load the initial data when the component loads
+    this.loadData();
   }
 
-  ngOnDestroy() {
-    if(this.timer){
-      clearInterval(this.timer);
-    }
-    if (this.recordsSubscription) {
-      this.recordsSubscription.unsubscribe();
-    }
+  private loadData(): void {
+    this.parkingRecords = this.parkingService.getParkingRecords(); 
   }
 
   public get parkingCount(): number {
@@ -57,7 +42,6 @@ export class VehicleLogs implements OnInit, OnDestroy {
     }).length;
   }
 
-
   logEntry(form: NgForm): void {
     if (form.invalid) {
       return;
@@ -65,6 +49,8 @@ export class VehicleLogs implements OnInit, OnDestroy {
     
     this.parkingService.logEntry(form.value);
     form.reset();
+    
+    this.loadData();   // Manually refresh the data after the change
   }
 
   logExit(form: NgForm): void {
@@ -72,10 +58,11 @@ export class VehicleLogs implements OnInit, OnDestroy {
     const selectedVehicleNumber = form.value.selectedVehicleNumber;
     this.parkingService.logExit(selectedVehicleNumber);
     form.resetForm();
+    this.loadData();
   }
   
   markAsExitedFromTable(vehicleNumber: string): void {
     this.parkingService.logExit(vehicleNumber);
+    this.loadData();
   }
-
 }

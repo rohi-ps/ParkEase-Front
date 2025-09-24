@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,41 +7,40 @@ import { Invoice } from '../model/billing';
 
 @Component({
   selector: 'app-billing',
+  standalone: true, 
   imports: [CommonModule],
   templateUrl: './billing.html',
   styleUrl: './billing.css'
 })
-export class Billing {
-   
-  public invoices$: Observable<Invoice[]>;
-  public totalRevenue$: Observable<number>;
-  public pendingPayments$: Observable<number>;
-  public totalInvoices$: Observable<number>;
+export class Billing implements OnInit {
+    
+  public invoices: Invoice[] = [];
+  public totalRevenue: number = 0;
+  public pendingPayments: number = 0;
+  public totalInvoices: number = 0;
 
-  constructor(public parkingService: Parkingservice) {
-    this.invoices$ = this.parkingService.invoices$;
+  constructor(public parkingService: Parkingservice) {}
 
-    this.totalRevenue$ = this.invoices$.pipe(
-      map(invoices => invoices
-        .filter(inv => inv.paymentStatus === 'Paid')
-        .reduce((sum, inv) => sum + inv.total, 0)
-      )
-    );
+  ngOnInit(): void {
+    this.loadData();
+  }
 
-    this.pendingPayments$ = this.invoices$.pipe(
-      map(invoices => invoices
-        .filter(inv => inv.paymentStatus === 'Pending')
-        .reduce((sum, inv) => sum + inv.total, 0)
-      )
-    );
+  private loadData(): void {
+    this.invoices = this.parkingService.getInvoices();
 
-    this.totalInvoices$ = this.invoices$.pipe(
-      map(invoices => invoices.length)
-    );
+    this.totalRevenue = this.invoices
+      .filter(inv => inv.paymentStatus === 'Paid')
+      .reduce((sum, inv) => sum + inv.total, 0);
+
+    this.pendingPayments = this.invoices
+      .filter(inv => inv.paymentStatus === 'Pending')
+      .reduce((sum, inv) => sum + inv.total, 0);
+
+    this.totalInvoices = this.invoices.length;
   }
 
   payInvoice(invoiceNumber: string): void {
     this.parkingService.markAsPaid(invoiceNumber);
+    this.loadData();
   }
-
 }
