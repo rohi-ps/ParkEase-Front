@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ParkingSlotsUserService } from './parking-slots-user.service';
-import { ParkingSlot } from '../parking-slots/parking-slots-module';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
+import { ParkingSlot } from '../model/parking-slots-module';
 
 
 @Component({
