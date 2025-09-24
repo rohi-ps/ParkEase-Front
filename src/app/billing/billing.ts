@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Parkingservice,Invoice } from "../Services/parkingservice";
+import { Parkingservice } from '../Services/parkingservice';
+import { Invoice } from '../model/billing';
+
 @Component({
   selector: 'app-billing',
   imports: [CommonModule],
