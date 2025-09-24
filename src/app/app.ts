@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [Homepage, Reservation, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, VehicleLogs, Billing, ParkingSlots],
+  imports: [Homepage,  CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
