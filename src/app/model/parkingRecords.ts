@@ -1,0 +1,10 @@
+export interface ParkingRecord {
+  id: number;
+  vehicleNumber: string;
+  vehicleType: '4W' | '2W';
+  customerName: string;
+  slotId: string;
+  entryTime: Date;
+  exitTime: Date | null;
+  status: 'Parked' | 'Completed' | 'Reserved';
+}
