@@ -1,0 +1,39 @@
+<header>
+  <div class="title">
+    <h2>Welcome back, John Doe!</h2>
+  <p>Here's your parking overview for today</p>
+  </div>
+
+  <div class="slotfinder">
+    <button (click)="createNewParking()">+ New Parking</button>
+  </div>
+</header>
+<hr>
+
+<app-summary-card 
+ [slotNumber]="'A-15'"
+        [vehicleNumber]="'ABC-123'"
+        [duration]="'2h 15m'"
+        [estimatedCost]="'$11.25'"
+        (extendParking)="handleExtendParking()"
+        (endParking)="handleEndParking()"
+        ></app-summary-card>
+
+
+
+<!-- <app-dashboard-stats
+  [thisMonthSessions]="55"
+  [totalSpent]="'$210.50'"
+  [avgDuration]="'2h 30m'"
+  [favoriteSlot]="'B-05'"
+  ></app-dashboard-stats> -->
+
+  <app-dashboard-stats></app-dashboard-stats>
+
+<app-recent-activity  [activities]="myActivityData"></app-recent-activity>
+
+<app-parking-status
+  [availableSlots]="data"
+  [occupiedSlots]="data"
+  [reservedSlots]="data"
+></app-parking-status>

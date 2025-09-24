@@ -1,0 +1,27 @@
+import { Component, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+
+@Component({
+  selector: 'app-sidenav',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './sidenav.html',
+  styleUrls: ['./sidenav.css']
+})
+export class SidenavComponent {
+  isOpen = true; // Initial state is open
+
+  @Output() toggleEvent = new EventEmitter<boolean>();
+  @Output() items = new EventEmitter();
+
+  toggle() {
+    this.isOpen = !this.isOpen;
+    this.toggleEvent.emit(this.isOpen);
+  }
+
+  selectLink( item : string){
+    // console.log(item);
+    this.items.emit(item);
+  }
+}

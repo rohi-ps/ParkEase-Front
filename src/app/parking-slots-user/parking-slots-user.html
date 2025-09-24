@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="container2">
+    <h2><i class="fa-solid fa-magnifying-glass" style="color: #74c0fc"></i> Find Parking</h2>
+    <p>Search and book available parking slots near you</p>
+    <!-- <small>Available slots = {{tCount}}</small> -->
+  </div>
+  <hr />
+  <br />
+  <!-- <button (click)="createSlots()" class="btn btn-create">Create Slot</button>
+  <button (click)="refreshSlots()" class="btn btn-refresh">Remove Slot</button>  -->
+  <div class="legend">
+    <div class="available legend-box"></div>
+    Available
+    <div class="occupied legend-box"></div>
+    Occupied
+  </div>
+  <br />
+  <div class="parking-slots-container">
+    <div
+      *ngFor="let slot of slots"
+      class="parking-slot"
+      [ngClass]="slot.status"
+      (mouseenter)="showInfo(slot)"
+      (mouseleave)="hideInfo()"
+      (click)="toggleSlot(slot)"
+    >
+      <!-- {{ slot.id }} -->
+      <i class="fa-solid fa-p fa-xl"></i>
+
+      <div *ngIf="hoveredSlot === slot" class="slot-info">
+        <p>Id : {{ slot.id }}</p>
+        <p>Type : {{ slot.vehicleType }}</p>
+        <p>Availability : {{ slot.status }}</p>
+        <div class="">
+          <button class="btn btn1" (click)="onBook()">BOOK NOW</button>
+          <button class="btn btn2" (click)="onReserve()">RESERVE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

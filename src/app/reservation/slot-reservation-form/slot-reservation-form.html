@@ -1,0 +1,60 @@
+
+<div class="container">
+  <div class="heading">
+    <form #slotreserve="ngForm" (ngSubmit)="onSubmit(slotreserve)">
+      <div class="form-group">
+        <div class="form-row">
+          <div class="form-col">
+            <label>Slot Id</label>
+            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" required>
+            <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
+          </div>
+          <div class="form-col">
+            <label>Vehicle Number</label>
+            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" required>
+            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col style=flex: 1;">
+            <label>Vehicle Type</label>
+            <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" required>
+              <option value="">--Select--</option>
+              <option value="2W"><i class="fas fa-motorcycle"></i>2W</option>
+              <option value="4W"><i class="fas fa-car"></i>4W</option>
+            </select>
+            <div class="text-danger" *ngIf="vehicletypes.touched && vehicletypes.invalid">Vehicle Type required</div>
+          </div>
+          <div class="form-col">
+            <label>Entry Date</label>
+            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" [min]="minDate" required>
+            <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Entry Time</label>
+            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.EntryTime" required>
+            <div class="text-danger" *ngIf="entrytime.touched && entrytime.invalid">Entry Time required</div>
+          </div>
+          <div class="form-col">
+            <label>Exit Date</label>
+            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate" [min]="minDate" (change)="checkDateDifference()" required>
+            <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>Exit Time</label>
+            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime" (change)="checkTimeDifference()" required>
+            <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
+          </div>
+        </div>
+        <div class="button1">
+          <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="slotreserve.invalid" data-bs-dismiss="modal">Create Reservation</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> 

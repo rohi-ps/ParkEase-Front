@@ -1,0 +1,27 @@
+import { Component, OnInit , Input} from '@angular/core';
+
+@Component({
+  selector: 'app-dashboard-stats',
+  imports: [],
+  templateUrl: './dashboard-stats.html',
+  styleUrl: './dashboard-stats.css'
+})
+export class DashboardStats implements OnInit{
+   // Inputs to receive data from a parent component
+  @Input() thisMonthSessions: number = 0;
+  @Input() totalSpent: string = '$0.00';
+  @Input() avgDuration: string = '0h 0m';
+  @Input() favoriteSlot: string = 'N/A';
+
+  constructor() { }
+
+  ngOnInit(): void {
+    // You can also add some default or mock data here if needed
+    if (this.thisMonthSessions === 0) {
+      this.thisMonthSessions = 23;
+      this.totalSpent = '$156.8';
+      this.avgDuration = '1h 45m';
+      this.favoriteSlot = 'A-15';
+    }
+  }
+}

@@ -1,0 +1,165 @@
+.container {
+
+  text-align: center;
+
+  font-family: Arial, sans-serif;
+
+}
+
+
+.btn {
+
+  margin: 5px;
+
+  padding: 8px 16px;
+
+  border: none;
+
+  cursor: pointer;
+
+  border-radius: 4px;
+
+}
+
+.btn-create {
+
+  background-color: #007bff;
+
+  color: white;
+
+}
+
+.btn-refresh {
+
+  background-color: #ff2020;
+  color: white;
+
+}
+
+/* .grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(7, 60px);
+
+  gap: 10px;
+
+  justify-content: center;
+
+  margin-top: 20px;
+
+} */
+
+/* .slot {
+
+  width: 60px;
+
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-weight: bold;
+
+  color: white;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+} */
+
+.available {
+  background-image: url("../assests/square-parking-regular-full.svg");
+  background-color: #28a745; 
+  /* fill: #28a745; */
+
+}
+
+.occupied {
+  background: url("../assests/square-parking-regular-full.svg");
+  background-color: #dc3545; 
+
+}
+
+.legend {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 20px;
+
+  gap: 20px;
+
+  align-items: center;
+
+}
+
+.legend-box {
+
+  width: 20px;
+
+  height: 20px;
+
+  display: inline-block;
+
+  margin-right: 5px;
+
+}
+
+.legend .available {
+
+  background: url("../assests/square-parking-regular-full.svg");
+  background-color: #28a745;
+}
+
+.legend .occupied {
+  background: url("../assests/square-parking-regular-full.svg");
+  background-color: #dc3545;
+
+}
+ 
+
+.slot-info {
+  position: absolute;
+  bottom: 110%; /* Position the pop-up above the slot */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.parking-slots-container {
+  display: flex;
+  /* flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: repeat(10, 60px);
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid black; */
+  /* padding: 10px; */
+}
+
+.parking-slot {
+  position: relative;
+  width: 50px;
+  height: 60px;
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  /* background-color: #28a745;  */
+}

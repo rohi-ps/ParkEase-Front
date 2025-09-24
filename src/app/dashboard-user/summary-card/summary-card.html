@@ -1,0 +1,29 @@
+<div class="parking-summary-card">
+    <div class="header">
+       
+           <span>Currently Parked</span>
+    </div>
+    <div class="details-grid">
+        <div class="detail-item">
+            <div class="label">Slot Number</div>
+            <div class="value">{{ slotNumber }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Vehicle</div>
+            <div class="value">{{ vehicleNumber }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Duration</div>
+            <div class="value duration">{{ duration }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Estimated Cost</div>
+            <div class="value cost">{{ estimatedCost }}</div>
+        </div>
+    </div>
+
+    <div class="actions">
+    <!-- <button class="btn extend-btn" (click)="onExtendParking()">Extend Parking</button> -->
+    <button class="btn end-btn" (click)="onEndParking()">End Parking</button>
+  </div>
+</div>

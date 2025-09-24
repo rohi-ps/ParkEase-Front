@@ -1,0 +1,313 @@
+<!-- Header Component -->
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center p-3 header-component">
+    <div>
+      <h3 class="mb-1">Entry & Exit Logging</h3>
+      <p class="text-muted mb-0">Track vehicle entries, exits, and parking duration</p>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#vehicleEntryModal"
+      >
+        Vehicle Entry
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#vehicleExitModal"
+      >
+        Vehicle Exit
+      </button>
+    </div>
+  </div>
+</div>
+<hr />
+
+<!-- Vehicle Entry Modal -->
+<div
+  class="modal fade"
+  id="vehicleEntryModal"
+  tabindex="-1"
+  aria-labelledby="vehicleEntryModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form #entryForm="ngForm" (ngSubmit)="logEntry(entryForm)">
+        <div class="modal-header">
+          <h5 class="modal-title" id="vehicleEntryModalLabel">Log Vehicle Entry</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="customerName" class="form-label">Customer Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="customerName"
+              name="customerName"
+              placeholder="Enter customer name"
+              ngModel
+              #name="ngModel"
+              required
+              minlength="3"
+            />
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger mt-1">
+              <small *ngIf="name.errors?.['required']">Customer name is required.</small>
+              <small *ngIf="name.errors?.['minlength']"
+                >Name must be at least 3 characters long.</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="vehicleNumber" class="form-label">Vehicle Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="vehicleNumber"
+              name="vehicleNumber"
+              placeholder="e.g., MH12GH3456"
+              ngModel
+              #vehicleNum="ngModel"
+              required
+              pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$"
+            />
+            <div
+              *ngIf="vehicleNum.invalid && (vehicleNum.dirty || vehicleNum.touched)"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="vehicleNum.errors?.['required']">Vehicle number is required.</small>
+              <small *ngIf="vehicleNum.errors?.['pattern']">Format must be MH12GH3456.</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="vehicleType" class="form-label">Vehicle Type</label>
+            <select class="form-select" name="vehicleType" ngModel #vehicleType="ngModel" required>
+              <option value="" disabled selected>Select vehicle type</option>
+              <option value="4W">4W (Four-Wheeler)</option>
+              <option value="2W">2W (Two-Wheeler)</option>
+            </select>
+            <div *ngIf="vehicleType.invalid && vehicleType.touched" class="text-danger mt-1">
+              <small *ngIf="vehicleType.errors?.['required']">Vehicle type is required.</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="slotId" class="form-label">Slot ID</label>
+            <input
+              type="text"
+              class="form-control"
+              name="slotId"
+              placeholder="e.g., A-15"
+              ngModel
+              #slotId="ngModel"
+              required
+            />
+            <div
+              *ngIf="slotId.invalid && (slotId.dirty || slotId.touched)"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="slotId.errors?.['required']">Slot ID is required.</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success w-100" [disabled]="!entryForm.valid">
+            Log Entry
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Vehicle Exit Modal -->
+<div
+  class="modal fade"
+  id="vehicleExitModal"
+  tabindex="-1"
+  aria-labelledby="vehicleExitModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form #exitForm="ngForm" (ngSubmit)="logExit(exitForm)">
+        <div class="modal-header">
+          <h5 class="modal-title" id="vehicleExitModalLabel">Log Vehicle Exit</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="selectVehicleToExit" class="form-label">Vehicle Number</label>
+            <select
+              class="form-select"
+              id="selectVehicleToExit"
+              name="selectedVehicleNumber"
+              ngModel
+              #selectedVehicleNum="ngModel"
+              required
+            >
+              <option value="" disabled selected>Select vehicle to exit</option>
+              <ng-container *ngFor="let record of parkingRecords">
+                <option *ngIf="record.status === 'Parked'" [value]="record.vehicleNumber">
+                  {{ record.vehicleNumber }} - {{ record.customerName }} ({{ record.slotId }})
+                </option>
+              </ng-container>
+            </select>
+            <div
+              *ngIf="
+                selectedVehicleNum.invalid &&
+                (selectedVehicleNum.touched || selectedVehicleNum.dirty)
+              "
+              class="text-danger mt-1"
+            >
+              <small *ngIf="selectedVehicleNum.errors?.['required']"
+                >Please select a vehicle to exit.</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid">
+            Confirm Exit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Statistics Cards Section -->
+<!-- Available slots card -->
+<div class="container">
+  <div class="row g-4 mb-5">
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-60 text-bg-warning">
+        <div class="card-body d-flex justify-content-evenly align-items-center">
+          <div>
+            <h6 class="card-subtitle mb-2">Available Slots</h6>
+          </div>
+          <div>
+            <h4 class="card-title">25</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Currently Parked Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-60 text-bg-primary">
+        <div class="card-body d-flex justify-content-evenly align-items-center">
+          <div>
+            <h6 class="card-subtitle mb-2 card-parking-title">Currently Parked</h6>
+          </div>
+          <div>
+            <h4 class="card-title card-parking-title">{{ parkingCount }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Today's Exits Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card h-60 text-bg-success">
+        <div class="card-body d-flex justify-content-evenly align-items-center">
+          <div>
+            <h6 class="card-subtitle mb-2">Today's Exits</h6>
+          </div>
+          <div>
+            <h4 class="card-title">{{ exitCount }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Total Revenue Card -->
+    <div class="col-lg-3 col-md-12">
+      <div class="card h-60 text-bg-dark">
+        <div class="card-body d-flex justify-content-evenly align-items-center">
+          <div>
+            <h6 class="card-subtitle mb-2">Total Revenue</h6>
+          </div>
+          <div>
+            <h4 class="card-title">
+              {{ totalRevenue$ | async | currency : 'INR' : 'symbol' : '1.2-2' }}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Displaying parking records -->
+<div class="container mt-5">
+  <h3>Vehicle Activity Logs</h3>
+
+  <div *ngIf="parkingRecords.length === 0" class="alert alert-warning mt-3">
+    No vehicle records found. Please log a new vehicle entry.
+  </div>
+
+  <div *ngIf="parkingRecords.length > 0" class="table-responsive mt-3">
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr class="table-primary">
+          <th>Id</th>
+          <th>Slot ID</th>
+          <th>Vehicle Number</th>
+          <th>Customer Name</th>
+          <th>Entry Time</th>
+          <th>Exit Time</th>
+          <th>Duration</th>
+          <th>Action</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of parkingRecords" class="table-default">
+          <td>{{ record.id }}</td>
+          <td>{{ record.slotId }}</td>
+          <td>{{ record.vehicleNumber }}</td>
+          <td>{{ record.customerName }}</td>
+          <td>{{ record.entryTime | date : 'short' }}</td>
+          <td>{{ record.exitTime ? (record.exitTime | date : 'short') : 'N/A' }}</td>
+          <td>{{ parkingService.calculateDuration(record.entryTime, record.exitTime) }}</td>
+          <td>
+            <button
+              *ngIf="record.status === 'Parked'"
+              (click)="markAsExitedFromTable(record.vehicleNumber)"
+              class="btn btn-sm btn-outline-danger"
+            >
+              Exit
+            </button>
+          </td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-info': record.status === 'Parked',
+                'bg-success': record.status === 'Completed'
+              }"
+            >
+              {{ record.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

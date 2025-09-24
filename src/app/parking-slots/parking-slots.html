@@ -1,0 +1,29 @@
+<div class="container">
+  <h2>Parking Slot Management</h2>
+  <button (click)="createSlots()" class="btn btn-create">Create Slot</button>
+  <button (click)="refreshSlots()" class="btn btn-refresh">Remove Slot</button>
+  <div class="legend">
+    <div class="available legend-box"></div>
+    Available
+    <div class="occupied legend-box"></div>
+    Occupied
+  </div>
+  <div class="parking-slots-container">
+    <div
+      *ngFor="let slot of slots"
+      class="parking-slot "
+      [ngClass]="slot.status"
+      (mouseenter)="showInfo(slot)"
+      (mouseleave)="hideInfo()"
+      (click)="toggleSlot(slot)"
+    >
+      <!-- {{ slot.id }} -->
+        
+      <div *ngIf="hoveredSlot === slot" class="slot-info">
+        <p>Id : {{ slot.id }}</p>
+        <p>Type : {{ slot.vehicleType }}</p>
+        <p>Availability : {{ slot.status }}</p>
+      </div>
+    </div>
+  </div>
+</div>
