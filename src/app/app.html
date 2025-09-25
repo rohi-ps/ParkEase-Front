@@ -23,10 +23,11 @@
     <div *ngIf="isDisplay === 'Billing & Payment'">
       <app-billing></app-billing>
     </div> 
+    <div *ngIf="isDisplay===''">
      <app-parking-slots-user 
       (onBookEvent)="bookEvent($event)"
       (onReserveEvent)="reserveEvent($event)">
-    </app-parking-slots-user> -->
-  <!-- </div> 
+    </app-parking-slots-user>
+    </div>
+   </div> 
 </div> -->
-
