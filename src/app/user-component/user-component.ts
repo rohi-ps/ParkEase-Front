@@ -10,6 +10,9 @@ import { ParkingSlotsUser } from "../parking-slots-user/parking-slots-user";
 import { Reservation } from "../reservation/reservation";
 import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
 import { Billing } from "../billing/billing";
+import { AuthService } from "../Services/auth.service";
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -22,7 +25,11 @@ export class UserComponent {
 isSidenavOpen = true;
   isDisplay = "Dashboard";
   isId = "";
-
+  userRole: string = '';
+   constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
   parkingEvent() {
     this.isDisplay = "Find Parking";
   }
@@ -42,5 +49,17 @@ isSidenavOpen = true;
 
   onDisplayClicked(item : string){
     this.isDisplay = item;
+  }
+  ngOnInit() {
+    this.userRole = this.authService.getCurrentUserRole();
+    if (!this.userRole) {
+      // If no user role is found, redirect to login
+      this.router.navigate(['/']);
+    }
+  }
+
+
+  isAdmin(): boolean {
+    return this.userRole === 'admin';
   }
 }
