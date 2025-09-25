@@ -10,5 +10,5 @@
 }
 
 .main-content.shifted {
-  margin-left: 250px; /* This value should match the collapsed width of the sidenav */
+  margin-left: 250px; 
 }
