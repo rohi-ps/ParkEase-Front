@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 
 @Component({
@@ -7,25 +7,26 @@ import { ParkingSlotsUserService } from '../../Services/parking-slots-user.servi
   templateUrl: './parking-stats.html',
   styleUrl: './parking-stats.css'
 })
-export class ParkingStats implements OnChanges {
-// @Input() availableSlots: number = 0;
-// @Input() occupiedSlots: number = 0;
+export class ParkingStats implements OnInit {
 
-  availableSlots: number = 10;
-  occupiedSlots: number = 10;
-  reservedSlots: number = 10;
+  availableSlots: number = 0;
+  occupiedSlots: number = 0;
+  reservedSlots: number = 0;
   
-  constructor(public parkingSlotsUserService: ParkingSlotsUserService) { }
+  constructor() { }
+  public parkingSlotsUserService = inject(ParkingSlotsUserService);
+
+  
   // Properties to hold the calculated percentages
   availablePercentage: number = 0;
   occupiedPercentage: number = 0;
   reservedPercentage: number = 0;
   
   // Use OnChanges to recalculate percentages whenever an Input property changes
-  ngOnChanges(changes: SimpleChanges): void {
-    this.calculatePercentages();
+  ngOnInit(): void {
     this.availableSlots = this.parkingSlotsUserService.getSlots();
-    this.occupiedSlots = this.parkingSlotsUserService.getReservedSlots();
+    this.occupiedSlots = this.parkingSlotsUserService.getOccupiedSlots();
+    this.calculatePercentages();
   }
 
   private calculatePercentages(): void {

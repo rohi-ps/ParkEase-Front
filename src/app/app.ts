@@ -17,11 +17,6 @@ export class App {
   isSidenavOpen = true;
   isDisplay = "Dashboard";
   isId = "";
-  // isLoggedIn = false;
-
-  // onUserLoggedIn() {
-  //   this.isLoggedIn = true;
-  // }
 
   
 
