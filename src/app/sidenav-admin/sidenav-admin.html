@@ -18,7 +18,7 @@
       </div>
       <div *ngIf="isOpen" class="inside_sidebar2">
         <h3 >ParkEase</h3>
-        <small >Customer Portal</small>
+        <small >Admin Portal</small>
       </div>
     </div>
 
@@ -33,6 +33,12 @@
       <a routerLink="/profile" (click)="selectLink('Find Parking')">
         <i class="fa-solid fa-square-parking" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">Find Parking</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" (click)="selectLink('My Reservation')">
+        <i class="fa-solid fa-calendar-days" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">My Reservation</span>
       </a>
     </li>
     <li>

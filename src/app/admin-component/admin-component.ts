@@ -1,8 +1,16 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+
+import { SidenavAdmin } from "../sidenav-admin/sidenav-admin";
+import { DashboardUser } from "../dashboard-user/dashboard-user";
+import { ParkingSlots } from "../parking-slots/parking-slots";
+import { AdminReservations } from "../admin-reservations/admin-reservations";
+import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
+import { Billing } from "../billing/billing";
 
 @Component({
   selector: 'app-admin-component',
-  imports: [],
+  imports: [SidenavAdmin, DashboardUser, ParkingSlots, AdminReservations, VehicleLogs, Billing, CommonModule],
   templateUrl: './admin-component.html',
   styleUrl: './admin-component.css'
 })
