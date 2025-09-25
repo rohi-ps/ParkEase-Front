@@ -10,11 +10,12 @@ import { Homepage } from "./homepage/homepage";
 import { Reservation } from "./reservation/reservation";
 
 import { CommonModule } from '@angular/common';
+import { DashboardComponent } from "./dashboard-admin/dashboard-admin";
 
 
 @Component({
   selector: 'app-root',
-  imports: [Homepage, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing],
+  imports: [Homepage, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, DashboardComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

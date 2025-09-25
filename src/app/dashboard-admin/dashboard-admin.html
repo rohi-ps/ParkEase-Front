@@ -1,1 +1,25 @@
-<p>dashboard-admin works!</p>
+<header>
+  <div class="title">
+    <h2>Welcome back, John Doe!</h2>
+  <p>Here's your parking overview for today</p>
+  </div>
+
+
+</header>
+<hr>
+<div class="dashboard-grid">
+  <app-stat-card 
+    *ngFor="let stat of stats"
+    [title]="stat.title"
+    [value]="stat.value"
+    [iconClass]="stat.iconClass"
+    [iconColor]="stat.iconColor"
+    [isCurrency]="stat.isCurrency || false">
+  </app-stat-card>
+</div>
+
+<app-parking-stats
+  [availableSlots]="data"
+  [occupiedSlots]="data"
+  [reservedSlots]="data"
+></app-parking-stats>
