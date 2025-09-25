@@ -93,26 +93,33 @@
           </div>
 
           <div class="mb-3">
-            <label for="vehicleType" class="form-label">Vehicle Type</label>
-            <select class="form-select" name="vehicleType" ngModel #vehicleType="ngModel" required>
-              <option value="" disabled selected>Select vehicle type</option>
-              <option value="4W">4W (Four-Wheeler)</option>
-              <option value="2W">2W (Two-Wheeler)</option>
+            <label for="slotId" class="form-label">Slot ID</label>
+            <select
+              id="slotId"
+              name="slotId"
+              ngModel
+              class="form-control"
+              required
+              (ngModelChange)="onSlotChange(entryForm)"
+            >
+              <option value="" disabled>Select a slot</option>
+              <option *ngFor="let slot of availableSlots" [value]="slot.id">
+                {{ slot.id }}
+              </option>
             </select>
-            <div *ngIf="vehicleType.invalid && vehicleType.touched" class="text-danger mt-1">
-              <small *ngIf="vehicleType.errors?.['required']">Vehicle type is required.</small>
-            </div>
           </div>
 
           <div class="mb-3">
-            <label for="slotId" class="form-label">Slot ID</label>
-            <select id="slotId" name="slotId" ngModel class="form-control" required>
-              <option value="" disabled>Select a slot</option>
-              <!-- Loop over the availableSlots array -->
-              <option *ngFor="let slot of availableSlots" [value]="slot.id">
-                {{ slot.id }} ({{ slot.vehicleType }})
-              </option>
-            </select>
+            <label for="vehicleType">Vehicle Type</label>
+            <input
+              type="text"
+              id="vehicleType"
+              name="vehicleType"
+              ngModel
+              class="form-control"
+              required
+              readonly
+            />
           </div>
         </div>
         <div class="modal-footer">

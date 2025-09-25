@@ -60,7 +60,22 @@ export class VehicleLogs implements OnInit {
     
     this.loadData();   // Manually refresh the data after the change
   }
+  // --- NEW METHOD ---
+  // This method is triggered when the user selects a different parking slot.
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
 
+    // Find the full slot object from the selected ID
+    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+
+    if (selectedSlot) {
+      // Use patchValue to update only the vehicleType field in the form
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+    }
+  }
   logExit(form: NgForm): void {
     if (form.invalid) return;
     const selectedVehicleNumber = form.value.selectedVehicleNumber;
