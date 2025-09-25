@@ -51,6 +51,12 @@
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>
         </div>
+        <div class="form-row" *ngIf="totalAmount">
+          <div class="form-col text-end">
+            <label><strong>Total Amount:</strong></label>
+            <div class="amount-display">{{totalAmount}}</div>
+          </div>
+        </div>
         <div class="button3">
             <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="modifyreserve.invalid" data-bs-dismiss="modal">Pay&Update</button>
         </div>

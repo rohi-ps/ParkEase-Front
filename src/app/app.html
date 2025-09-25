@@ -1,10 +1,11 @@
-<div class="home">
+<!-- <div class="home">
   <router-outlet></router-outlet>
-</div>
-<!-- <div class="app-container">
+</div> -->
+
+ <div class="app-container">
   <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
   <div class="main-content" [class.shifted]="isSidenavOpen">
-    <div *ngIf="isDisplay === 'Dashboard'">
+     <div *ngIf="isDisplay === 'Dashboard'">
       <app-dashboard-user (newParkingEvent)="parkingEvent()"></app-dashboard-user>
     </div>
     <div *ngIf="isDisplay === 'Find Parking'">
@@ -14,20 +15,18 @@
       ></app-parking-slots-user>
     </div>
     <div *ngIf="isDisplay === 'My Reservation'">
-      <app-reservation (slotId)="(isId)"></app-reservation>
+      <app-reservation (slotId)="isId"></app-reservation>
     </div>
     <div *ngIf="isDisplay === 'Vehicle logs'">
-      <app-vehicle-logs (slotId)="(isId)"></app-vehicle-logs>
+      <app-vehicle-logs (slotId)="isId"></app-vehicle-logs>
     </div>
     <div *ngIf="isDisplay === 'Billing & Payment'">
       <app-billing></app-billing>
-    </div>
-    <div *ngIf="isDisplay === ''">
-      <app-parking-slots-user
-        (onBookEvent)="bookEvent($event)"
-        (onReserveEvent)="reserveEvent($event)"
-      >
-      </app-parking-slots-user>
-    </div>
-  </div>
-</div> -->
+    </div> 
+     <app-parking-slots-user 
+      (onBookEvent)="bookEvent($event)"
+      (onReserveEvent)="reserveEvent($event)">
+    </app-parking-slots-user> 
+   </div> 
+</div> 
+

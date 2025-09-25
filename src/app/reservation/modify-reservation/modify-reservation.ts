@@ -1,7 +1,9 @@
-import { Component} from '@angular/core';
+import { Component,Input,inject} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { VehicleTypes, Types } from '../../model/vtypes';
+import { Customer } from '../../model/customers';
+import { CustomerService } from '../../Services/customer-service';
 @Component({
   selector: 'app-modify-reservation',
   imports: [FormsModule, CommonModule],
@@ -9,9 +11,24 @@ import { VehicleTypes, Types } from '../../model/vtypes';
   styleUrl: './modify-reservation.css'
 })
 export class ModifyReservation {
+  @Input() customer: Customer | null = null;
+  private customerService = inject(CustomerService);
+  ngOnChanges(): void {
+    if (this.customer) {
+      this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType as VehicleTypes, vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
+    }
+  }
+  totalAmount: string = '';
+  updateAmount(): void {
+    if (this.form.VehicleType && this.form.EntryDate && this.form.EntryTime && this.form.ExitDate && this.form.ExitTime) {
+      const durationMinutes = this.customerService.calculateDurationInMinutes(this.form.EntryDate, this.form.EntryTime, this.form.ExitDate, this.form.ExitTime);
+      this.totalAmount = this.customerService.calculateAmount(this.form.VehicleType, durationMinutes);
+    } else {
+      this.totalAmount = '';
+    }
+  }
   vehicleTypes = Types
   form = {
-    id: 0,
     slotId: '',
     VehicleType: '' as VehicleTypes,
     vehicleNumber: '',
@@ -20,6 +37,7 @@ export class ModifyReservation {
     ExitDate: '',
     ExitTime: ''
   }
+  minDate: string = new Date().toISOString().split('T')[0];
   checkDateDifference() {
     const entrydate = new Date(this.form.EntryDate);
     const exitdate = new Date(this.form.ExitDate);
@@ -30,11 +48,8 @@ export class ModifyReservation {
         alert("Exit date is more than 10 days after entry date");
         this.form.ExitDate = '';
       }
-      else if (diffInDays < 0) {
-        alert("Exit date cannot be before entry date");
-        this.form.ExitDate = '';
-      }
     }
+    this.updateAmount()
   }
   checkTimeDifference(): void {
     const entryDate = new Date(this.form.EntryDate + 'T' + this.form.EntryTime);
@@ -49,12 +64,25 @@ export class ModifyReservation {
         this.form.ExitTime = '';
       }
     }
-  }
+    this.updateAmount()
+  }  
   onModify(f: any): void {
-    if (f.valid) {
-      console.log("modified reservation", f.value)
+    if (f.valid && this.customer) {
+      const updatedCustomer: Customer = {
+        ...this.customer,
+        slotId: this.form.slotId,
+        vehicleType: this.form.VehicleType,
+        vehicleNumber: this.form.vehicleNumber,
+        entryDate: this.form.EntryDate,
+        entryTime: this.form.EntryTime,
+        exitDate: this.form.ExitDate,
+        exitTime: this.form.ExitTime
+      };
+      this.customerService.updateCustomer(updatedCustomer);
+      console.log("modified reservation", updatedCustomer);
     }
-    
   }
-  
 }
+
+
+

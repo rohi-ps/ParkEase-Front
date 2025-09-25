@@ -48,31 +48,36 @@
         <th>Entry Time</th>
         <th>Exit Date</th>
         <th>Exit Time</th>
+        <th>Duration</th>
+        <th>Amount</th>
         <th>Status</th>
         <th>Actions</th>
+        <th></th>
       </tr>
     </thead>
     <tbody class="text-center">
-      <tr *ngFor=" let customer of filteredCustomers">
+      <tr *ngFor=" let customer of filteredCustomers()">
         <td>{{customer.slotId}}</td>
         <td>{{customer.vehicleNumber}}</td>
         <td>{{customer.vehicleType}}</td>
-        <td>{{customer.entryDate}}</td>
+        <td>{{customer.entryDate |date}}</td>
         <td>{{customer.entryTime}}</td>
-        <td>{{customer.exitDate}}</td>
+        <td>{{customer.exitDate|date}}</td>
         <td>{{customer.exitTime}}</td>
+        <td>{{customer.Duration}}</td>
+        <td>{{customer.Amount}}</td>
         <td>
           <span [ngClass]="getStatusClass(customer.status)" class="status-box d-inline-flex align-items-center gap-2">
             <i [ngClass]="getStatusIcon(customer.status)" class="me-1"></i>
             <span>{{customer.status}}</span>
           </span>
         </td>
-        <td>
-          <button class="btn btn-icon text-primary" data-bs-target="#edit" data-bs-toggle="modal">
+        <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
+          <button class="btn btn-icon text-primary" data-bs-target="#edit" data-bs-toggle="modal" (click)="onEdit(customer)">
             <i class="fas fa-edit"></i>
           </button>
         </td>
-        <td>
+        <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
           <button class="btn btn-icon text-danger" (click)="deletecustomer(customer.id)">
             <i class="fas fa-trash-alt"></i>
           </button>
@@ -81,7 +86,7 @@
     </tbody>
   </table>
   </div>
-  <div class="modal fade" id="edit" tabindex="-1">
+  <div class="modal fade" id="edit">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -89,7 +94,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
         </div>
         <div class="modal-body">
-          <app-modify-reservation></app-modify-reservation>
+          <app-modify-reservation [customer]="selectedCustomer"></app-modify-reservation>
         </div>
       </div>
     </div>
