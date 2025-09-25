@@ -12,12 +12,13 @@ import { ParkingSlot } from '../model/parking-slots-module';
 })
 export class ParkingSlotsUser implements OnInit {
 
-  @Output() onReserveEvent = new EventEmitter<void>();
-  @Output() onBookEvent = new EventEmitter<void>();
+  @Output() onReserveEvent = new EventEmitter<string>();
+  @Output() onBookEvent = new EventEmitter<string>();
 
- constructor() {
+ constructor(private parkkingSlotUserService : ParkingSlotsUserService) {
   //  this.createSlots();
  }
+//  private parkkingSlotUserService = inject(ParkingSlotsUserService);
 
  ngOnInit(): void {
     
@@ -26,7 +27,6 @@ export class ParkingSlotsUser implements OnInit {
 
   }
 
- private parkkingSlotUserService = inject(ParkingSlotsUserService);
 
  slots : ParkingSlot[] = []
  hoveredSlot : any | null = null;
@@ -34,7 +34,6 @@ export class ParkingSlotsUser implements OnInit {
  
  createSlots() {
  this.slots = this.parkkingSlotUserService.getCreateSlots();
- this.tcount();
  }
 
 // pushSlots(type : string){
@@ -45,7 +44,6 @@ export class ParkingSlotsUser implements OnInit {
 
  refreshSlots() {
   this.slots = this.parkkingSlotUserService.getRefreshSlots();
-  this.tcount();
  }
 
  tcount(){
@@ -53,6 +51,8 @@ export class ParkingSlotsUser implements OnInit {
  }
  toggleSlot(slot: ParkingSlot) {
    slot.status = slot.status === 'available' ? 'occupied' : 'available';
+  //  console.log('working');
+   this.parkkingSlotUserService.updateSlot(slot);
  }
 
  showInfo(slot: ParkingSlot){
@@ -62,11 +62,11 @@ export class ParkingSlotsUser implements OnInit {
   this.hoveredSlot = null;
  }
 
- onBook(){
-  this.onBookEvent.emit();
+ onBook(slot: ParkingSlot){
+  this.onBookEvent.emit(slot.id);
  }
- onReserve(){
-  this.onReserveEvent.emit();
+ onReserve(slot: ParkingSlot){
+  this.onReserveEvent.emit(slot.id);
  }
 
 }
