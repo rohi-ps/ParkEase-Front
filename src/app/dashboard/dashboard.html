@@ -1,0 +1,12 @@
+ <div class="app-container">
+  <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
+  <div class="main-content" [class.shifted]="isSidenavOpen">
+    
+     <ng-container *ngIf="isAdmin(); else userDashboard">
+      <app-dashboard-admin></app-dashboard-admin>
+    </ng-container>
+    <ng-template #userDashboard>
+      <app-dashboard-user></app-dashboard-user>
+    </ng-template>
+   </div> 
+</div>
