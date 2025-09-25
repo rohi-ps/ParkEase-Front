@@ -87,16 +87,17 @@ export class ParkingSlotsUserService {
     }
   }
 
-updateSlot(updatedSlot: ParkingSlot) {
+  updateSlot(updatedSlot: ParkingSlot) {
     //  this.slots.maps(slot => slot.id === updateSlot.id? slot.status = updateSlot.status : slot.status);
-this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
-this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
-this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
-this.saveTasks();
-// console.log(this.slots,updatedSlot);
+  this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
+  this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+  this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+  this.saveTasks();
+  // console.log(this.slots,updatedSlot);
 
-this.saveTasks();
+  this.saveTasks();
   }
+
   getRefreshSlots() {
     if (this.slots.length > 0) {
       const removedSlot = this.slots.pop();
@@ -122,6 +123,9 @@ this.saveTasks();
   }
   getSlots() {
     return this.tAvailCount;
+  }
+  getReservedSlots(){
+    return this.tReserveCount;
   }
   private saveTasks() {
     localStorage.setItem('slots', JSON.stringify(this.slots));
