@@ -2,10 +2,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* min-height: 100vh; */
-  background: linear-gradient(to bottom right, #408EE0, #1E90FF); 
+  font-family: 'Segoe UI', sans-serif;
 }
 
+.login2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .full-height {
   height: 100vh;
 }
@@ -14,24 +19,21 @@
   background-color: white;
   padding: 40px;
   border-radius: 15px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); 
-  width: 400px;
-  min-height: 400px;
-  align-items: center;
+  width: 100%;
+  max-width: 500px;
   text-align: center;
-  margin-right: 400px;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-h6 {
-  margin-bottom: 10px;
-  font-weight: 500;
-  color: #408EE0;
+
+h5 {
+  margin-bottom: 5px;
 }
 
 h3 {
   margin-bottom: 30px;
   font-weight: 600;
+  color: #408EE0;
 }
 
 .form-group {

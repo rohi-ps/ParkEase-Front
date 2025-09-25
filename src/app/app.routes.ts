@@ -1,20 +1,17 @@
 import { Routes } from '@angular/router';
 import { Homepage } from './homepage/homepage';
-import { DashboardUser } from './dashboard-user/dashboard-user';
-import { DashboardComponent } from './dashboard-admin/dashboard-admin';
 
 export const routes: Routes = [
     {
         path: '',
         component: Homepage
-    }
-    ,{
-        path: 'userdashboard',
-        component: DashboardUser
     },
     {
-        path:'admindashboard',
-        component: DashboardComponent
+        path: 'user-dashboard',
+        loadComponent: () => import('./dashboard-user/dashboard-user').then(m => m.DashboardUser)
+    },
+    {
+        path: 'admin-dashboard',
+        loadComponent: () => import('./dashboard-admin/dashboard-admin').then(m => m.DashboardComponent)
     }
-    
 ];
