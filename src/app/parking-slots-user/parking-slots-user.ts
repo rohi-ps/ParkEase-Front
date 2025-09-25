@@ -13,7 +13,6 @@ import { ParkingSlot } from '../model/parking-slots-module';
 export class ParkingSlotsUser implements OnInit {
 
   @Output() onReserveEvent = new EventEmitter<string>();
-  @Output() onBookEvent = new EventEmitter<string>();
 
  constructor(private parkkingSlotUserService : ParkingSlotsUserService) {
   //  this.createSlots();
@@ -49,10 +48,10 @@ export class ParkingSlotsUser implements OnInit {
  tcount(){
   this.tCount = this.parkkingSlotUserService.getTcount();
  }
- toggleSlot(slot: ParkingSlot) {
-   slot.status = slot.status === 'available' ? 'occupied' : 'available';
-   this.parkkingSlotUserService.updateSlot(slot);
- }
+//  toggleSlot(slot: ParkingSlot) {
+//    slot.status = slot.status === 'available' ? 'occupied' : 'available';
+//    this.parkkingSlotUserService.updateSlot(slot);
+//  }
 
  showInfo(slot: ParkingSlot){
   this.hoveredSlot = slot;
@@ -61,9 +60,6 @@ export class ParkingSlotsUser implements OnInit {
   this.hoveredSlot = null;
  }
 
- onBook(slot: ParkingSlot){
-  this.onBookEvent.emit(slot.id);
- }
  onReserve(slot: ParkingSlot){
   this.onReserveEvent.emit(slot.id);
  }

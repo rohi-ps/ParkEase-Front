@@ -15,7 +15,7 @@ import { DashboardComponent } from "./dashboard-admin/dashboard-admin";
 
 @Component({
   selector: 'app-root',
-  imports: [Homepage, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, DashboardComponent],
+  imports: [Homepage, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, DashboardComponent, ParkingSlots],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
