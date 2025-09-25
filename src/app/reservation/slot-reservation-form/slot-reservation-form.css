@@ -45,7 +45,8 @@ button {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  margin-left: 200px;
+  display: block;
+  margin: 0 auto;
 }
 button:disabled {
   background-color: #bdc3c7;
