@@ -19,7 +19,6 @@ isOpen = true; // Initial state is open
   }
 
   selectLink( item : string){
-    // console.log(item);
     this.items.emit(item);
   }
 }
