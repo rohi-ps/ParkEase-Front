@@ -12,7 +12,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
 
-<<<<<<< HEAD
   isSidenavOpen = true;
   isDisplay = "Dashboard";
   isId = "#";
@@ -42,8 +41,6 @@ export class App {
   onDisplayClicked(item : string){
     this.isDisplay = item;
   }
-=======
  
->>>>>>> main
 
 }

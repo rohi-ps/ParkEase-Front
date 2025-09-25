@@ -5,8 +5,12 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
-            <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
+            <!-- <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
+            <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div> -->
+            <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)">
+              <option value="" disabled>Select a slot</option>
+              <option *ngFor="let slot of availableSlots" [value]="slot.id">{{ slot.id }}</option>
+            </select>
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
@@ -21,13 +25,13 @@
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" required>
+            <!-- <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" required>
               <option value="">--Select--</option>
               <option value="2W"><i class="fas fa-motorcycle"></i>2W</option>
               <option value="4W"><i class="fas fa-car"></i>4W</option>
             </select>
-            <div class="text-danger" *ngIf="vehicletypes.touched && vehicletypes.invalid">Vehicle Type required</div>
-
+            <div class="text-danger" *ngIf="vehicletypes.touched && vehicletypes.invalid">Vehicle Type required</div> -->
+            <input type="text" id="vehicleType" name="vT" ngModel class="form-control" required readonly/>
           </div>
           <div class="form-col">
             <label>Entry Date</label>

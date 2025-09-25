@@ -1,9 +1,9 @@
 import { Component, inject, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { VehicleTypes, Types } from '../../model/vtypes';
 import { CustomerService } from '../../Services/customer-service';
-
+import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
+import { ParkingSlot } from '../../model/parking-slots-module';
 @Component({
   selector: 'app-slot-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -11,10 +11,10 @@ import { CustomerService } from '../../Services/customer-service';
   styleUrl: './slot-reservation-form.css'
 })
 export class SlotReservationForm {
-  vehicleTypes = Types;
+  public availableSlots: ParkingSlot[] = [];
   form = {
     slotId: '',
-    VehicleType: '' as VehicleTypes,
+    VehicleType: '' ,
     vehicleNumber: '',
     EntryDate: '',
     EntryTime: '',
@@ -22,6 +22,20 @@ export class SlotReservationForm {
     ExitTime: ''
   }
   private customerService = inject(CustomerService);
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
+
+    // Find the full slot object from the selected ID
+    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+
+    if (selectedSlot) {
+      // Use patchValue to update only the vehicleType field in the form
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+    }
+  }
 
   totalAmount: string = '';
   updateAmount(): void {

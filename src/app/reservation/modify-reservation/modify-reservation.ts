@@ -1,7 +1,6 @@
 import { Component,Input,inject} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { VehicleTypes, Types } from '../../model/vtypes';
 import { Customer } from '../../model/customers';
 import { CustomerService } from '../../Services/customer-service';
 @Component({
@@ -15,7 +14,7 @@ export class ModifyReservation {
   private customerService = inject(CustomerService);
   ngOnChanges(): void {
     if (this.customer) {
-      this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType as VehicleTypes, vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
+      this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType, vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
     }
   }
   totalAmount: string = '';
@@ -27,10 +26,9 @@ export class ModifyReservation {
       this.totalAmount = '';
     }
   }
-  vehicleTypes = Types
   form = {
     slotId: '',
-    VehicleType: '' as VehicleTypes,
+    VehicleType: '',
     vehicleNumber: '',
     EntryDate: '',
     EntryTime: '',
