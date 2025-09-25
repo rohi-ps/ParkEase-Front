@@ -1,9 +1,8 @@
-import { Component, inject,Input } from '@angular/core';
+import { Component ,inject} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { VehicleTypes, Types } from '../../model/vtypes';
+import { VehicleTypes,Types } from '../../model/vtypes';
 import { CustomerService } from '../../Services/customer-service';
-
 @Component({
   selector: 'app-slot-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -11,11 +10,7 @@ import { CustomerService } from '../../Services/customer-service';
   styleUrl: './slot-reservation-form.css'
 })
 export class SlotReservationForm {
-  @Input() slotId: string = '';
-  ngOnInit() {
-    this.form.slotId = this.slotId;
-  }
-  vehicleTypes=Types;
+  vehicleTypes=Types
   form={
     slotId:'',
     VehicleType:'' as VehicleTypes,
@@ -26,7 +21,9 @@ export class SlotReservationForm {
     ExitTime:''
   }
   private customerService = inject(CustomerService);
-  minDate:string = new Date().toISOString().split('T')[0];
+
+  minDate: string = new Date().toISOString().split('T')[0];
+
   checkDateDifference(){
     const entrydate=new Date(this.form.EntryDate);
     const exitdate=new Date(this.form.ExitDate);
@@ -59,7 +56,4 @@ export class SlotReservationForm {
     }
     this.customerService.addtocustomer(this.form.slotId,this.form.vehicleNumber, this.form.VehicleType, this.form.EntryDate, this.form.EntryTime, this.form.ExitDate, this.form.ExitTime,'','') 
   }
-  
 }
-
-
