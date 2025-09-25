@@ -1,12 +1,14 @@
 import { Component} from '@angular/core';
 
 import { UserComponent } from "./user-component/user-component";
+import { DashboardComponent } from "./dashboard-admin/dashboard-admin";
+import { SidenavComponent } from "./sidenav/sidenav";
 
 
 
 @Component({
   selector: 'app-root',
-  imports: [UserComponent],
+  imports: [UserComponent, DashboardComponent, SidenavComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -21,18 +23,7 @@ export class App {
   //   this.isLoggedIn = true;
   // }
 
-  parkingEvent() {
-    this.isDisplay = "Find Parking";
-  }
-  bookEvent(data : string){
-    this.isDisplay = "Vehicle logs";
-    this.isId = data;
-
-  }
-  reserveEvent(data : string){
-    this.isDisplay = "My Reservation";
-    this.isId = data;
-  }
+  
 
   onToggle(isOpen: boolean) {
     this.isSidenavOpen = isOpen;

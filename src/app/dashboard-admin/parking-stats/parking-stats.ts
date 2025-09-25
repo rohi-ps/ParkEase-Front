@@ -10,10 +10,10 @@ import { ParkingSlotsUserService } from '../../Services/parking-slots-user.servi
 export class ParkingStats implements OnChanges {
 // @Input() availableSlots: number = 0;
 // @Input() occupiedSlots: number = 0;
-  @Input() reservedSlots: number = 0;
 
-  availableSlots: number = 0;
-  occupiedSlots: number = 0;
+  availableSlots: number = 10;
+  occupiedSlots: number = 10;
+  reservedSlots: number = 10;
   
   constructor(public parkingSlotsUserService: ParkingSlotsUserService) { }
   // Properties to hold the calculated percentages

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ParkingSlots } from "../parking-slots/parking-slots";
-import { SidenavComponent } from '../sidenav/sidenav';
-import { ParkingSlotsUser } from "../parking-slots-user/parking-slots-user";
-import { DashboardUser } from '../dashboard-user/dashboard-user';
-import { Billing } from "../billing/billing";
-import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
 import { Homepage } from "../homepage/homepage";
-import { Reservation } from "../reservation/reservation";
+import { SidenavComponent } from '../sidenav/sidenav';
 import { DashboardComponent } from "../dashboard-admin/dashboard-admin";
+import { DashboardUser } from '../dashboard-user/dashboard-user';
+import { ParkingSlots } from "../parking-slots/parking-slots";
+import { ParkingSlotsUser } from "../parking-slots-user/parking-slots-user";
+import { Reservation } from "../reservation/reservation";
+import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
+import { Billing } from "../billing/billing";
 
 
 @Component({

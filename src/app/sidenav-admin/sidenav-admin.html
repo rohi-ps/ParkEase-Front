@@ -1,0 +1,57 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-..."
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<div class="sidenav-container" [class.collapsed]="!isOpen">
+
+
+  <button class="toggle-button" (click)="toggle()">
+    <i class="fa-solid fa-bars fa-xl" style="color:#74c0fc; cursor: pointer;"></i>
+  </button>
+
+      <div class="inside_sidebar">
+      <div class="inside_sidebar1">
+        <i class="fa-solid fa-location-dot fa-2xl" style="color: #74c0fc;"></i>
+      </div>
+      <div *ngIf="isOpen" class="inside_sidebar2">
+        <h3 >ParkEase</h3>
+        <small >Customer Portal</small>
+      </div>
+    </div>
+
+  <ul class="nav-list" >
+    <li>
+      <a routerLink="/dashboard" (click)="selectLink('Dashboard')">
+        <i class="fa-regular fa-chart-bar" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/profile" (click)="selectLink('Find Parking')">
+        <i class="fa-solid fa-square-parking" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Find Parking</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" (click)="selectLink('My Reservation')">
+        <i class="fa-solid fa-calendar-days" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">My Reservation</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" (click)="selectLink('Vehicle logs')">
+        <i class="fa-solid fa-car" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Vehicle logs</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" (click)="selectLink('Billing & Payment')">
+        <i class="fa-solid fa-book" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Billing & Payment</span>
+      </a>
+    </li>
+  </ul>
+</div>
