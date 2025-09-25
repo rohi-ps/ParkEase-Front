@@ -35,8 +35,8 @@ export class ParkingSlotsUserService {
     } else {
       this.asciiValue = 65;
     }
-    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   }
 
   getCreateSlots() {
@@ -53,8 +53,8 @@ export class ParkingSlotsUserService {
     } else {
       alert('enter a valid vehicle type');
     }
-    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
     this.saveTasks();
     return this.slots;
   }
@@ -90,8 +90,8 @@ export class ParkingSlotsUserService {
   updateSlot(updatedSlot: ParkingSlot) {
     //  this.slots.maps(slot => slot.id === updateSlot.id? slot.status = updateSlot.status : slot.status);
   this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
-  this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
-  this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+  this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+  this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   this.saveTasks();
   // console.log(this.slots,updatedSlot);
 
@@ -112,8 +112,8 @@ export class ParkingSlotsUserService {
     } else {
       alert('no slots to remove');
     }
-    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
     this.saveTasks();
     return this.slots;
   }
@@ -124,7 +124,7 @@ export class ParkingSlotsUserService {
   getSlots() {
     return this.tAvailCount;
   }
-  getReservedSlots(){
+  getOccupiedSlots(){
     return this.tReserveCount;
   }
   private saveTasks() {
