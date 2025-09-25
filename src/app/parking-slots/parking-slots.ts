@@ -51,7 +51,7 @@ export class ParkingSlots implements OnInit {
  }
  toggleSlot(slot: ParkingSlot) {
    slot.status = slot.status === 'available' ? 'occupied' : 'available';
-   this.parkkingSlotUserService.updateSlot(slot);
+   this.parkkingSlotUserService.updateSlot(slot);   
  }
 
  showInfo(slot: ParkingSlot){

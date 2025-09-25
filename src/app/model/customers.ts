@@ -7,5 +7,7 @@ export interface Customer {
   entryTime: string;
   exitDate: string;
   exitTime: string;
+  Duration:string;
+  Amount:string;
   status : string;
 }
