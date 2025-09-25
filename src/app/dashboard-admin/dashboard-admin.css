@@ -1,0 +1,27 @@
+header{
+    display: flex;
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-grid {
+  /* Use CSS Grid for a 3-column layout */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; /* Spacing between the cards */
+  padding: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr; /* 1 column on small screens */
+  }
+}

@@ -115,7 +115,7 @@
 
 .slot-info {
   position: absolute;
-  bottom: 110%; /* Position the pop-up above the slot */
+  bottom: 105%; /* Position the pop-up above the slot */
   left: 50%;
   transform: translateX(-50%);
   padding: 10px;

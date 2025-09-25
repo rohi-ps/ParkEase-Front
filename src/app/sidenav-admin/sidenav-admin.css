@@ -1,0 +1,70 @@
+
+
+.sidenav-container {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  color: white;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+}
+
+.sidenav-container.collapsed {
+  width: 60px; /* Adjust this value to fit your icons */
+}
+
+.toggle-button {
+    float: right;
+  width: 60px;
+  background-color: #333;
+  border: none;
+  margin: 5px;
+  padding: 5px;
+  margin-top: 7px;
+
+}
+
+.inside_sidebar{
+    display: flex;
+    margin: 10px;
+}
+.inside_sidebar1{
+    margin-top: 30px ;
+}
+.inside_sidebar2{
+    /* padding: 3px; */
+    margin-top: 20px;
+    margin-left: 5px;
+    align-items: center;
+    text-align: center;
+}
+.inside_sidebar2 h3{
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.nav-list li a {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-list li a:hover {
+  background-color: #575757;
+}
+
+.nav-list i {
+  margin-right: 15px;
+  min-width: 25px; /* Ensures consistent icon spacing */
+}

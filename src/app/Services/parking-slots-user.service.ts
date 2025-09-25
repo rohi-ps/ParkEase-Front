@@ -9,7 +9,8 @@ export class ParkingSlotsUserService {
   rows: string[] = [];
   cols = 0;
   asciiValue = 65;
-  tCount = 0;
+  tAvailCount = 0;
+  tReserveCount = 0;
 
   constructor() {
     const slots = localStorage.getItem('slots');
@@ -34,7 +35,8 @@ export class ParkingSlotsUserService {
     } else {
       this.asciiValue = 65;
     }
-    this.tCount = this.slots.length;
+    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
   }
 
   getCreateSlots() {
@@ -51,9 +53,9 @@ export class ParkingSlotsUserService {
     } else {
       alert('enter a valid vehicle type');
     }
-    this.tCount = this.slots.length;
+    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
     this.saveTasks();
-    console.log(this.rows, this.asciiValue, this.cols, this.slots);
     return this.slots;
   }
 
@@ -85,6 +87,17 @@ export class ParkingSlotsUserService {
     }
   }
 
+  updateSlot(updatedSlot: ParkingSlot) {
+    //  this.slots.maps(slot => slot.id === updateSlot.id? slot.status = updateSlot.status : slot.status);
+  this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
+  this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+  this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+  this.saveTasks();
+  // console.log(this.slots,updatedSlot);
+
+  this.saveTasks();
+  }
+
   getRefreshSlots() {
     if (this.slots.length > 0) {
       const removedSlot = this.slots.pop();
@@ -99,16 +112,20 @@ export class ParkingSlotsUserService {
     } else {
       alert('no slots to remove');
     }
-    this.tCount = this.slots.length;
+    this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
     this.saveTasks();
     return this.slots;
   }
 
   getTcount() {
-    return this.tCount;
+    return this.tAvailCount;
   }
   getSlots() {
-    return this.tCount;
+    return this.tAvailCount;
+  }
+  getReservedSlots(){
+    return this.tReserveCount;
   }
   private saveTasks() {
     localStorage.setItem('slots', JSON.stringify(this.slots));

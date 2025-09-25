@@ -1,0 +1,40 @@
+<div class="status-card">
+  <div class="header">
+    Parking Facility Status
+  </div>
+  
+  <div class="metrics-container">
+    <div class="metric-item">
+      <div class="icon-value-container">
+        
+        <span class="value">{{ availableSlots }}</span>
+      </div>
+      <div class="label">Available Slots</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar green-bar" [style.width.%]="availablePercentage"></div>
+      </div>
+    </div>
+
+    <div class="metric-item">
+      <div class="icon-value-container">
+       
+        <span class="value">{{ occupiedSlots }}</span>
+      </div>
+      <div class="label">Occupied Slots</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar red-bar" [style.width.%]="occupiedPercentage"></div>
+      </div>
+    </div>
+    
+    <div class="metric-item">
+      <div class="icon-value-container">
+       
+        <span class="value">{{ reservedSlots }}</span>
+      </div>
+      <div class="label">Reserved Slots</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar orange-bar" [style.width.%]="reservedPercentage"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Activity } from '../dashboard-user-model';
+import { Activity } from '../../model/dashboard-user-model';
 @Component({
   selector: 'app-recent-activity',
   imports: [CommonModule],
