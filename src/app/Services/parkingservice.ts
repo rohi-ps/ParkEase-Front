@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, timer, combineLatest  } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Invoice, ParkingRecord } from '../model/billing';
+import { ParkingSlotsUserService } from './parking-slots-user.service'; 
 
 
 @Injectable({
@@ -15,7 +14,7 @@ export class Parkingservice {
   private nextId = 1;
   private nextInvoiceId = 1;
 
-  constructor() {}
+  constructor(private parkingSlotsService: ParkingSlotsUserService) {}
   
   public getParkingRecords(): ParkingRecord[] {
     return [...this._parkingRecords]; // Return a copy to prevent mutation
@@ -70,6 +69,8 @@ export class Parkingservice {
     };
 
     this._parkingRecords.push(newRecord);
+     // After logging the entry, update the slot status to 'occupied'
+    this.parkingSlotsService.updateSlotStatus(entryData.slotId, 'occupied');
     console.log('Service: Vehicle Entered:', newRecord);
   }
 
@@ -81,6 +82,8 @@ export class Parkingservice {
     if (recordToUpdate) {
       recordToUpdate.status = 'Completed';
       recordToUpdate.exitTime = new Date();
+      // Before generating the invoice, update the slot status back to 'available'
+      this.parkingSlotsService.updateSlotStatus(recordToUpdate.slotId, 'available');
       this.generateInvoice(recordToUpdate);
     }
   }

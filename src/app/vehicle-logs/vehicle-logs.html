@@ -93,34 +93,33 @@
           </div>
 
           <div class="mb-3">
-            <label for="vehicleType" class="form-label">Vehicle Type</label>
-            <select class="form-select" name="vehicleType" ngModel #vehicleType="ngModel" required>
-              <option value="" disabled selected>Select vehicle type</option>
-              <option value="4W">4W (Four-Wheeler)</option>
-              <option value="2W">2W (Two-Wheeler)</option>
+            <label for="slotId" class="form-label">Slot ID</label>
+            <select
+              id="slotId"
+              name="slotId"
+              ngModel
+              class="form-control"
+              required
+              (ngModelChange)="onSlotChange(entryForm)"
+            >
+              <option value="" disabled>Select a slot</option>
+              <option *ngFor="let slot of availableSlots" [value]="slot.id">
+                {{ slot.id }}
+              </option>
             </select>
-            <div *ngIf="vehicleType.invalid && vehicleType.touched" class="text-danger mt-1">
-              <small *ngIf="vehicleType.errors?.['required']">Vehicle type is required.</small>
-            </div>
           </div>
 
           <div class="mb-3">
-            <label for="slotId" class="form-label">Slot ID</label>
+            <label for="vehicleType">Vehicle Type</label>
             <input
               type="text"
-              class="form-control"
-              name="slotId"
-              placeholder="e.g., A-15"
+              id="vehicleType"
+              name="vehicleType"
               ngModel
-              #slotId="ngModel"
+              class="form-control"
               required
+              readonly
             />
-            <div
-              *ngIf="slotId.invalid && (slotId.dirty || slotId.touched)"
-              class="text-danger mt-1"
-            >
-              <small *ngIf="slotId.errors?.['required']">Slot ID is required.</small>
-            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -244,7 +243,7 @@
             <h6 class="card-subtitle mb-2">Reserved Slots</h6>
           </div>
           <div>
-            <h4 class="card-title"> 23 </h4>
+            <h4 class="card-title">23</h4>
           </div>
         </div>
       </div>
