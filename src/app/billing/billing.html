@@ -9,10 +9,10 @@
   </div>
 
   <!-- Statistics Cards Section -->
-  <div class="container">
+  <div class="container align-items-center">
     <div class="row g-4 mb-4">
       <!-- Total Revenue Card -->
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-4 col-md-6">
         <div class="card h-100 text-bg-primary">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
@@ -20,7 +20,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ totalRevenue$ | async | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ totalRevenue | currency : 'INR' : 'symbol' : '1.2-2' }}
               </h2>
             </div>
           </div>
@@ -35,21 +35,21 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ pendingPayments$ | async | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ pendingPayments | currency : 'INR' : 'symbol' : '1.2-2' }}
               </h2>
             </div>
           </div>
         </div>
       </div>
       <!-- Total Invoices Card -->
-      <div class="col-lg-4 col-md-12">
+      <div class="col-lg-4 col-md-6">
         <div class="card text-bg-success h-60">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
               <h6 class="card-subtitle mb-2">Total Invoices</h6>
             </div>
             <div>
-              <h2 class="card-title">{{ totalInvoices$ | async }}</h2>
+              <h2 class="card-title">{{ totalInvoices}}</h2>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let invoice of invoices$ | async">
+        <tr *ngFor="let invoice of invoices">
           <td>
             <strong>{{ invoice.invoiceNumber }}</strong>
           </td>
@@ -105,7 +105,7 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="(invoices$ | async)?.length === 0">
+        <tr *ngIf="(invoices)?.length === 0">
           <td colspan="7" class="text-center text-muted py-4">No invoices to display.</td>
         </tr>
       </tbody>
