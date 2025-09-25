@@ -12,6 +12,8 @@ interface User {
   providedIn: 'root'
 })
 export class AuthService {
+  private currentUserRole: string = '';
+
   private users: User[] = [
     {
       "role": "admin",
@@ -34,16 +36,26 @@ export class AuthService {
     const user = this.users.find(u => u.username === username && u.password === password);
     
     if (user) {
+      this.currentUserRole = user.role; // Store the current user's role
       return {
         isAuthenticated: true,
         role: user.role
       };
     }
     
+    this.currentUserRole = '';
     return {
       isAuthenticated: false,
       role: ''
     };
+  }
+
+  getCurrentUserRole(): string {
+    return this.currentUserRole;
+  }
+
+  logout() {
+    this.currentUserRole = '';
   }
 
   registerUser(userData: { email: string; firstname: string; lastname: string; password: string }): boolean {
