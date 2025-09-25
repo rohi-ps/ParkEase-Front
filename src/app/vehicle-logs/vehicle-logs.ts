@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subscription , Observable } from 'rxjs';
 import { Parkingservice } from '../Services/parkingservice';
 import { ParkingRecord } from '../model/billing';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
+import { ParkingSlot } from '../model/parking-slots-module';
+
 @Component({
   selector: 'app-vehicle-logs',
   standalone: true, 
@@ -14,7 +16,12 @@ import { ParkingRecord } from '../model/billing';
 export class VehicleLogs implements OnInit {
   
   public parkingRecords: ParkingRecord[] = [];
-  constructor(public parkingService: Parkingservice) {}
+  public availableSlots: ParkingSlot[] = [];
+
+  constructor(
+    private parkingService: Parkingservice,
+    private parkingSlotsService: ParkingSlotsUserService
+  ) {}
 
   ngOnInit() {
     // Load the initial data when the component loads
@@ -23,6 +30,7 @@ export class VehicleLogs implements OnInit {
 
   private loadData(): void {
     this.parkingRecords = this.parkingService.getParkingRecords(); 
+    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
   }
 
   public get parkingCount(): number {
@@ -52,7 +60,22 @@ export class VehicleLogs implements OnInit {
     
     this.loadData();   // Manually refresh the data after the change
   }
+  // --- NEW METHOD ---
+  // This method is triggered when the user selects a different parking slot.
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
 
+    // Find the full slot object from the selected ID
+    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+
+    if (selectedSlot) {
+      // Use patchValue to update only the vehicleType field in the form
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+    }
+  }
   logExit(form: NgForm): void {
     if (form.invalid) return;
     const selectedVehicleNumber = form.value.selectedVehicleNumber;

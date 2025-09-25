@@ -1,8 +1,8 @@
 <div class="home">
-  <app-homepage></app-homepage>
+  <router-outlet></router-outlet>
 </div>
-<!-- 
- <div class="app-container">
+
+ <!-- <div class="app-container">
   <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
@@ -23,10 +23,11 @@
     <div *ngIf="isDisplay === 'Billing & Payment'">
       <app-billing></app-billing>
     </div> 
+    <div *ngIf="isDisplay===''">
      <app-parking-slots-user 
       (onBookEvent)="bookEvent($event)"
       (onReserveEvent)="reserveEvent($event)">
-    </app-parking-slots-user> -->
-  <!-- </div> 
-</div> -->
-
+    </app-parking-slots-user>
+    </div>
+   </div> 
+</div>  -->
