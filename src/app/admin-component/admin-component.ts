@@ -7,10 +7,11 @@ import { ParkingSlots } from "../parking-slots/parking-slots";
 import { AdminReservations } from "../admin-reservations/admin-reservations";
 import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
 import { Billing } from "../billing/billing";
+import { DashboardComponent } from "../dashboard-admin/dashboard-admin";
 
 @Component({
   selector: 'app-admin-component',
-  imports: [SidenavAdmin, DashboardUser, ParkingSlots, AdminReservations, VehicleLogs, Billing, CommonModule],
+  imports: [SidenavAdmin, DashboardUser, ParkingSlots, AdminReservations, VehicleLogs, Billing, CommonModule, DashboardComponent],
   templateUrl: './admin-component.html',
   styleUrl: './admin-component.css'
 })

@@ -2,7 +2,7 @@
    <app-sidenav-admin (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav-admin>>
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
-        <app-dashboard-user (newParkingEvent)="parkingEvent()"></app-dashboard-user>
+        <app-dashboard-admin></app-dashboard-admin>
     </div>
     <div *ngIf="isDisplay === 'Find Parking'">
       <app-parking-slots (onBookEvent)="bookEvent($event)"></app-parking-slots>
