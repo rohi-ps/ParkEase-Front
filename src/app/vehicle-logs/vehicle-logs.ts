@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subscription , Observable } from 'rxjs';
 import { Parkingservice } from '../Services/parkingservice';
 import { ParkingRecord } from '../model/billing';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
+import { ParkingSlot } from '../model/parking-slots-module';
+
 @Component({
   selector: 'app-vehicle-logs',
   standalone: true, 
@@ -14,7 +16,12 @@ import { ParkingRecord } from '../model/billing';
 export class VehicleLogs implements OnInit {
   
   public parkingRecords: ParkingRecord[] = [];
-  constructor(public parkingService: Parkingservice) {}
+  public availableSlots: ParkingSlot[] = [];
+
+  constructor(
+    private parkingService: Parkingservice,
+    private parkingSlotsService: ParkingSlotsUserService
+  ) {}
 
   ngOnInit() {
     // Load the initial data when the component loads
@@ -23,6 +30,7 @@ export class VehicleLogs implements OnInit {
 
   private loadData(): void {
     this.parkingRecords = this.parkingService.getParkingRecords(); 
+    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
   }
 
   public get parkingCount(): number {
