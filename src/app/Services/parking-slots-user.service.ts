@@ -9,8 +9,10 @@ export class ParkingSlotsUserService {
   rows: string[] = [];
   cols = 0;
   asciiValue = 65;
-  tCount = 0;
+  tAvailCount = 0;
+  tReserveCount = 0;
 
+  
   constructor() {
     const slots = localStorage.getItem('slots');
     const rows = localStorage.getItem('rows');
@@ -34,7 +36,9 @@ export class ParkingSlotsUserService {
     }else{
         this.asciiValue = 65;
     }
-    this.tCount = this.slots.length;
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+    
   }
 
 
@@ -53,9 +57,11 @@ export class ParkingSlotsUserService {
   }else{
       alert("enter a valid vehicle type");
   }
-  this.tCount = this.slots.length;
+  this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+  this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
   this.saveTasks();
   console.log(this.rows,this.asciiValue,this.cols,this.slots);
+  console.log(this.tAvailCount,this.tReserveCount);
   return this.slots;
   }
 
@@ -79,18 +85,29 @@ export class ParkingSlotsUserService {
   }else{
     alert("no slots to remove");
   }
-this.tCount = this.slots.length;
+this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
 this.saveTasks();
+console.log(this.tAvailCount,this.tReserveCount);
 return this.slots;
   }
 
 
   getTcount(){
-    return this.tCount;
+    return this.tAvailCount;
   }
   getSlots(){
-    return this.tCount;
+    return this.tAvailCount;
   }
+  updateSlot(updatedSlot: ParkingSlot){
+    // console.log("hello")
+    this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length; 
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;   
+    this.saveTasks();
+  }
+
+
   private saveTasks(){
     localStorage.setItem('slots', JSON.stringify(this.slots));
     localStorage.setItem('rows',JSON.stringify(this.rows));
