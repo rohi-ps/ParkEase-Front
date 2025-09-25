@@ -9,19 +9,23 @@
     </div>
     <div *ngIf="isDisplay === 'Find Parking'">
       <app-parking-slots-user
-        (onBookEvent)="bookEvent()"
-        (onReserveEvent)="reserveEvent()"
+        (onBookEvent)="bookEvent($event)"
+        (onReserveEvent)="reserveEvent($event)"
       ></app-parking-slots-user>
     </div>
     <div *ngIf="isDisplay === 'My Reservation'">
-      <app-reservation></app-reservation>
+      <app-reservation (slotId)="isId"></app-reservation>
     </div>
     <div *ngIf="isDisplay === 'Vehicle logs'">
-      <app-vehicle-logs></app-vehicle-logs>
+      <app-vehicle-logs (slotId)="isId"></app-vehicle-logs>
     </div>
     <div *ngIf="isDisplay === 'Billing & Payment'">
       <app-billing></app-billing>
     </div> 
-  </div> 
-</div>
+     <app-parking-slots-user 
+      (onBookEvent)="bookEvent($event)"
+      (onReserveEvent)="reserveEvent($event)">
+    </app-parking-slots-user>
+  <!-- </div> 
+</div> -->
 

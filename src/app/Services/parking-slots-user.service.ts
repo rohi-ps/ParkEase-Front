@@ -9,8 +9,10 @@ export class ParkingSlotsUserService {
   rows: string[] = [];
   cols = 0;
   asciiValue = 65;
-  tCount = 0;
+  tAvailCount = 0;
+  tReserveCount = 0;
 
+  
   constructor() {
     const slots = localStorage.getItem('slots');
     const rows = localStorage.getItem('rows');
@@ -34,9 +36,12 @@ export class ParkingSlotsUserService {
     } else {
       this.asciiValue = 65;
     }
-    this.tCount = this.slots.length;
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+    
   }
 
+<<<<<<< HEAD
   getCreateSlots() {
     let vehicleType = prompt('Enter vehicle type (2W or 4W):');
     if (vehicleType === '2W' || vehicleType === '4W') {
@@ -55,6 +60,57 @@ export class ParkingSlotsUserService {
     this.saveTasks();
     console.log(this.rows, this.asciiValue, this.cols, this.slots);
     return this.slots;
+=======
+
+  getCreateSlots(){
+    let vehicleType = prompt("Enter vehicle type (2W or 4W):");
+  if(vehicleType==='2W' || vehicleType==='4W'){
+  
+  if(this.cols === 10 || this.cols===0){
+    const char =  String.fromCharCode(this.asciiValue)
+    this.rows.push(char);
+    this.cols = 0;
+    this.asciiValue++;
+  }
+  this.cols = this.cols + 1;
+  this.getPushSlots(String(vehicleType));
+  }else{
+      alert("enter a valid vehicle type");
+  }
+  this.tAvailCount = this.slots.filter(slot => slot.availability === 'available').length;
+  this.tReserveCount = this.slots.filter(slot => slot.availability === 'occupied').length;
+  this.saveTasks();
+  console.log(this.rows,this.asciiValue,this.cols,this.slots);
+  console.log(this.tAvailCount,this.tReserveCount);
+  return this.slots;
+  }
+
+  getPushSlots(type:string){
+    const text = this.rows.slice(-1)[0] + this.cols;
+    this.slots.push({ id: text,vehicleType : type, availability : 'available',  status: 'available' });
+  }
+  
+
+  getRefreshSlots(){
+      if(this.slots.length > 0){
+    const removedSlot = this.slots.pop();
+
+    if(this.cols === 1){
+      this.rows.pop();
+      this.asciiValue--;
+      this.cols = 10;
+    }else{
+      this.cols--;
+    }
+  }else{
+    alert("no slots to remove");
+  }
+this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+this.saveTasks();
+console.log(this.tAvailCount,this.tReserveCount);
+return this.slots;
+>>>>>>> 0e0d11d8f8eda87b3dbd1ff3bb2cd73eb81151a2
   }
 
   getPushSlots(type: string) {
@@ -72,6 +128,7 @@ export class ParkingSlotsUserService {
     return this.slots.filter(slot => slot.status === 'available');
   }
 
+<<<<<<< HEAD
   // --- NEW METHOD ---
   // Finds a slot by its ID and updates its status.
   updateSlotStatus(slotId: string, newStatus: 'available' | 'occupied'): void {
@@ -111,6 +168,24 @@ export class ParkingSlotsUserService {
     return this.tCount;
   }
   private saveTasks() {
+=======
+  getTcount(){
+    return this.tAvailCount;
+  }
+  getSlots(){
+    return this.tAvailCount;
+  }
+  updateSlot(updatedSlot: ParkingSlot){
+    // console.log("hello")
+    this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length; 
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;   
+    this.saveTasks();
+  }
+
+
+  private saveTasks(){
+>>>>>>> 0e0d11d8f8eda87b3dbd1ff3bb2cd73eb81151a2
     localStorage.setItem('slots', JSON.stringify(this.slots));
     localStorage.setItem('rows', JSON.stringify(this.rows));
     localStorage.setItem('cols', this.cols.toString());
