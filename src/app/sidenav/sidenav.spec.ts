@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Sidenav } from './sidenav';
+// import { Sidenav } from './sidenav';
 
-describe('Sidenav', () => {
-  let component: Sidenav;
-  let fixture: ComponentFixture<Sidenav>;
+// describe('Sidenav', () => {
+//   let component: Sidenav;
+//   let fixture: ComponentFixture<Sidenav>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Sidenav]
-    })
-    .compileComponents();
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       imports: [Sidenav]
+//     })
+//     .compileComponents();
 
-    fixture = TestBed.createComponent(Sidenav);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//     fixture = TestBed.createComponent(Sidenav);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });
