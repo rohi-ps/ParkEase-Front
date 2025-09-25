@@ -22,6 +22,7 @@ export class App {
 
   isSidenavOpen = true;
   isDisplay = "Dashboard";
+  isId = "";
   // isLoggedIn = false;
 
   // onUserLoggedIn() {
@@ -31,11 +32,14 @@ export class App {
   parkingEvent() {
     this.isDisplay = "Find Parking";
   }
-  bookEvent(){
+  bookEvent(data : string){
     this.isDisplay = "Vehicle logs";
+    this.isId = data;
+
   }
-  reserveEvent(){
+  reserveEvent(data : string){
     this.isDisplay = "My Reservation";
+    this.isId = data;
   }
 
   onToggle(isOpen: boolean) {

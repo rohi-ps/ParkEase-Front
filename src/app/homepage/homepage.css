@@ -150,14 +150,6 @@ body, html {
   }
 }
 
-
-
-
-
-
-
-
-
 .features-section {
   text-align: center;
 
@@ -223,5 +215,121 @@ body, html {
 .modal-content {
   background: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Added from inline styles in homepage.html */
+
+.page-bg {
+  background: linear-gradient(135deg, #e3f0ff 0%, #ffffff 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.navbar-custom {
+  background: #fff;
+  border-bottom: 2px solid #e3f0ff;
+}
+
+.navbar-brand-custom {
+  color: #2563eb;
+}
+
+.navbar-brand-custom i {
+  color: #2563eb;
+}
+
+.nav-link-custom {
+  color: #2563eb;
+}
+
+.hero-section {
+  background: linear-gradient(90deg, #e3f0ff 60%, #fff 100%);
+}
+
+.hero-title {
+  color: #2563eb;
+}
+
+.hero-lead {
+  color: #334155;
+}
+
+
+.hero-icon {
+  color: #2563eb;
+}
+
+.hero-img {
+  width: 90px;
+}
+
+.hero-caption {
+  color: #2563eb;
+}
+
+.why-section-title {
+  color: #2563eb;
+}
+
+.why-section-list {
+  max-width: 800px;
+  color: #334155;
+  list-style: disc inside;
+}
+
+.why-section-list li {
+  margin-bottom: 8px;
+}
+
+.about-section {
+  background: #f5faff;
+}
+
+.about-section-title {
+  color: #2563eb;
+}
+
+.about-section-text {
+  max-width: 800px;
+  color: #334155;
+}
+
+.features-section-title {
+  color: #2563eb;
+}
+
+.features-section-box-title {
+  color: #2563eb;
+}
+
+.features-section-box-text {
+  color: #334155;
+}
+
+.contact-section {
+  background: #f5faff;
+}
+
+.contact-section-title {
+  color: #2563eb;
+}
+
+.contact-section-text {
+  color: #334155;
+}
+
+.contact-section-list {
+  color: #334155;
+  list-style: none;
+  padding: 0;
+}
+
+.contact-section-list a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.contact-section-list li {
+  margin-bottom: 0.5em;
 }
 
