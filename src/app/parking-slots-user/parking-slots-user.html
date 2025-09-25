@@ -6,8 +6,6 @@
   </div>
   <hr />
   <br />
-  <button (click)="createSlots()" class="btn btn-create">Create Slot</button>
-  <button (click)="refreshSlots()" class="btn btn-refresh">Remove Slot</button> 
   <div class="legend">
     <div class="available legend-box"></div>
     Available
@@ -22,7 +20,6 @@
       [ngClass]="slot.status"
       (mouseenter)="showInfo(slot)"
       (mouseleave)="hideInfo()"
-      (click)="toggleSlot(slot)"
     >
       <!-- {{ slot.id }} -->
       <i class="fa-solid fa-p fa-xl"></i>
@@ -31,8 +28,7 @@
         <p>Id : {{ slot.id }}</p>
         <p>Type : {{ slot.vehicleType }}</p>
         <p>Availability : {{ slot.status }}</p>
-        <div class="">
-          <button class="btn btn1" (click)="onBook(slot)">BOOK NOW</button>
+        <div class="btn">
           <button class="btn btn2" (click)="onReserve(slot)">RESERVE</button>
         </div>
       </div>
