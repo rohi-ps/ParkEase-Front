@@ -2,7 +2,13 @@
   <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
+      
+      <ng-container *ngIf="isAdmin(); else userDashboard">
+      <app-dashboard-admin></app-dashboard-admin>
+    </ng-container>
+    <ng-template #userDashboard>
       <app-dashboard-user (newParkingEvent)="parkingEvent()"></app-dashboard-user>
+    </ng-template>
     </div>
     <div *ngIf="isDisplay === 'Find Parking'">
       <app-parking-slots-user
@@ -23,6 +29,6 @@
       (onReserveEvent)="reserveEvent($event)">
     </app-parking-slots-user>
     </div>
-    <!-- <app-dashboard-admin></app-dashboard-admin> -->
+    
    </div> 
 </div>
