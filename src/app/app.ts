@@ -22,7 +22,7 @@ export class App {
 
   isSidenavOpen = true;
   isDisplay = "Dashboard";
-  isId = "";
+  isId = "#";
   // isLoggedIn = false;
 
   // onUserLoggedIn() {

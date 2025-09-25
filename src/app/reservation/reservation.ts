@@ -11,7 +11,7 @@ import { ModifyReservation } from './modify-reservation/modify-reservation';
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
-  @Input() slotId:string="A-01";
+  // @Input() slotId:string="";
   customers: any[] = []
   selectedStatus = 'All Status';
   constructor(private cs: CustomerService) {

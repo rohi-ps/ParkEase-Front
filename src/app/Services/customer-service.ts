@@ -8,7 +8,7 @@ export class CustomerService {
   customers: Customer[] = [
     {
       id: 1,
-      slotId: 'A-01',
+      slotId: 'A1',
       vehicleNumber: 'TN09AB1234',
       vehicleType: '2W',
       entryDate: '2025-09-22',
@@ -21,7 +21,7 @@ export class CustomerService {
     },
     {
       id: 2,
-      slotId: 'B-02',
+      slotId: 'B2',
       vehicleNumber: 'TN10XY5678',
       vehicleType: '4W',
       entryDate: '2025-09-22',
@@ -34,7 +34,7 @@ export class CustomerService {
     },
     {
       id: 3,
-      slotId: 'C-03',
+      slotId: 'C3',
       vehicleNumber: 'TN11CD9012',
       vehicleType: '2W',
       entryDate: '2025-09-21',
@@ -47,7 +47,7 @@ export class CustomerService {
     },
     {
       id: 4,
-      slotId: 'D-14',
+      slotId: 'D4',
       vehicleNumber: 'TN12EF3456',
       vehicleType: '4W',
       entryDate: '2025-09-20',

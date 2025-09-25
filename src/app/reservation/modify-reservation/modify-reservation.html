@@ -5,13 +5,14 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" required>
+            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
             <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
-            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" required>
+            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" placeholder="eg:TN12GH3456" pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$" required>
             <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required</div>
+            <div class="text-danger" *ngIf="vehiclenumber.errors?.['pattern']">Vehicle Number Format must be TN12GH3456</div>
           </div>
         </div>
         <div class="form-row">

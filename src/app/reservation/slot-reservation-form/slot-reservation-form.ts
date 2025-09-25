@@ -11,10 +11,10 @@ import { CustomerService } from '../../Services/customer-service';
   styleUrl: './slot-reservation-form.css'
 })
 export class SlotReservationForm {
-  @Input() slotId: string = '';
-  ngOnInit() {
-    this.form.slotId = this.slotId;
-  }
+  // @Input() slotId!: string;
+  // ngOnInit() {
+  //   this.form.slotId = this.slotId;
+  // }
   vehicleTypes=Types;
   form={
     slotId:'',

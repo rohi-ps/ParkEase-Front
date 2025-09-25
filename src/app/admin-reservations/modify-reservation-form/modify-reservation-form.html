@@ -5,7 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A-15" required>
+            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
             <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
           </div>
           <div class="form-col">

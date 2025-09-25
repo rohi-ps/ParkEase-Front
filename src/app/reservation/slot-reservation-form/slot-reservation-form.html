@@ -6,7 +6,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" required>
+            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
             <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
           </div>
           <div class="form-col">
@@ -18,12 +18,13 @@
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" required>
+            <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" placeholder="eg: TN12GH3456" pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$" required>
               <option value="">--Select--</option>
               <option value="2W"><i class="fas fa-motorcycle"></i>2W</option>
               <option value="4W"><i class="fas fa-car"></i>4W</option>
             </select>
             <div class="text-danger" *ngIf="vehicletypes.touched && vehicletypes.invalid">Vehicle Type required</div>
+            <div class="text-danger" *ngIf="vehiclenumber.errors?.['pattern']">Vehicle Number Format must be TN12GH3456</div>
           </div>
           <div class="form-col">
             <label>Entry Date</label>
