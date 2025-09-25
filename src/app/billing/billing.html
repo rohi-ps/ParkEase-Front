@@ -16,7 +16,8 @@
         <div class="card h-100 text-bg-primary">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
-              <h6 class="card-subtitle mb-2">Total Revenue</h6>
+              <h6 class="card-subtitle mb-2" *ngIf="isAdmin()">Total Revenue</h6>
+              <h6 class="card-subtitle mb-2" *ngIf="!isAdmin()">Total Spends</h6>
             </div>
             <div>
               <h2 class="card-title">
@@ -64,7 +65,7 @@
       <thead class="thead-dark">
         <tr class="table-warning">
           <th>Invoice #</th>
-          <th>Customer</th>
+          <th *ngIf="isAdmin()" >Customer</th>
           <th>Vehicle</th>
           <th>Duration</th>
           <th>Total</th>
@@ -78,7 +79,7 @@
           <td>
             <strong>{{ invoice.invoiceNumber }}</strong>
           </td>
-          <td>{{ invoice.customerName }}</td>
+          <td *ngIf="isAdmin()">{{ invoice.customerName }}</td>
           <td>{{ invoice.vehicleNumber }}</td>
 
           <td>{{ parkingService.formatDurationFromMinutes(invoice.durationMinutes) }}</td>
