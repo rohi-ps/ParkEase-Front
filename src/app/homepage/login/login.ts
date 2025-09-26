@@ -12,7 +12,6 @@ declare var bootstrap: any;
   styleUrl: './login.css'
 })
 export class Login {
-  @Output() loginSuccess = new EventEmitter<void>();
   
   user = {
     email: "",
@@ -42,7 +41,6 @@ export class Login {
       const result = this.authService.authenticateUser(username, password);
       
       if (result.isAuthenticated) {
-        this.loginSuccess.emit();
         this.closeModal(); // Close the modal before navigation
         
         if (result.role === 'admin') {
