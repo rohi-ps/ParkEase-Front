@@ -18,6 +18,15 @@ export class ModifyReservationForm {
       this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType as VehicleTypes, vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
     }
   }
+  totalAmount: string = '';
+  updateAmount(): void {
+    if (this.form.VehicleType && this.form.EntryDate && this.form.EntryTime && this.form.ExitDate && this.form.ExitTime) {
+      const durationMinutes = this.customerService.calculateDurationInMinutes(this.form.EntryDate, this.form.EntryTime, this.form.ExitDate, this.form.ExitTime);
+      this.totalAmount = this.customerService.calculateAmount(this.form.VehicleType, durationMinutes);
+    } else {
+      this.totalAmount = '';
+    }
+  }
   vehicleTypes = Types
   form = {
     slotId: '',
@@ -40,6 +49,7 @@ export class ModifyReservationForm {
         this.form.ExitDate = '';
       }
     }
+    this.updateAmount()
   }
   checkTimeDifference(): void {
     const entryDate = new Date(this.form.EntryDate + 'T' + this.form.EntryTime);
@@ -54,7 +64,8 @@ export class ModifyReservationForm {
         this.form.ExitTime = '';
       }
     }
-  } 
+    this.updateAmount()
+  }  
   onModify(f: any): void {
     if (f.valid && this.customer) {
       const updatedCustomer: Customer = {
