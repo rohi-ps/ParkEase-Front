@@ -52,3 +52,9 @@ button:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
+.amount-display {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 5px;
+}

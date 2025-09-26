@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SlotReservationForm } from './slot-reservation-form';
 
 describe('SlotReservationForm', () => {
@@ -17,9 +16,6 @@ describe('SlotReservationForm', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
   it('should create', () => {
     expect(component).toBeTruthy();
   });

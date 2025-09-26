@@ -1,33 +1,29 @@
 <div class="container">
-    <div class="modifying">
-        <form #modifyreserve="ngForm" (ngSubmit)="onModify(modifyreserve)">
-        <div class="form-group">
+  <div class="modifying">
+    <form #modifyreserve="ngForm" (ngSubmit)="onModify(modifyreserve)">
+      <div class="form-group">
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A-15" required>
-            <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
+            <input type="text" id="slotId" name="slotId" ngModel class="form-control" [(ngModel)]="form.slotId" required
+              readonly />
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
-            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" placeholder="eg:TN12GH3456" pattern="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$" required>
-            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required</div>
-            <div class="text-danger" *ngIf="vehiclenumber.errors?.['pattern']">Vehicle Number Format must be TN12GH3456</div>
+            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" required>
+            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
+            </div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <select #vehicletypes="ngModel" name="vT" [(ngModel)]="form.VehicleType" required>
-              <option value="">--Select--</option>
-              <option value="2W"><i class="fas fa-motorcycle"></i>2W</option>
-              <option value="4W"><i class="fas fa-car"></i>4W</option>
-            </select>
-            <div class="text-danger" *ngIf="vehicletypes.touched && vehicletypes.invalid">Vehicle Type required</div>
+            <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control"
+              [(ngModel)]="form.VehicleType" required readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
-            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" [min]="minDate" required>
+            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" required>
             <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
           </div>
         </div>
@@ -39,7 +35,8 @@
           </div>
           <div class="form-col">
             <label>Exit Date</label>
-            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate" [min]="minDate" (change)="checkDateDifference()" required>
+            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate"
+              (change)="checkDateDifference()" required>
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
         </div>
@@ -47,15 +44,22 @@
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
-            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime" (change)="checkTimeDifference()" required>
+            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime"
+              (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>
         </div>
+        <div class="form-row" *ngIf="totalAmount">
+          <div class="form-col text-end">
+            <label><strong>Total Amount:</strong></label>
+            <div class="amount-display">{{ totalAmount }}</div>
+          </div>
+        </div>
         <div class="button3">
-            <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="modifyreserve.invalid" data-bs-dismiss="modal">Pay&Update</button>
+          <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="modifyreserve.invalid"
+            data-bs-dismiss="modal">pay & update Reservation</button>
         </div>
-
-        </div>
-        </form>
-    </div>
+      </div>
+    </form>
+  </div>
 </div>
