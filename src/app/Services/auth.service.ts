@@ -13,6 +13,7 @@ interface User {
 })
 export class AuthService {
   private currentUserRole: string = '';
+  private currentUser: User | null = null;
 
   private users: User[] = [
     {
@@ -36,7 +37,8 @@ export class AuthService {
     const user = this.users.find(u => u.username === username && u.password === password);
     
     if (user) {
-      this.currentUserRole = user.role; // Store the current user's role
+      this.currentUserRole = user.role;
+      this.currentUser = user;
       return {
         isAuthenticated: true,
         role: user.role
@@ -44,6 +46,7 @@ export class AuthService {
     }
     
     this.currentUserRole = '';
+    this.currentUser = null;
     return {
       isAuthenticated: false,
       role: ''
@@ -54,8 +57,13 @@ export class AuthService {
     return this.currentUserRole;
   }
 
+  getCurrentUser(): User | null {
+    return this.currentUser;
+  }
+
   logout() {
     this.currentUserRole = '';
+    this.currentUser = null;
   }
 
   registerUser(userData: { email: string; firstname: string; lastname: string; password: string }): boolean {
