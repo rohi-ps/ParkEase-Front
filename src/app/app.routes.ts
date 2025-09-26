@@ -12,11 +12,9 @@ export const routes: Routes = [
     {
         path: 'user-dashboard',
         component: UserComponent,
-        data: { roles: ['user'] }
     },
     {
         path: 'admin-dashboard',
         component: AdminComponent,
-        data: { roles: ['admin'] }
     }
 ];
