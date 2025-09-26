@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
@@ -12,6 +12,13 @@ import { ParkingSlot } from '../../model/parking-slots-module';
 })
 export class SlotReservationForm {
   public availableSlots: ParkingSlot[] = [];
+  constructor(private parkingSlotsService: ParkingSlotsUserService){}
+  ngOnInit(){
+    this.loadData();
+  }
+  private loadData(): void {
+    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
+  } 
   form = {
     slotId: '',
     VehicleType: '' ,

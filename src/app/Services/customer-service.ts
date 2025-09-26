@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customers';
+// import { ParkingSlotsUserService } from './parking-slots-user.service';
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  constructor(){}
+  // constructor(private parkingSlotsService: ParkingSlotsUserService){}
   customers: Customer[] = [
     {
       id: 1,
