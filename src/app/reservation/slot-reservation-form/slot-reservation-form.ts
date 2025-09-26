@@ -66,7 +66,6 @@ export class SlotReservationForm {
       }
     }
     this.updateAmount();
-    this.updateAmount();
   }
   onSlotChange(form: NgForm): void {
     const slotId = form.value.slotId;

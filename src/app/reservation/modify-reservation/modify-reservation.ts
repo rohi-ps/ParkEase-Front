@@ -45,7 +45,6 @@ export class ModifyReservation {
     ExitTime: ''
   }
   minDate: string = new Date().toISOString().split('T')[0];
-  minDate: string = new Date().toISOString().split('T')[0];
   checkDateDifference() {
     const entrydate = new Date(this.form.EntryDate);
     const exitdate = new Date(this.form.ExitDate);
@@ -57,7 +56,6 @@ export class ModifyReservation {
         this.form.ExitDate = '';
       }
     }
-    this.updateAmount()
     this.updateAmount()
   }
   checkTimeDifference(): void {
@@ -78,10 +76,8 @@ export class ModifyReservation {
   onSlotChange(form: NgForm): void {
     const slotId = form.value.slotId;
     if (!slotId) return;
-    // Find the full slot object from the selected ID
     const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
     if (selectedSlot) {
-      // Use patchValue to update only the vehicleType field in the form
       form.form.patchValue({
         vehicleType: selectedSlot.vehicleType
       });

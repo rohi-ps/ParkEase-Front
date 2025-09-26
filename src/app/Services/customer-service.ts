@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customers';
-// import { ParkingSlotsUserService } from './parking-slots-user.service';
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  // constructor(private parkingSlotsService: ParkingSlotsUserService){}
   customers: Customer[] = [
     {
       id: 1,
@@ -78,6 +76,7 @@ export class CustomerService {
       this.customers[index] = updated;
     }
   }
+  
   calculateDurationInMinutes(entryDate: string, entryTime: string, exitDate: string, exitTime: string): number {
     const entry = new Date(entryDate + 'T' + entryTime);
     const exit = new Date(exitDate + 'T' + exitTime);
