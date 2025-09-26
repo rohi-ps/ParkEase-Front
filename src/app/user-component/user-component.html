@@ -4,7 +4,8 @@
      <div *ngIf="isDisplay === 'Dashboard'">
       
       <ng-container *ngIf="isAdmin(); else userDashboard">
-      <app-dashboard-admin></app-dashboard-admin>
+      <!-- <app-dashboard-admin></app-dashboard-admin> -->
+       <app-admin-component></app-admin-component>
     </ng-container>
     <ng-template #userDashboard>
       <app-dashboard-user (newParkingEvent)="parkingEvent()"></app-dashboard-user>

@@ -1,0 +1,21 @@
+ <div class="app-container">
+   <app-sidenav-admin (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav-admin>>
+  <div class="main-content" [class.shifted]="isSidenavOpen">
+     <div *ngIf="isDisplay === 'Dashboard'">
+        <app-dashboard-admin></app-dashboard-admin>
+    </div>
+    <div *ngIf="isDisplay === 'Find Parking'">
+      <app-parking-slots (onBookEvent)="bookEvent($event)"></app-parking-slots>
+    </div>
+    <div *ngIf="isDisplay === 'My Reservation'">
+       <app-admin-reservations></app-admin-reservations>
+    </div>
+    <div *ngIf="isDisplay === 'Vehicle logs'">
+      <app-vehicle-logs></app-vehicle-logs>
+    </div>
+    <div *ngIf="isDisplay === 'Billing & Payment'">
+      <app-billing></app-billing>
+    </div> 
+    
+   </div> 
+</div>
