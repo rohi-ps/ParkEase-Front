@@ -1,5 +1,8 @@
  <div class="app-container">
-  <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
+  <div *ngIf="!isAdmin()">
+    <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
+  </div>
+  
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
       
