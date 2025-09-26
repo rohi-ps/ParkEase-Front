@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 import { ParkingSlot } from '../../model/parking-slots-module';
+
 @Component({
   selector: 'app-slot-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -12,13 +13,13 @@ import { ParkingSlot } from '../../model/parking-slots-module';
 })
 export class SlotReservationForm {
   public availableSlots: ParkingSlot[] = [];
-  constructor(private parkingSlotsService: ParkingSlotsUserService){}
+  constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService:CustomerService){}
   ngOnInit(){
     this.loadData();
   }
   private loadData(): void {
     this.availableSlots = this.parkingSlotsService.getAvailableSlots();
-  } 
+  }
   form = {
     slotId: '',
     VehicleType: '' ,
@@ -28,22 +29,6 @@ export class SlotReservationForm {
     ExitDate: '',
     ExitTime: ''
   }
-  private customerService = inject(CustomerService);
-  onSlotChange(form: NgForm): void {
-    const slotId = form.value.slotId;
-    if (!slotId) return;
-
-    // Find the full slot object from the selected ID
-    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
-
-    if (selectedSlot) {
-      // Use patchValue to update only the vehicleType field in the form
-      form.form.patchValue({
-        vehicleType: selectedSlot.vehicleType
-      });
-    }
-  }
-
   totalAmount: string = '';
   updateAmount(): void {
     if (this.form.VehicleType && this.form.EntryDate && this.form.EntryTime && this.form.ExitDate && this.form.ExitTime) {
@@ -81,6 +66,19 @@ export class SlotReservationForm {
       }
     }
     this.updateAmount();
+    this.updateAmount();
+  }
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
+    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+    if (selectedSlot) {
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+      this.form.VehicleType = selectedSlot.vehicleType;
+      this.updateAmount()
+    }
   }
   onSubmit(fo: any): void {
     if (fo.valid) {

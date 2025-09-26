@@ -12,6 +12,7 @@ import { Customer } from '../model/customers';
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
+
   customers: any[] = []
   selectedStatus = 'All Status';
   constructor(private cs: CustomerService) {
@@ -21,6 +22,7 @@ export class Reservation implements OnInit {
   }
   searchTerm: string = '';
   filteredCustomers(): any[] {
+    this.customers = this.cs.getallUsers();
     return this.customers.filter(customer => {
       const matchesStatus = this.selectedStatus === 'All Status' || customer.status.toLowerCase() === this.selectedStatus.toLowerCase();
       const matchesSearch = !this.searchTerm || customer.slotId.toLowerCase().includes(this.searchTerm.toLowerCase()) || customer.vehicleNumber.toLowerCase().includes(this.searchTerm.toLowerCase());
@@ -65,5 +67,6 @@ export class Reservation implements OnInit {
   onEdit(customer: Customer) {
     this.selectedCustomer = { ...customer }; 
   }
+
 }
  

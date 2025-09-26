@@ -1,9 +1,10 @@
-import { Component,Input,inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component,Input } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { VehicleTypes,Types } from '../../model/vtypes';
 import { CustomerService } from '../../Services/customer-service';
 import { Customer } from '../../model/customers';
+import { ParkingSlot } from '../../model/parking-slots-module';
+import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 @Component({
   selector: 'app-modify-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -12,11 +13,18 @@ import { Customer } from '../../model/customers';
 })
 export class ModifyReservationForm {
   @Input() customer: Customer | null = null;
-  private customerService = inject(CustomerService);
+  constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService:CustomerService){}
   ngOnChanges(): void {
     if (this.customer) {
-      this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType as VehicleTypes, vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
+      this.form = { slotId: this.customer.slotId, VehicleType: this.customer.vehicleType , vehicleNumber: this.customer.vehicleNumber, EntryDate: this.customer.entryDate, EntryTime: this.customer.entryTime, ExitDate: this.customer.exitDate, ExitTime: this.customer.exitTime }
     }
+  }
+  public availableSlots: ParkingSlot[] = [];
+  ngOnInit(){
+    this.loadData();
+  }
+  private loadData(): void {
+    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
   }
   totalAmount: string = '';
   updateAmount(): void {
@@ -27,10 +35,9 @@ export class ModifyReservationForm {
       this.totalAmount = '';
     }
   }
-  vehicleTypes = Types
   form = {
     slotId: '',
-    VehicleType: '' as VehicleTypes,
+    VehicleType: '' ,
     vehicleNumber: '',
     EntryDate: '',
     EntryTime: '',
@@ -65,7 +72,20 @@ export class ModifyReservationForm {
       }
     }
     this.updateAmount()
-  }  
+  }
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
+
+    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+
+    if (selectedSlot) {
+      
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+    }
+  }
   onModify(f: any): void {
     if (f.valid && this.customer) {
       const updatedCustomer: Customer = {
