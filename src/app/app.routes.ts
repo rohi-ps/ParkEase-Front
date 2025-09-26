@@ -13,13 +13,11 @@ export const routes: Routes = [
     {
         path: 'user-dashboard',
         component: UserComponent,
-        canActivate: [AuthGuard],
         data: { roles: ['user'] }
     },
     {
         path: 'admin-dashboard',
         component: AdminComponent,
-        canActivate: [AuthGuard],
         data: { roles: ['admin'] }
     }
 ];
