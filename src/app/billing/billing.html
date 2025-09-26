@@ -71,7 +71,7 @@
           <th>Total</th>
           <th>Status</th>
           
-          <th *ngIf="isAdmin()">Action</th>
+          <th *ngIf="!isAdmin()">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -97,7 +97,7 @@
               >{{ invoice.paymentStatus }}</span
             >
           </td>
-          <td *ngIf="isAdmin()">
+          <td *ngIf="!isAdmin()">
             <button
               *ngIf="invoice.paymentStatus === 'Pending'"
               class="btn btn-sm btn-primary"
