@@ -5,7 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input type="text" id="slotId" name="slotId" ngModel class="form-control" [(ngModel)]="form.slotId" required
+            <input type="text" id="slotId" name="slotId" ngModel class="form-control" (ngModelChange)="onSlotChange(modifyreserve)" [(ngModel)]="form.slotId" required
               readonly />
           </div>
           <div class="form-col">
