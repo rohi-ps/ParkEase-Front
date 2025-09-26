@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Parkingservice } from '../Services/parkingservice';
+import { AuthService } from '../Services/auth.service';
 import { Invoice } from '../model/billing';
 
 @Component({
@@ -19,7 +20,10 @@ export class Billing implements OnInit {
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
 
-  constructor(public parkingService: Parkingservice) {}
+  constructor(
+    public parkingService: Parkingservice,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -42,5 +46,9 @@ export class Billing implements OnInit {
   payInvoice(invoiceNumber: string): void {
     this.parkingService.markAsPaid(invoiceNumber);
     this.loadData();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.getCurrentUserRole() === 'admin';
   }
 }
