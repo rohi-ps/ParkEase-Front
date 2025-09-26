@@ -7,22 +7,105 @@ import { ParkingSlotsUserService } from './parking-slots-user.service';
   providedIn: 'root'
 })
 export class Parkingservice {
-  // Use simple private arrays for data storage
   private _parkingRecords: ParkingRecord[] = [];
   private _invoices: Invoice[] = [];
   
   private nextId = 1;
   private nextInvoiceId = 1;
 
-  constructor(private parkingSlotsService: ParkingSlotsUserService) {}
+  constructor(private parkingSlotsService: ParkingSlotsUserService) {
+    this._initializeStaticData();
+  }
   
   public getParkingRecords(): ParkingRecord[] {
-    return [...this._parkingRecords]; // Return a copy to prevent mutation
+    return [...this._parkingRecords]; 
   }
 
   public getInvoices(): Invoice[] {
-    return [...this._invoices]; // Return a copy
+    return [...this._invoices]; 
   }
+  private _initializeStaticData(): void {
+    const now = new Date();
+
+    // --- STATIC PARKING RECORDS ---
+    this._parkingRecords = [
+      {
+        id: 1,
+        vehicleNumber: 'MH-10-AB-1111',
+        vehicleType: '4W',
+        customerName: 'Dhruv',
+        slotId: 'A1',
+        entryTime: new Date(now.getTime() - 60 * 60 * 1000), // Parked 1 hour ago
+        exitTime: null,
+        status: 'Parked',
+      },
+      {
+        id: 2,
+        vehicleNumber: 'MH-12-CD-2222',
+        vehicleType: '2W',
+        customerName: 'Jagan',
+        slotId: 'B2',
+        entryTime: new Date(now.getTime() - 3 * 60 * 60 * 1000), // Entered 3 hours ago
+        exitTime: new Date(now.getTime() - 1 * 60 * 60 * 1000), // Exited 1 hour ago
+        status: 'Completed',
+      },
+      {
+        id: 3,
+        vehicleNumber: 'MH-14-EF-3333',
+        vehicleType: '4W',
+        customerName: 'Devraj',
+        slotId: 'C3',
+        entryTime: new Date(now.getTime() - 26 * 60 * 60 * 1000), // Entered 26 hours ago (yesterday)
+        exitTime: new Date(now.getTime() - 24 * 60 * 60 * 1000), // Exited 24 hours ago (yesterday)
+        status: 'Completed',
+      },
+       {
+        id: 4,
+        vehicleNumber: 'MH-09-GH-4444',
+        vehicleType: '2W',
+        customerName: 'Rohit',
+        slotId: 'D4',
+        entryTime: new Date(now.getTime() - 15 * 60 * 1000), // Parked 15 minutes ago
+        exitTime: null,
+        status: 'Parked',
+      },
+    ];
+
+    this._invoices = [
+      {
+        invoiceNumber: 'INV-001',
+        parkingRecordId: 2,
+        customerName: 'Jagan',
+        vehicleNumber: 'MH-12-CD-2222',
+        slotId: 'B2',
+        durationMinutes: 120, 
+        rate: 1.00,
+        subtotal: 120.00,
+        tax: 9.60,
+        total: 129.60,
+        paymentStatus: 'Pending',
+      },
+      {
+        invoiceNumber: 'INV-002',
+        parkingRecordId: 3,
+        customerName: 'Devraj',
+        vehicleNumber: 'MH-14-EF-3333',
+        slotId: 'C3',
+        durationMinutes: 120,
+        rate: 1.00,
+        subtotal: 120.00,
+        tax: 9.60,
+        total: 129.60,
+        paymentStatus: 'Paid',
+      }
+    ];
+
+    // --- UPDATE ID COUNTERS ---
+    // Ensuring new records don't have conflicting IDs
+    this.nextId = this._parkingRecords.length + 1;
+    this.nextInvoiceId = this._invoices.length + 1;
+  }
+
 
   private generateInvoice(record: ParkingRecord): void {
     if (!record.exitTime) return;

@@ -4,23 +4,23 @@
     <i class="bi bi-receipt-cutoff text-primary" style="font-size: 2rem"></i>
     <div class="ms-3">
       <h3 class="mb-0">Billing & Payments</h3>
-      <p class="text-muted mb-0">Manage payments and financial records/p>
+      <p class="text-muted mb-0">Manage invoices, payments, and financial records</p>
     </div>
   </div>
 
   <!-- Statistics Cards Section -->
   <div class="container align-items-center">
     <div class="row g-4 mb-4">
-      <!-- Total Expense Card -->
+      <!-- Total Revenue Card -->
       <div class="col-lg-4 col-md-6">
         <div class="card h-100 text-bg-primary">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
-              <h6 class="card-subtitle mb-2">Total Expense</h6>
+              <h6 class="card-subtitle mb-2">Total Revenue</h6>
             </div>
             <div>
               <h2 class="card-title">
-                {{ totalExpense | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ totalRevenue | currency : 'INR' : 'symbol' : '1.2-2' }}
               </h2>
             </div>
           </div>
@@ -58,7 +58,7 @@
   </div>
   <br />
   <!-- Invoices Table Section -->
-  <div><h3>Vehicle Parking History</h3></div>
+  <div><h3>Vehicle Activity Logs</h3></div>
   <div class="table-responsive bg-white border rounded-3 shadow-sm">
     <table class="table table-hover align-middle mb-0">
       <thead class="thead-dark">
@@ -69,7 +69,6 @@
           <th>Duration</th>
           <th>Total</th>
           <th>Status</th>
-          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -95,15 +94,7 @@
               >{{ invoice.paymentStatus }}</span
             >
           </td>
-          <td>
-            <button
-              *ngIf="invoice.paymentStatus === 'Pending'"
-              class="btn btn-sm btn-primary"
-              (click)="payInvoice(invoice.invoiceNumber)"
-            >
-              Pay
-            </button>
-          </td>
+        
         </tr>
         <tr *ngIf="(invoices)?.length === 0">
           <td colspan="7" class="text-center text-muted py-4">No invoices to display.</td>

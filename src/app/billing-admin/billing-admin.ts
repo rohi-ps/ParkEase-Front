@@ -1,21 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Parkingservice } from '../Services/parkingservice';
 import { Invoice } from '../model/billing';
 
 @Component({
-  selector: 'app-billing',
-  standalone: true, 
+  selector: 'app-billing-admin',
   imports: [CommonModule],
-  templateUrl: './billing.html',
-  styleUrl: './billing.css'
+  templateUrl: './billing-admin.html',
+  styleUrl: './billing-admin.css'
 })
-export class Billing implements OnInit {
-    
-  public invoices: Invoice[] = [];
-  public totalExpense: number = 0;
+export class BillingAdmin implements OnInit {
+   public invoices: Invoice[] = [];
+  public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
 
@@ -28,7 +24,7 @@ export class Billing implements OnInit {
   private loadData(): void {
     this.invoices = this.parkingService.getInvoices();
 
-    this.totalExpense = this.invoices
+    this.totalRevenue = this.invoices
       .filter(inv => inv.paymentStatus === 'Paid')
       .reduce((sum, inv) => sum + inv.total, 0);
 
@@ -39,8 +35,6 @@ export class Billing implements OnInit {
     this.totalInvoices = this.invoices.length;
   }
 
-  payInvoice(invoiceNumber: string): void {
-    this.parkingService.markAsPaid(invoiceNumber);
-    this.loadData();
-  }
+
+
 }
