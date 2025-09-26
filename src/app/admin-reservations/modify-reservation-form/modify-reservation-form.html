@@ -5,7 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A-15" required>
+            <input #slotid="ngModel" type="text" name="sId" [(ngModel)]="form.slotId" placeholder="eg: A1" required>
             <div class="text-danger" *ngIf="slotid.touched && slotid.invalid">Slot Id is required</div>
           </div>
           <div class="form-col">
@@ -49,6 +49,12 @@
             <label>Exit Time</label>
             <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime" (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
+          </div>
+        </div>
+        <div class="form-row" *ngIf="totalAmount">
+          <div class="form-col text-end">
+            <label><strong>Total Amount:</strong></label>
+            <div class="amount-display">{{totalAmount}}</div>
           </div>
         </div>
         <div class="button3">
