@@ -12,12 +12,13 @@ import { VehicleLogs } from "../vehicle-logs/vehicle-logs";
 import { Billing } from "../billing/billing";
 import { AuthService } from "../Services/auth.service";
 import { Router } from '@angular/router';
+import { AdminComponent } from "../admin-component/admin-component";
 
 
 
 @Component({
   selector: 'app-user-component',
-  imports: [ParkingSlots, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, Homepage, CommonModule, DashboardComponent],
+  imports: [ParkingSlots, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, Homepage, CommonModule, DashboardComponent, AdminComponent],
   templateUrl: './user-component.html',
   styleUrl: './user-component.css'
 })

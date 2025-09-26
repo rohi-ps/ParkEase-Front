@@ -45,6 +45,7 @@ export class ModifyReservation {
     ExitTime: ''
   }
   minDate: string = new Date().toISOString().split('T')[0];
+  minDate: string = new Date().toISOString().split('T')[0];
   checkDateDifference() {
     const entrydate = new Date(this.form.EntryDate);
     const exitdate = new Date(this.form.ExitDate);
@@ -56,6 +57,7 @@ export class ModifyReservation {
         this.form.ExitDate = '';
       }
     }
+    this.updateAmount()
     this.updateAmount()
   }
   checkTimeDifference(): void {

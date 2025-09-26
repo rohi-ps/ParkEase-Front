@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 import { ParkingSlot } from '../../model/parking-slots-module';
+
 @Component({
   selector: 'app-slot-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -64,6 +65,7 @@ export class SlotReservationForm {
         this.form.ExitTime = '';
       }
     }
+    this.updateAmount();
     this.updateAmount();
   }
   onSlotChange(form: NgForm): void {

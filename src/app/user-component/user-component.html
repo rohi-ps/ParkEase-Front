@@ -1,10 +1,13 @@
  <div class="app-container">
-  <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
+  <div *ngIf="!isAdmin()">
+    <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
+  </div>
+  
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
-      
       <ng-container *ngIf="isAdmin(); else userDashboard">
-      <app-dashboard-admin></app-dashboard-admin>
+      <!-- <app-dashboard-admin></app-dashboard-admin> -->
+       <app-admin-component></app-admin-component>
     </ng-container>
     <ng-template #userDashboard>
       <app-dashboard-user (newParkingEvent)="parkingEvent()"></app-dashboard-user>

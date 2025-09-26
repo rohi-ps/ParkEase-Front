@@ -14,6 +14,7 @@
           </div>
           <div class="modal-body">
             <app-slot-reservation-form ></app-slot-reservation-form>
+            <app-slot-reservation-form ></app-slot-reservation-form>
           </div>
         </div>
       </div>
@@ -60,9 +61,9 @@
         <td>{{customer.slotId}}</td>
         <td>{{customer.vehicleNumber}}</td>
         <td>{{customer.vehicleType}}</td>
-        <td>{{customer.entryDate}}</td>
+        <td>{{customer.entryDate |date}}</td>
         <td>{{customer.entryTime}}</td>
-        <td>{{customer.exitDate}}</td>
+        <td>{{customer.exitDate|date}}</td>
         <td>{{customer.exitTime}}</td>
         <td>{{ customer.Duration }}</td>
         <td>{{ customer.Amount }}</td>

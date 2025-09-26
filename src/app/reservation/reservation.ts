@@ -1,4 +1,4 @@
-import { Component,Input,OnInit} from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SlotReservationForm } from "./slot-reservation-form/slot-reservation-form";
@@ -67,5 +67,6 @@ export class Reservation implements OnInit {
   onEdit(customer: Customer) {
     this.selectedCustomer = { ...customer }; 
   }
+
 }
  
