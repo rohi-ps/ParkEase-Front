@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { SlotReservationForm } from "./slot-reservation-form/slot-reservation-form";
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservation } from './modify-reservation/modify-reservation';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-reservation',
-  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation],
+  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation,RouterOutlet],
   templateUrl: './reservation.html',
   styleUrl: './reservation.css'
 })

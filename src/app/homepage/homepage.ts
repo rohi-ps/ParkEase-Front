@@ -13,21 +13,7 @@ import { Register } from './register/register';
   styleUrl: './homepage.css'
 })
 export class Homepage {
-  @Output() userLoggedIn = new EventEmitter<void>();
-
-  onLoginSuccess() {
-    // Close the modal
-    this.userLoggedIn.emit();
-    }
-    // Emit the event to the parent component
   }
-  // closeModal(id: string) {
-  //   const modalEl = document.getElementById(id);
-  //   if (modalEl) {
-  //     const modalInstance = bootstrap.Modal.getInstance(modalEl);
-  //     modalInstance?.hide();
-  //   }
-  // }
 
  
 

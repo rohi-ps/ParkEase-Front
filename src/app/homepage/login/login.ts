@@ -1,6 +1,7 @@
 import { Component,OnInit,Output,EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-login',
   imports: [FormsModule, CommonModule],
@@ -8,24 +9,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.css'
 })
 export class Login {
-  @Output() loginSuccess = new EventEmitter<void>();
-  
+
+  constructor(private router:Router){}
   user={
   email: "",
   password:""
   }
-  onSubmit(form:any) {
-   if (form.valid) {
+onSubmit(form: any) {
+  if (form.valid) {
     const email = this.user.email;
-    const password = this.user.password;
     const domain = email.split('@')[1];
 
-    this.loginSuccess.emit();
     const adminDomains = ['company.com', 'admin.com'];
     const isAdmin = adminDomains.includes(domain);
 
     if (isAdmin) {
-      alert('Logged in as Admin');
+      this.router.navigate(['/nav/userdashboard']).then(() => {
+  const backdrop = document.querySelector('.modal-backdrop');
+  if (backdrop) backdrop.remove();
+  document.body.classList.remove('modal-open');
+});
     } else {
       alert('Logged in as Normal User');
     }
@@ -34,5 +37,7 @@ export class Login {
   } else {
     console.warn('Form is invalid');
   }
-  }
+}
+
+   
 }
