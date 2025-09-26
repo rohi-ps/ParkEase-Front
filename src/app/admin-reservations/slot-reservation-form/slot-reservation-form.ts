@@ -22,8 +22,17 @@ export class SlotReservationForm {
   }
   private customerService = inject(CustomerService);
 
-  minDate: string = new Date().toISOString().split('T')[0];
+  totalAmount: string = '';
+  updateAmount(): void {
+    if (this.form.VehicleType && this.form.EntryDate && this.form.EntryTime && this.form.ExitDate && this.form.ExitTime) {
+      const durationMinutes = this.customerService.calculateDurationInMinutes(this.form.EntryDate, this.form.EntryTime, this.form.ExitDate, this.form.ExitTime);
+      this.totalAmount = this.customerService.calculateAmount(this.form.VehicleType, durationMinutes);
+    } else {
+      this.totalAmount = '';
+    }
+  }
 
+  minDate: string = new Date().toISOString().split('T')[0];
   checkDateDifference(){
     const entrydate=new Date(this.form.EntryDate);
     const exitdate=new Date(this.form.ExitDate);
@@ -35,6 +44,7 @@ export class SlotReservationForm {
        this.form.ExitDate = '';
       }
     }
+    this.updateAmount();
   }
   checkTimeDifference():void{
     const entryDate = new Date(this.form.EntryDate+'T'+this.form.EntryTime);
@@ -49,6 +59,7 @@ export class SlotReservationForm {
         this.form.ExitTime = '';
       }
     }
+    this.updateAmount();
   }
   onSubmit(fo:any):void{
     if(fo.valid){
