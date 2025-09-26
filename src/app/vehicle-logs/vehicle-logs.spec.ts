@@ -17,9 +17,9 @@ const getTodayAtMidnight = () => {
 
 // --- MOCK DATA ---
 const MOCK_PARKING_RECORDS: ParkingRecord[] = [
-  { id: 1, vehicleNumber: 'TS-01', customerName: 'John', status: 'Parked', entryTime: new Date(), exitTime: null, slotId: 'A1', vehicleType: '4W' },
-  { id: 2, vehicleNumber: 'TS-02', customerName: 'Jane', status: 'Completed', entryTime: new Date(), exitTime: new Date(), slotId: 'A2', vehicleType: '4W' },
-  { id: 3, vehicleNumber: 'TS-03', customerName: 'Doe', status: 'Parked', entryTime: new Date(), exitTime: null, slotId: 'B1', vehicleType: '2W' },
+  { id: 1, vehicleNumber: 'MH09DH0909', customerName: 'Devraj', status: 'Parked', entryTime: new Date(), exitTime: null, slotId: 'A1', vehicleType: '4W' },
+  { id: 2, vehicleNumber: 'MH10CK8179', customerName: 'Dhruv', status: 'Completed', entryTime: new Date(), exitTime: new Date(), slotId: 'A2', vehicleType: '4W' },
+  { id: 3, vehicleNumber: 'MH12TF1212', customerName: 'Rohit', status: 'Parked', entryTime: new Date(), exitTime: null, slotId: 'B1', vehicleType: '2W' },
 ];
 
 const MOCK_AVAILABLE_SLOTS: ParkingSlot[] = [
@@ -40,21 +40,19 @@ describe('VehicleLogs', () => {
     mockParkingService = jasmine.createSpyObj('Parkingservice', ['getParkingRecords', 'logEntry', 'logExit']);
     mockParkingSlotsService = jasmine.createSpyObj('ParkingSlotsUserService', ['getAvailableSlots']);
 
-    // Configure the testing module
+    
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
         CommonModule,
-        VehicleLogs // Import the standalone component
+        VehicleLogs 
       ],
       providers: [
-        // Provide the mock services instead of the real ones
         { provide: Parkingservice, useValue: mockParkingService },
         { provide: ParkingSlotsUserService, useValue: mockParkingSlotsService }
       ]
     }).compileComponents();
 
-    // Set up the mock return values before creating the component
     mockParkingService.getParkingRecords.and.returnValue(MOCK_PARKING_RECORDS);
     mockParkingSlotsService.getAvailableSlots.and.returnValue(MOCK_AVAILABLE_SLOTS);
     
@@ -107,7 +105,6 @@ describe('VehicleLogs', () => {
   describe('Form Actions', () => {
     it('should call parkingService.logEntry and reload data on logEntry', () => {
       const mockForm = { value: { vehicleNumber: 'NEW-01' }, reset: () => {} } as NgForm;
-      // THE FIX: Cast component to 'any' to spy on the private method
       spyOn(component as any, 'loadData'); 
       spyOn(mockForm, 'reset');
 
@@ -120,7 +117,6 @@ describe('VehicleLogs', () => {
 
     it('should call parkingService.logExit and reload data on logExit', () => {
       const mockForm = { value: { selectedVehicleNumber: 'TS-01' }, resetForm: () => {} } as NgForm;
-      // THE FIX: Cast component to 'any' to spy on the private method
       spyOn(component as any, 'loadData');
       spyOn(mockForm, 'resetForm');
 
@@ -132,7 +128,6 @@ describe('VehicleLogs', () => {
     });
 
     it('should call parkingService.logExit and reload data from markAsExitedFromTable', () => {
-      // THE FIX: Cast component to 'any' to spy on the private method
       spyOn(component as any, 'loadData');
       const vehicleNumber = 'TS-03';
 
