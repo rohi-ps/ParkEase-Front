@@ -1,10 +1,10 @@
-import { Component,Input,OnInit} from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SlotReservationForm } from "./slot-reservation-form/slot-reservation-form";
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservation } from './modify-reservation/modify-reservation';
-import { RouterOutlet } from '@angular/router';
+import { Customer } from '../model/customers';
 @Component({
   selector: 'app-reservation',
   imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation,RouterOutlet],
@@ -12,7 +12,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
-  @Input() slotId:string="A-01";
+
   customers: any[] = []
   selectedStatus = 'All Status';
   constructor(private cs: CustomerService) {
@@ -21,7 +21,8 @@ export class Reservation implements OnInit {
       this.customers = this.cs.getallUsers();
   }
   searchTerm: string = '';
-  get filteredCustomers(): any[] {
+  filteredCustomers(): any[] {
+    this.customers = this.cs.getallUsers();
     return this.customers.filter(customer => {
       const matchesStatus = this.selectedStatus === 'All Status' || customer.status.toLowerCase() === this.selectedStatus.toLowerCase();
       const matchesSearch = !this.searchTerm || customer.slotId.toLowerCase().includes(this.searchTerm.toLowerCase()) || customer.vehicleNumber.toLowerCase().includes(this.searchTerm.toLowerCase());
@@ -62,6 +63,10 @@ export class Reservation implements OnInit {
       customerToUpdate.status = 'Cancelled';
     }
   }
+  selectedCustomer: Customer | null = null;
+  onEdit(customer: Customer) {
+    this.selectedCustomer = { ...customer }; 
+  }
+
 }
  
-//this is a trial

@@ -1,12 +1,14 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterEvent, RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
+
 
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [CommonModule, RouterOutlet,RouterLink],
+  imports: [CommonModule, RouterLink, RouterOutlet],
   templateUrl: './sidenav.html',
   styleUrls: ['./sidenav.css']
 })

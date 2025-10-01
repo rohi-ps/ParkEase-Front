@@ -20,4 +20,12 @@ describe('SlotReservationForm', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+  it('should initialize form with empty values', () => {
+    expect(component.form.slotId).toBe('');
+    expect(component.form.vehicleNumber).toBe('');
+    expect(component.form.VehicleType).toBe('');
+  });
 });

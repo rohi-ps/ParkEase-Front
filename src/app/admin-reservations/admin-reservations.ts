@@ -21,6 +21,7 @@ export class AdminReservations {
   }
   searchTerm: string = '';
   filteredCustomers(): any[] {
+    this.customers = this.cs.getallUsers();
     return this.customers.filter(customer => {
       const matchesStatus = this.selectedStatus === 'All Status' || customer.status.toLowerCase() === this.selectedStatus.toLowerCase();
       const matchesSearch = !this.searchTerm || customer.slotId.toLowerCase().includes(this.searchTerm.toLowerCase()) || customer.vehicleNumber.toLowerCase().includes(this.searchTerm.toLowerCase());

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { RecentActivity } from "./recent-activity/recent-activity";
-import { Activity } from './dashboard-user-model';
+import { Activity } from '../model/dashboard-user-model';
 import { ParkingStatus } from "./parking-status/parking-status";
 import { DashboardStats } from "./dashboard-stats/dashboard-stats";
 import { SummaryCard } from "./summary-card/summary-card";

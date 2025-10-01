@@ -1,29 +1,17 @@
 import { Component} from '@angular/core';
-import { ParkingSlots } from "./parking-slots/parking-slots";
-import { SidenavComponent } from './sidenav/sidenav';
-import { ParkingSlotsUser } from "./parking-slots-user/parking-slots-user";
-import { DashboardUser } from './dashboard-user/dashboard-user';
-import { Billing } from "./billing/billing";
-import { VehicleLogs } from "./vehicle-logs/vehicle-logs";
-import { Homepage } from "./homepage/homepage";
-import {RouterOutlet } from '@angular/router';
 
-import { Reservation } from "./reservation/reservation";
-
-import { CommonModule } from '@angular/common';
-
-
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [Homepage, CommonModule, SidenavComponent, DashboardUser, ParkingSlotsUser, Reservation, VehicleLogs, Billing, RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   isSidenavOpen = true;
   isDisplay = "Dashboard";
-  isId = "";
+  isId = "#";
   // isLoggedIn = false;
 
   // onUserLoggedIn() {
@@ -50,6 +38,7 @@ export class App {
   onDisplayClicked(item : string){
     this.isDisplay = item;
   }
+ 
 
 }
 

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customers';
+// import { ParkingSlotsUserService } from './parking-slots-user.service';
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  constructor(){}
+  // constructor(private parkingSlotsService: ParkingSlotsUserService){}
   customers: Customer[] = [
     {
       id: 1,
-      slotId: 'A-01',
+      slotId: 'F1',
       vehicleNumber: 'TN09AB1234',
       vehicleType: '2W',
       entryDate: '2025-09-22',
@@ -21,7 +22,7 @@ export class CustomerService {
     },
     {
       id: 2,
-      slotId: 'B-02',
+      slotId: 'G2',
       vehicleNumber: 'TN10XY5678',
       vehicleType: '4W',
       entryDate: '2025-09-22',
@@ -34,7 +35,7 @@ export class CustomerService {
     },
     {
       id: 3,
-      slotId: 'C-03',
+      slotId: 'H3',
       vehicleNumber: 'TN11CD9012',
       vehicleType: '2W',
       entryDate: '2025-09-21',
@@ -47,7 +48,7 @@ export class CustomerService {
     },
     {
       id: 4,
-      slotId: 'D-14',
+      slotId: 'I4',
       vehicleNumber: 'TN12EF3456',
       vehicleType: '4W',
       entryDate: '2025-09-20',
