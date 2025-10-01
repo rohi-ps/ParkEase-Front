@@ -44,10 +44,10 @@ export class Login {
         this.closeModal(); // Close the modal before navigation
         
         if (result.role === 'admin') {
-          this.router.navigate(['/admin-dashboard']);
+          this.router.navigate(['adminsidenav']);
           console.log('Navigating to admin dashboard');
         } else {
-          this.router.navigate(['/user-dashboard']);
+          this.router.navigate(['usersidenav']);
           console.log('Navigating to user dashboard');
         }
       } else {
