@@ -5,6 +5,7 @@ import { SlotReservationForm } from "./slot-reservation-form/slot-reservation-fo
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservation } from './modify-reservation/modify-reservation';
 import { Customer } from '../model/customers';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-reservation',
   imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation,RouterOutlet],
