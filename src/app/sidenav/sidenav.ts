@@ -16,6 +16,7 @@ export class SidenavComponent {
   isOpen = true; // Initial state is open
 
   @Output() toggleEvent = new EventEmitter<boolean>();
+
   @Output() items = new EventEmitter();
 
   toggle() {
@@ -27,4 +28,5 @@ export class SidenavComponent {
     // console.log(item);
     this.items.emit(item);
   }
+  
 }

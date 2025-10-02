@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-
   isSidenavOpen = true;
   isDisplay = "Dashboard";
   isId = "#";
@@ -42,3 +41,5 @@ export class App {
  
 
 }
+
+

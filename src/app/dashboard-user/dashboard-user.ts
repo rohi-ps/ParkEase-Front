@@ -4,12 +4,13 @@ import { Activity } from '../model/dashboard-user-model';
 import { ParkingStatus } from "./parking-status/parking-status";
 import { DashboardStats } from "./dashboard-stats/dashboard-stats";
 import { SummaryCard } from "./summary-card/summary-card";
+import { RouterOutlet } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-dashboard-user',
-  imports: [RecentActivity, ParkingStatus, DashboardStats, SummaryCard],
+  imports: [RecentActivity, ParkingStatus, DashboardStats, SummaryCard,RouterOutlet],
   templateUrl: './dashboard-user.html',
   styleUrl: './dashboard-user.css'
 })
