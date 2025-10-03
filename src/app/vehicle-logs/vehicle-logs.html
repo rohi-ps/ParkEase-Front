@@ -123,7 +123,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100" [disabled]="!entryForm.valid">
+          <button type="submit" class="btn btn-success w-100" [disabled]="!entryForm.valid"  data-bs-dismiss="modal">
             Log Entry
           </button>
         </div>
@@ -184,7 +184,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid">
+          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid"  data-bs-dismiss="modal">
             Confirm Exit
           </button>
         </div>
@@ -204,7 +204,7 @@
             <h6 class="card-subtitle mb-2">Available Slots</h6>
           </div>
           <div>
-            <h4 class="card-title">25</h4>
+            <h4 class="card-title">{{availableSlotsCount}}</h4>
           </div>
         </div>
       </div>

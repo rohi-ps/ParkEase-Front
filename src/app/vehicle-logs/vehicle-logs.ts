@@ -17,6 +17,7 @@ export class VehicleLogs implements OnInit {
   
   public parkingRecords: ParkingRecord[] = [];
   public availableSlots: ParkingSlot[] = [];
+  public availableSlotsCount:number=0;
 
   constructor(
     private parkingService: Parkingservice,
@@ -26,6 +27,8 @@ export class VehicleLogs implements OnInit {
   ngOnInit() {
     // Load the initial data when the component loads
     this.loadData();
+    this.availableSlotsCount=this.parkingSlotsService.getTcount()
+
   }
 
   private loadData(): void {

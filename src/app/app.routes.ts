@@ -20,7 +20,8 @@ export const routes: Routes = [
         {path:'userdashboard',component:DashboardUser},
         {path:'userparking',component:ParkingSlotsUser},
         {path:'userreservation',component:Reservation},
-        {path:'billing',component:Billing}
+        {path:'billing',component:Billing},
+        {path:'logout',component:Homepage}
     ]
   },
    {path:'adminsidenav',component:SidenavAdmin,

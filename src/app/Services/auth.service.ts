@@ -15,23 +15,31 @@ export class AuthService {
   private currentUserRole: string = '';
   private currentUser: User | null = null;
 
+  // Added users 'Jagan' and 'Devraj' to match invoice data for easy testing.
   private users: User[] = [
     {
       "role": "admin",
-      "username": "admin1",
-      "password": "adminPass123"
+      "username": "admin",
+      "password": "admin"
     },
     {
       "role": "user",
-      "username": "user1",
-      "password": "userPass123"
+      "username": "Jagan",
+      "password": "password",
+      "firstname":"Jagan"
     },
     {
       "role": "user",
-      "username": "user2",
-      "password": "userPass456"
+      "username": "Devraj",
+      "password": "password",
+      "firstname":"Devraj"
     }
   ];
+
+  constructor() {
+    // Load user from storage when the app starts or reloads
+    this.loadUserFromSession();
+  }
 
   authenticateUser(username: string, password: string): { isAuthenticated: boolean; role: string } {
     const user = this.users.find(u => u.username === username && u.password === password);
@@ -39,6 +47,10 @@ export class AuthService {
     if (user) {
       this.currentUserRole = user.role;
       this.currentUser = user;
+      
+      // Save the logged-in user to sessionStorage
+      sessionStorage.setItem('currentUser', JSON.stringify(user));
+
       return {
         isAuthenticated: true,
         role: user.role
@@ -64,17 +76,26 @@ export class AuthService {
   logout() {
     this.currentUserRole = '';
     this.currentUser = null;
+    // Remove the user from sessionStorage on logout
+    sessionStorage.removeItem('currentUser');
+  }
+
+  private loadUserFromSession(): void {
+    const storedUser = sessionStorage.getItem('currentUser');
+    if (storedUser) {
+      const user: User = JSON.parse(storedUser);
+      this.currentUser = user;
+      this.currentUserRole = user.role;
+    }
   }
 
   registerUser(userData: { email: string; firstname: string; lastname: string; password: string }): boolean {
-    // Check if user already exists
     if (this.users.some(user => user.username === userData.email)) {
       return false; // User already exists
     }
 
-    // Add new user
     const newUser: User = {
-      role: 'user', // Default role for new registrations
+      role: 'user',
       username: userData.email,
       password: userData.password,
       firstname: userData.firstname,
@@ -82,12 +103,6 @@ export class AuthService {
     };
 
     this.users.push(newUser);
-    console.log('Updated users array:', this.users);
     return true;
-  }
-
-  // Helper method to get all users (for debugging)
-  getAllUsers(): User[] {
-    return this.users;
   }
 }

@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   data = 20;
   ngOnInit(): void {
 
-    this.availableSlots = this.parkingSlotsUserService.getSlots();
+    this.availableSlots = this.parkingSlotsUserService.getTcount();
     this.occupiedSlots = this.parkingSlotsUserService.getOccupiedSlots();
     this.totalSlots = this.availableSlots + this.occupiedSlots;
     this.stats = [
