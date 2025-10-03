@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { StatCardComponent } from './stat-card.component/stat-card.component';
 import { ParkingStats } from "./parking-stats/parking-stats";
 import { Stat } from '../model/dashboard-user-model';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -12,25 +13,34 @@ import { Stat } from '../model/dashboard-user-model';
   styleUrls: ['./dashboard-admin.css']
 })
 export class DashboardComponent implements OnInit {
+  constructor(private parkingSlotsUserService : ParkingSlotsUserService) {  }
+
+  availableSlots: number = 0;
+  occupiedSlots: number = 0;
+  totalSlots: number = 0
   stats: Stat[] = [];
   data = 20;
   ngOnInit(): void {
+
+    this.availableSlots = this.parkingSlotsUserService.getSlots();
+    this.occupiedSlots = this.parkingSlotsUserService.getOccupiedSlots();
+    this.totalSlots = this.availableSlots + this.occupiedSlots;
     this.stats = [
       {
         title: 'Total Parking Slots',
-        value: 150,
+        value: this.totalSlots,
         iconClass: 'far fa-square', 
         iconColor: '#007bff' 
       },
       {
         title: 'Occupied Slots',
-        value: 89,
+        value: this.occupiedSlots,
         iconClass: 'fas fa-truck-moving', 
         iconColor: '#dc3545' 
       },
       {
         title: 'Available Slots',
-        value: 61,
+        value: this.availableSlots,
         iconClass: 'fas fa-check-circle', 
         iconColor: '#28a745' 
       },

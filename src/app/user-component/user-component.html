@@ -1,4 +1,4 @@
- <div class="app-container">
+ <!-- <div class="app-container">
   <div *ngIf="!isAdmin()">
     <app-sidenav (toggleEvent)="onToggle($event)" (items)="onDisplayClicked($event)"></app-sidenav>
   </div>
@@ -6,7 +6,7 @@
   <div class="main-content" [class.shifted]="isSidenavOpen">
      <div *ngIf="isDisplay === 'Dashboard'">
       <ng-container *ngIf="isAdmin(); else userDashboard">
-      <!-- <app-dashboard-admin></app-dashboard-admin> -->
+      <app-dashboard-admin></app-dashboard-admin>
        <app-admin-component></app-admin-component>
     </ng-container>
     <ng-template #userDashboard>
@@ -34,4 +34,4 @@
     </div>
     
    </div> 
-</div>
+</div> -->

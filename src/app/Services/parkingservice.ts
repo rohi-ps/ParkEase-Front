@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Invoice, ParkingRecord } from '../model/billing';
 import { ParkingSlotsUserService } from './parking-slots-user.service';
  
- 
 @Injectable({
   providedIn: 'root'
 })
@@ -17,12 +16,20 @@ export class Parkingservice {
     this._initializeStaticData();
   }
  
-  public getParkingRecords(): ParkingRecord[] {
-    return [...this._parkingRecords];
+  public getParkingRecords(role: string, username?: string): ParkingRecord[] {
+    if (role === 'admin') {
+      return [...this._parkingRecords];
+    } else {
+      return [...this._parkingRecords.filter(record => record.customerName === username)];
+    }
   }
  
-  public getInvoices(): Invoice[] {
-    return [...this._invoices];
+  public getInvoices(role: string, username?: string): Invoice[] {
+    if (role === 'admin') {
+      return [...this._invoices];
+    } else {
+      return [...this._invoices.filter(invoice => invoice.customerName === username)];
+    }
   }
   private _initializeStaticData(): void {
     const now = new Date();

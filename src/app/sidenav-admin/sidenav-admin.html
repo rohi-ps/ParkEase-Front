@@ -24,34 +24,38 @@
 
   <ul class="nav-list" >
     <li>
-      <a routerLink="/dashboard" (click)="selectLink('Dashboard')">
+      <a routerLink="admindashboard" (click)="selectLink('Dashboard')">
         <i class="fa-regular fa-chart-bar" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">Dashboard</span>
       </a>
     </li>
     <li>
-      <a routerLink="/profile" (click)="selectLink('Find Parking')">
+      <a routerLink="adminparking" (click)="selectLink('Find Parking')">
         <i class="fa-solid fa-square-parking" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">Find Parking</span>
       </a>
     </li>
     <li>
-      <a routerLink="/settings" (click)="selectLink('My Reservation')">
+      <a routerLink="adminreservation" (click)="selectLink('My Reservation')">
         <i class="fa-solid fa-calendar-days" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">My Reservation</span>
       </a>
     </li>
     <li>
-      <a routerLink="/settings" (click)="selectLink('Vehicle logs')">
+      <a routerLink="vehiclelogs" (click)="selectLink('Vehicle logs')">
         <i class="fa-solid fa-car" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">Vehicle logs</span>
       </a>
     </li>
     <li>
-      <a routerLink="/settings" (click)="selectLink('Billing & Payment')">
+      <a routerLink="billing" (click)="selectLink('Billing & Payment')">
         <i class="fa-solid fa-book" style="color: #74c0fc"></i>
         <span *ngIf="isOpen" style="cursor: pointer;">Billing & Payment</span>
       </a>
     </li>
   </ul>
+
 </div>
+<div class="main-content" [class.collapsed]="!isOpen">
+    <router-outlet></router-outlet>
+  </div>
