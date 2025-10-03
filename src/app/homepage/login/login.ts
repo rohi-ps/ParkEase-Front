@@ -3,16 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../Services/auth.service';
+import { RouterLink } from "@angular/router";
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
-  @Output() loginSuccess = new EventEmitter<void>();
   
   user = {
     email: "",
@@ -42,14 +42,13 @@ export class Login {
       const result = this.authService.authenticateUser(username, password);
       
       if (result.isAuthenticated) {
-        this.loginSuccess.emit();
         this.closeModal(); // Close the modal before navigation
         
         if (result.role === 'admin') {
-          this.router.navigate(['/admin-dashboard']);
+          this.router.navigate(['adminsidenav']);
           console.log('Navigating to admin dashboard');
         } else {
-          this.router.navigate(['/user-dashboard']);
+          this.router.navigate(['usersidenav']);
           console.log('Navigating to user dashboard');
         }
       } else {

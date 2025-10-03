@@ -64,4 +64,16 @@ h3 {
   &:hover {
     color: #ff4d4d;
   }
+  app-login.ng-leave,
+app-login.ng-leave-active {
+  opacity: 0 !important;
+  z-index: -1 !important;
+  display: none !important;
+}
+body, html {
+  filter: none !important;
+  opacity: 1 !important;
+  background: none !important;
+}
+
 }

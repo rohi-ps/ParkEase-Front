@@ -15,7 +15,7 @@
             <label>Vehicle Number</label>
             <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber"
               placeholder="eg: TN12GH3456" required>
-            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
+        <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
             </div>
             <div class="text-danger" *ngIf="vehiclenumber.errors?.['pattern']">Vehicle Number Format must be TN12GH3456
             </div>

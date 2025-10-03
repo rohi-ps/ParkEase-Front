@@ -155,3 +155,11 @@
   background-color: #f8d7da;
   color: #dc3545; 
 }
+.main-content {
+  transition: margin-left 0.3s ease;
+  margin-left: 250px; /* when sidebar is open */
+}
+
+.main-content.expanded {
+  margin-left: 80px; /* when sidebar is collapsed */
+}
