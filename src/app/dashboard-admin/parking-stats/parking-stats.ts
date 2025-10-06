@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { Component,OnInit, inject } from '@angular/core';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 
 @Component({

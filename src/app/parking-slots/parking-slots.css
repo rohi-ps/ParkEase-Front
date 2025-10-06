@@ -61,6 +61,13 @@
   background-color: #ffced2;
 }
 
+.occupied button{
+  display: none;
+}
+
+.available button{
+  display: block;
+}
 .available i{
   /* background-image: url("../assests/square-parking-regular-full.svg"); */
   color: #28a745; 

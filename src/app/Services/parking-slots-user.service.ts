@@ -1,40 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ParkingSlot } from '../model/parking-slots-module';
+import { parkingSlots } from '../model/parking-data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ParkingSlotsUserService {
-  slots: ParkingSlot[] = [];
-  rows: string[] = [];
+  slots: ParkingSlot[] = parkingSlots;
+  rows: string[] = ["A","B","C","D"];
   cols = 0;
-  asciiValue = 65;
+  asciiValue = 69;
   tAvailCount = 0;
   tReserveCount = 0;
 
   constructor() {
-    const slots = localStorage.getItem('slots');
-    const rows = localStorage.getItem('rows');
-    const cols = localStorage.getItem('cols');
-    const asciiValue = localStorage.getItem('asciiValue'); // <-- Corrected variable name, it's a string
-
-    if (slots) {
-      this.slots = JSON.parse(slots);
-    }
-    if (rows) {
-      this.rows = JSON.parse(rows);
-    }
-    if (cols) {
-      this.cols = Number(cols);
-    } else {
-      this.cols = 0;
-    }
-    // Corrected logic: check if asciiValue exists before assigning
-    if (asciiValue) {
-      this.asciiValue = Number(asciiValue); // <-- Convert to a number here
-    } else {
-      this.asciiValue = 65;
-    }
+    
+    
+  
     this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
     this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   }
@@ -55,7 +37,6 @@ export class ParkingSlotsUserService {
     }
     this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
     this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
-    this.saveTasks();
     return this.slots;
   }
 
@@ -80,7 +61,6 @@ export class ParkingSlotsUserService {
     const slotToUpdate = this.slots.find(slot => slot.id === slotId);
     if (slotToUpdate) {
       slotToUpdate.status = newStatus;
-      this.saveTasks(); // Persist the change to localStorage
       console.log(`Slot ${slotId} status updated to ${newStatus}`);
     } else {
       console.error(`Could not find slot with ID: ${slotId} to update.`);
@@ -92,10 +72,7 @@ export class ParkingSlotsUserService {
   this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
   this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
   this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
-  this.saveTasks();
-  // console.log(this.slots,updatedSlot);
-
-  this.saveTasks();
+  
   }
 
   getRefreshSlots() {
@@ -114,7 +91,6 @@ export class ParkingSlotsUserService {
     }
     this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
     this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
-    this.saveTasks();
     return this.slots;
   }
 
@@ -127,10 +103,5 @@ export class ParkingSlotsUserService {
   getOccupiedSlots(){
     return this.tReserveCount;
   }
-  private saveTasks() {
-    localStorage.setItem('slots', JSON.stringify(this.slots));
-    localStorage.setItem('rows', JSON.stringify(this.rows));
-    localStorage.setItem('cols', this.cols.toString());
-    localStorage.setItem('asciiValue', this.asciiValue.toString());
-  }
+
 }
