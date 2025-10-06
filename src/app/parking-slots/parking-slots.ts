@@ -42,11 +42,6 @@ export class ParkingSlots implements OnInit {
     this.slots = this.parkkingSlotUserService.getCreateSlots();
  }
 
-// pushSlots(type : string){
- 
-
-// }
-
  refreshSlots() {
  this.slots = this.parkkingSlotUserService.getRefreshSlots();
  }
