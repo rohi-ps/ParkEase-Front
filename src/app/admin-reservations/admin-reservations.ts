@@ -5,6 +5,7 @@ import { SlotReservationForm } from './slot-reservation-form/slot-reservation-fo
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservationForm } from './modify-reservation-form/modify-reservation-form';
 import { Customer } from '../model/customers';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 @Component({
   selector: 'app-admin-reservations',
   imports: [FormsModule,CommonModule,ModifyReservationForm,SlotReservationForm],
@@ -14,7 +15,7 @@ import { Customer } from '../model/customers';
 export class AdminReservations {
   customers: any[] = []
   selectedStatus = 'All Status';
-  constructor(private cs: CustomerService) {
+  constructor(private cs: CustomerService, private parkingSlotsService: ParkingSlotsUserService) {
   }
   ngOnInit(): void {
     this.customers = this.cs.getallUsers();
@@ -60,11 +61,12 @@ export class AdminReservations {
     const customerToUpdate = this.customers.find(c => c.id === id);
     if (customerToUpdate) {
       customerToUpdate.status = 'Cancelled';
+      this.parkingSlotsService.updateSlotStatus(customerToUpdate.slotId, 'available');
     }
   }
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
-    this.selectedCustomer = { ...customer }; // clone to avoid direct mutation
+    this.selectedCustomer = { ...customer }; 
   }
 }
 

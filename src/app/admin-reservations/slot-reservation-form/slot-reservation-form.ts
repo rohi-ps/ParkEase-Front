@@ -16,6 +16,7 @@ export class SlotReservationForm {
   constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService:CustomerService){}
   ngOnInit(){
     this.loadData();
+    this.customerService.refreshParkingSlotStatus();
   }
   private loadData(): void {
     this.availableSlots = this.parkingSlotsService.getAvailableSlots();
@@ -84,5 +85,6 @@ export class SlotReservationForm {
       console.log("slot booked", fo.value)
     }
     this.customerService.addtocustomer(this.form.slotId, this.form.vehicleNumber, this.form.VehicleType, this.form.EntryDate, this.form.EntryTime, this.form.ExitDate, this.form.ExitTime, '', '')
+    this.parkingSlotsService.updateSlotStatus(this.form.slotId, 'occupied');
   }
 }

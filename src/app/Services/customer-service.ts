@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customers';
+import { ParkingSlotsUserService } from './parking-slots-user.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+  constructor(private parkingSlotsService: ParkingSlotsUserService) { }
   customers: Customer[] = [
     {
       id: 1,
@@ -15,7 +18,7 @@ export class CustomerService {
       exitDate: '2025-09-22',
       exitTime: '11:00',
       Duration: '2h',
-      Amount: '₹43.20',
+      Amount: '$43.20',
       status: 'Upcoming'
     },
     {
@@ -28,7 +31,7 @@ export class CustomerService {
       exitDate: '2025-09-22',
       exitTime: '13:00',
       Duration: '3h',
-      Amount: '₹97.20',
+      Amount: '$97.20',
       status: 'Active'
     },
     {
@@ -41,7 +44,7 @@ export class CustomerService {
       exitDate: '2025-09-21',
       exitTime: '16:00',
       Duration: '1h',
-      Amount: '₹21.60',
+      Amount: '$21.60',
       status: 'Completed'
     },
     {
@@ -54,7 +57,7 @@ export class CustomerService {
       exitDate: '2025-09-20',
       exitTime: '11:00',
       Duration: '4h',
-      Amount: '₹129.60',
+      Amount: '$129.60',
       status: 'Cancelled'
     }
   ];
@@ -65,7 +68,8 @@ export class CustomerService {
     const durationMinutes = this.calculateDurationInMinutes(entryDate, entryTime, exitDate, exitTime);
     const duration = this.formatDurationFromMinutes(durationMinutes);
     const amount = this.calculateAmount(vehicleType, durationMinutes);
-    this.customers.unshift({ id: this.customers.length + 1, slotId, vehicleNumber, vehicleType, entryDate, entryTime, exitDate, exitTime, Duration:duration, Amount:amount, status });
+    this.customers.unshift({ id: this.customers.length + 1, slotId, vehicleNumber, vehicleType, entryDate, entryTime, exitDate, exitTime, Duration: duration, Amount: amount, status });
+    this.refreshParkingSlotStatus();
   }
   updateCustomer(updated: Customer): void {
     const durationMinutes = this.calculateDurationInMinutes(updated.entryDate, updated.entryTime, updated.exitDate, updated.exitTime);
@@ -74,9 +78,10 @@ export class CustomerService {
     const index = this.customers.findIndex(c => c.id === updated.id);
     if (index !== -1) {
       this.customers[index] = updated;
+      this.refreshParkingSlotStatus();
     }
   }
-  
+
   calculateDurationInMinutes(entryDate: string, entryTime: string, exitDate: string, exitTime: string): number {
     const entry = new Date(entryDate + 'T' + entryTime);
     const exit = new Date(exitDate + 'T' + exitTime);
@@ -90,10 +95,22 @@ export class CustomerService {
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
   }
   calculateAmount(vehicleType: string, durationMinutes: number): string {
-    const ratePerMinute = vehicleType === '2W' ? 20 / 60 : 30 / 60; // ₹10/hr or ₹15/hr
+    const ratePerMinute = vehicleType === '2W' ? 20 / 60 : 30 / 60; 
     const subtotal = durationMinutes * ratePerMinute;
     const tax = subtotal * 0.08; // 8% tax
     const total = subtotal + tax;
-    return `₹${total.toFixed(2)}`;
+    return `$${total.toFixed(2)}`;
   }
+  refreshParkingSlotStatus(): void {
+    this.customers.forEach(customer => {
+      const status = customer.status;
+      const slotId = customer.slotId;
+      if (status === 'Completed' || status === 'Cancelled') {
+        this.parkingSlotsService.updateSlotStatus(slotId, 'available');
+      } else if (status === 'Active' || status === 'Upcoming') {
+        this.parkingSlotsService.updateSlotStatus(slotId, 'occupied');
+      }
+    });
+  }
+
 }

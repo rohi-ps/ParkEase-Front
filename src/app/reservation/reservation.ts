@@ -5,10 +5,10 @@ import { SlotReservationForm } from "./slot-reservation-form/slot-reservation-fo
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservation } from './modify-reservation/modify-reservation';
 import { Customer } from '../model/customers';
-import { RouterOutlet } from '@angular/router';
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 @Component({
   selector: 'app-reservation',
-  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation,RouterOutlet],
+  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation],
   templateUrl: './reservation.html',
   styleUrl: './reservation.css'
 })
@@ -16,7 +16,7 @@ export class Reservation implements OnInit {
 
   customers: any[] = []
   selectedStatus = 'All Status';
-  constructor(private cs: CustomerService) {
+  constructor(private cs: CustomerService, private parkingSlotsService: ParkingSlotsUserService) {
   }
   ngOnInit(): void {
       this.customers = this.cs.getallUsers();
@@ -62,6 +62,7 @@ export class Reservation implements OnInit {
     const customerToUpdate = this.customers.find(user => user.id === id);
     if (customerToUpdate) {
       customerToUpdate.status = 'Cancelled';
+      this.parkingSlotsService.updateSlotStatus(customerToUpdate.slotId, 'available');
     }
   }
   selectedCustomer: Customer | null = null;
