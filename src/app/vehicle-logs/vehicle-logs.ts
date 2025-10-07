@@ -32,9 +32,8 @@ export class VehicleLogs implements OnInit {
   }
 
   private loadData(): void {
-    // Replace 'admin' and 'username' with actual values as needed
-    const role = 'admin'; // or 'user'
-    const username = ''; // provide username if role is not 'admin'
+    const role = 'admin'; 
+    const username = ''; 
     this.parkingRecords = this.parkingService.getParkingRecords(role, username); 
     this.availableSlots = this.parkingSlotsService.getAvailableSlots();
   }

@@ -74,7 +74,6 @@ export class ParkingSlotsUserService {
 
   getPushSlots(type: string) {
     const text = this.rows.slice(-1)[0] + this.cols;
-    // The new slot object now matches the simplified model.
     this.slots.push({
       id: text,
       vehicleType: type,

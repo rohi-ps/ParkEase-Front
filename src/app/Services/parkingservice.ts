@@ -50,7 +50,7 @@ export class Parkingservice {
         id: 2,
         vehicleNumber: 'MH-12-CD-2222',
         vehicleType: '2W',
-        customerName: 'Jagan',
+        customerName: "Jagan",
         slotId: 'B2',
         entryTime: new Date(now.getTime() - 3 * 60 * 60 * 1000), // Entered 3 hours ago
         exitTime: new Date(now.getTime() - 1 * 60 * 60 * 1000), // Exited 1 hour ago
@@ -60,7 +60,7 @@ export class Parkingservice {
         id: 3,
         vehicleNumber: 'MH-14-EF-3333',
         vehicleType: '4W',
-        customerName: 'Devraj',
+        customerName: 'Devraj@gmail.com',
         slotId: 'C3',
         entryTime: new Date(now.getTime() - 26 * 60 * 60 * 1000), // Entered 26 hours ago (yesterday)
         exitTime: new Date(now.getTime() - 24 * 60 * 60 * 1000), // Exited 24 hours ago (yesterday)
@@ -70,7 +70,7 @@ export class Parkingservice {
         id: 4,
         vehicleNumber: 'MH-09-GH-4444',
         vehicleType: '2W',
-        customerName: 'Rohit',
+        customerName: 'Rohit@gmail.com',
         slotId: 'D4',
         entryTime: new Date(now.getTime() - 15 * 60 * 1000), // Parked 15 minutes ago
         exitTime: null,
@@ -82,7 +82,7 @@ export class Parkingservice {
       {
         invoiceNumber: 'INV-001',
         parkingRecordId: 2,
-        customerName: 'Jagan',
+        customerName: 'Jagan@gmail.com',
         vehicleNumber: 'MH-12-CD-2222',
         slotId: 'B2',
         durationMinutes: 120,
@@ -95,7 +95,7 @@ export class Parkingservice {
       {
         invoiceNumber: 'INV-002',
         parkingRecordId: 3,
-        customerName: 'Devraj',
+        customerName: 'Devraj@gmail.com',
         vehicleNumber: 'MH-14-EF-3333',
         slotId: 'C3',
         durationMinutes: 120,

@@ -19,20 +19,21 @@ export class AuthService {
   private users: User[] = [
     {
       "role": "admin",
-      "username": "admin",
-      "password": "admin"
+      "username": "admin@parkease.com",
+      "password": "admin@12"
+
     },
     {
       "role": "user",
-      "username": "Jagan",
-      "password": "password",
-      "firstname":"Jagan"
+      "username": "Jagan@gmail.com",
+      "password": "password@12",
+      'firstname':"Jagan"
     },
     {
       "role": "user",
-      "username": "Devraj",
-      "password": "password",
-      "firstname":"Devraj"
+      "username": "Devraj@gmail.com",
+      "password": "password@12",
+      'firstname':'Devraj'
     }
   ];
 
