@@ -9,7 +9,7 @@ export interface ParkingRecord {
   status: 'Parked' | 'Completed' | 'Reserved';
 }
 // This file defines the data structures based on your backend code
-
+ 
 export interface Invoice {
   _id: string;
   invoiceId: string;
@@ -29,7 +29,7 @@ export interface Invoice {
   createdAt: Date;
   updatedAt: Date;
 }
-
+ 
 export interface Rate {
   _id: string;
   vehicleType: string;
@@ -38,10 +38,11 @@ export interface Rate {
   createdAt: Date;
   updatedAt: Date;
 }
-
+ 
 // Based on the PAYMENT_METHODS util in your backend
 export interface PaymentMethod {
   id: string;
   name: string;
   enabled: boolean;
 }
+ 

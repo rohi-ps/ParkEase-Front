@@ -28,7 +28,7 @@ export class Parkingservice {
     if (role === 'admin') {
       return [...this._invoices];
     } else {
-      return [...this._invoices.filter(invoice => 
+      return [...this._invoices.filter(invoice =>
         typeof invoice.userId === 'object' && invoice.userId.email === userEmail
       )];
     }
@@ -140,13 +140,13 @@ export class Parkingservice {
       '2W': { base: 50, additional: 10 },
       '4W': { base: 100, additional: 20 }
     };
-    
+   
     const rate = rates[record.vehicleType];
-    
+   
     const newInvoice: Invoice = {
         _id: String(this.nextInvoiceId++),
         invoiceId: `INV-${String(this.nextInvoiceId).padStart(3, '0')}`,
-        userId: { 
+        userId: {
           email: `${record.customerName.toLowerCase()}@example.com`,
           name: record.customerName
         },

@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 // Corrected paths based on component location
-import { AuthService } from '../Services/auth.service'; 
+import { AuthService } from '../Services/auth.service';
 import { BillingService } from '../Services/billing.service';
-import { Invoice } from '../model/billing.model'; 
-
+import { Invoice } from '../model/billing.model';
+ 
 // Import your interceptor and related providers
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // Corrected path, assuming 'Interceptors' directory
-import { AuthInterceptor } from '../Services/auth.interceptor'; 
-
+import { AuthInterceptor } from '../Services/auth.interceptor';
+ 
 @Component({
   selector: 'app-billing',
   standalone: true,
@@ -27,15 +27,14 @@ import { AuthInterceptor } from '../Services/auth.interceptor';
   ]
 })
 export class Billing implements OnInit {
-    
+   
   public invoices: Invoice[] = [];
   public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
-  public paymentMethods: PaymentMethod[] = [];
   private currentRole: string = '';
   private currentUserEmail: string = ''; // Changed from currentUser
-
+ 
   constructor(
     private authService: AuthService,
     private billingService: BillingService // Inject the new BillingService
@@ -43,12 +42,11 @@ export class Billing implements OnInit {
     this.currentRole = this.authService.getCurrentUserRole();
     this.currentUserEmail = this.authService.getCurrentUserEmail();
   }
-
+ 
   ngOnInit(): void {
     this.loadData();
-    this.loadPaymentMethods();
   }
-
+ 
   private loadData(): void {
     // Get invoices based on role
     if (this.isAdmin()) {
@@ -70,7 +68,7 @@ export class Billing implements OnInit {
       this.billingService.getAllInvoices().subscribe({
         next: (response) => {
           // Filter based on the populated userId object
-          this.invoices = response.data.filter(inv => 
+          this.invoices = response.data.filter(inv =>
             typeof inv.userId === 'object' && inv.userId.email === this.currentUserEmail
           );
           this.calculateTotals(this.invoices);
@@ -83,38 +81,38 @@ export class Billing implements OnInit {
       });
     }
   }
-
+ 
   // Helper function to calculate totals
   private calculateTotals(invoices: Invoice[]): void {
     this.totalRevenue = invoices
       .filter(inv => inv.status === 'paid')
       .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
-
+ 
     this.pendingPayments = invoices
       .filter(inv => inv.status === 'pending')
       .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
-
-    
-
+ 
+   
+ 
     this.totalInvoices = invoices.length;
   }
-
+ 
   public formatDuration(checkInTime: Date, checkOutTime: Date): string {
     const start = new Date(checkInTime);
     const end = new Date(checkOutTime);
     const diffMs = end.getTime() - start.getTime();
     const diffMins = Math.round(diffMs / 60000);
-    
+   
     const hours = Math.floor(diffMins / 60);
     const mins = diffMins % 60;
-    
+   
     if (hours === 0) {
       return `${mins} min${mins !== 1 ? 's' : ''}`;
     } else {
       return `${hours} hr${hours !== 1 ? 's' : ''} ${mins} min${mins !== 1 ? 's' : ''}`;
     }
   }
-
+ 
   // Helper method to format currency
   public formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-IN', {
@@ -122,23 +120,23 @@ export class Billing implements OnInit {
       currency: 'INR'
     }).format(amount);
   }
-
+ 
   public isAdmin(): boolean {
     return this.currentRole === 'admin';
   }
-
+ 
   public payInvoice(invoiceId: string): void {
     // Find the invoice by its _id
     const invoiceToPay = this.invoices.find(inv => inv._id === invoiceId);
-
+ 
     if (!invoiceToPay) {
        console.error('Could not find invoice with id:', invoiceId);
        return;
     }
-
+ 
     // Use 'CARD' as the default payment method
     const selectedPaymentMethod = 'CARD';
-    
+   
     this.billingService.processPayment(invoiceToPay._id, selectedPaymentMethod).subscribe({
       next: (response) => {
         console.log('Payment successful:', response);
@@ -149,13 +147,5 @@ export class Billing implements OnInit {
         // Here you would show an error message to the user
       }
     });
-  }
-
-  formatDuration(minutes: number): string {
-    return this.billingService.formatDurationFromMinutes(minutes);
-  }
-
-  formatCurrency(amount: number): string {
-    return this.billingService.formatCurrency(amount);
   }
 }

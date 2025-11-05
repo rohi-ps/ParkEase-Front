@@ -35,27 +35,36 @@ export class Login {
   }
 
   onSubmit(form: any) {
-    if (form.valid) {
-      const username = this.user.email;
-      const password = this.user.password;
+  if (form.valid) {
+    const username = this.user.email;
+    const password = this.user.password;
 
-      const result = this.authService.authenticateUser(username, password);
-      
-      if (result.isAuthenticated) {
-        this.closeModal(); // Close the modal before navigation
-        
-        if (result.role === 'admin') {
-          this.router.navigate(['adminsidenav']);
-          console.log('Navigating to admin dashboard');
+    this.authService.authenticateUser(username, password).subscribe({
+      next: (res) => {
+        console.log('Login response:', res);
+
+        if (res.token) {
+          this.authService.storeToken(res.token); // Save token
+          this.closeModal(); // Close modal
+
+          if (res.role === 'admin') {
+            this.router.navigate(['adminsidenav']);
+            console.log('Navigating to admin dashboard');
+          } else {
+            this.router.navigate(['usersidenav']);
+            console.log('Navigating to user dashboard');
+          }
         } else {
-          this.router.navigate(['usersidenav']);
-          console.log('Navigating to user dashboard');
+          alert('Invalid login response');
         }
-      } else {
+      },
+      error: (err) => {
+        console.error('Login error:', err);
         alert('Invalid username or password');
       }
-    } else {
-      console.warn('Form is invalid');
-    }
+    });
+  } else {
+    console.warn('Form is invalid');
   }
+}
 }
