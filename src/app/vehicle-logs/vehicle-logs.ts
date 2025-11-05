@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Parkingservice } from '../Services/parkingservice';
-import { ParkingRecord } from '../model/billing';
+import { ParkingRecord } from '../model/billing.model';
 import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 import { ParkingSlot } from '../model/parking-slots-module';
 
