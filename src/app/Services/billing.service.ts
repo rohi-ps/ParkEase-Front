@@ -1,98 +1,99 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Invoice, Rate, PaymentMethod, BillingError } from '../model/billing';
-import { EnvironmentService } from './environment.service';
-
+import { Invoice, Rate, PaymentMethod } from '../model/billing.model';
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class BillingService {
-  private apiUrl: string;
-
-  constructor(
-    private http: HttpClient,
-    private envService: EnvironmentService
-  ) {
-    this.apiUrl = `${this.envService.apiUrl}/billing`;
+  // Base URL for all billing-related API calls
+  private baseUrl = 'http://localhost:3000/api/billing';
+ 
+  constructor(private http: HttpClient) { }
+ 
+  // --- Invoice Endpoints ---
+ 
+  /**
+   * (Admin) Get all invoices
+   * Corresponds to: GET /api/billing/invoices
+   */
+  getAllInvoices(): Observable<{ status: string, results: number, data: Invoice[] }> {
+    return this.http.get<{ status: string, results: number, data: Invoice[] }>(`${this.baseUrl}/invoices`);
   }
-
-  // Get all invoices (admin only)
-  getAllInvoices(): Observable<{ status: string; results: number; data: Invoice[] }> {
-    return this.http.get<{ status: string; results: number; data: Invoice[] }>(`${this.apiUrl}/invoices`);
+ 
+  /**
+   * (User/Admin) Get a specific invoice by its ID
+   * Corresponds to: GET /api/billing/invoices/:id
+   */
+  getInvoiceById(id: string): Observable<{ status: string, data: Invoice }> {
+    return this.http.get<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices/${id}`);
   }
-
-  // Get specific invoice
-  getInvoiceByNumber(invoiceNumber: string): Observable<{ status: string; data: Invoice }> {
-    return this.http.get<{ status: string; data: Invoice }>(`${this.apiUrl}/invoices/${invoiceNumber}`);
-  }
-
-  // Generate new invoice
+ 
+  /**
+   * (User) Generate a new invoice
+   * Corresponds to: POST /api/billing/invoices
+   */
   generateInvoice(invoiceData: {
-    customerName: string;
-    vehicleNumber: string;
-    vehicleType: string;
-    durationMinutes: number;
-    parkingSpotId?: string;
-  }): Observable<{ status: string; data: Invoice }> {
-    return this.http.post<{ status: string; data: Invoice }>(`${this.apiUrl}/invoices`, invoiceData);
+    userId: string,
+    parkingSpotId: string,
+    vehicleType: string,
+    checkInTime: Date,
+    checkOutTime: Date
+  }): Observable<{ status: string, data: Invoice }> {
+    return this.http.post<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices`, invoiceData);
   }
-
-  // Process payment for an invoice
-  processPayment(invoiceNumber: string, paymentMethod: string): Observable<{ status: string; data: Invoice }> {
-    return this.http.put<{ status: string; data: Invoice }>(`${this.apiUrl}/invoices/${invoiceNumber}/payment`, { paymentMethod });
+ 
+  /**
+   * (User) Process payment for a specific invoice
+   * Corresponds to: PUT /api/billing/invoices/:id/payment
+   */
+  processPayment(invoiceId: string, paymentMethod: string): Observable<{ status: string, data: Invoice }> {
+    return this.http.put<{ status: string, data: Invoice }>(
+      `${this.baseUrl}/invoices/${invoiceId}/payment`,
+      { paymentMethod }
+    );
   }
-
-  // Get available payment methods
-  getPaymentMethods(): Observable<{ status: string; data: PaymentMethod[] }> {
-    return this.http.get<{ status: string; data: PaymentMethod[] }>(`${this.apiUrl}/payment-methods`);
+ 
+  /**
+   * (User) Get available payment methods
+   * Corresponds to: GET /api/billing/payment-methods
+   */
+  getPaymentMethods(): Observable<{ status: string, data: PaymentMethod[] }> {
+    return this.http.get<{ status: string, data: PaymentMethod[] }>(`${this.baseUrl}/payment-methods`);
   }
-
-  // Get all rates (admin only)
-  getRates(): Observable<{ status: string; data: Rate[] }> {
-    return this.http.get<{ status: string; data: Rate[] }>(`${this.apiUrl}/rates`);
+ 
+  // --- Rate Endpoints (Admin) ---
+ 
+  /**
+   * (Admin) Get all vehicle rates
+   * Corresponds to: GET /api/billing/rates
+   */
+  getRates(): Observable<{ status: string, data: Rate[] }> {
+    return this.http.get<{ status: string, data: Rate[] }>(`${this.baseUrl}/rates`);
   }
-
-  // Create new rate (admin only)
-  createRate(rateData: Omit<Rate, 'createdAt' | 'updatedAt'>): Observable<{ status: string; data: Rate }> {
-    return this.http.post<{ status: string; data: Rate }>(`${this.apiUrl}/rates`, rateData);
+ 
+  /**
+   * (Admin) Create a new rate for a vehicle type
+   * Corresponds to: POST /api/billing/rates
+   */
+  createRate(rateData: {
+    vehicleType: string,
+    baseRate: number,
+    additionalHourRate: number
+  }): Observable<{ status: string, data: Rate }> {
+    return this.http.post<{ status: string, data: Rate }>(`${this.baseUrl}/rates`, rateData);
   }
-
-  // Update rate (admin only)
-  updateRate(vehicleType: string, rateData: Pick<Rate, 'baseRate' | 'additionalHourRate'>): Observable<{ status: string; data: Rate }> {
-    return this.http.put<{ status: string; data: Rate }>(`${this.apiUrl}/rates/${vehicleType}`, rateData);
-  }
-
-  // Format duration from minutes to readable string
-  formatDurationFromMinutes(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return `${hours}h ${remainingMinutes}m`;
-  }
-
-  // Calculate total from subtotal and tax
-  calculateTotal(subtotal: number, taxRate: number = 0.18): { subtotal: number; tax: number; total: number } {
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
-    return {
-      subtotal,
-      tax,
-      total
-    };
-  }
-
-  // Generate invoice number
-  generateInvoiceNumber(prefix: string = 'INV'): string {
-    const timestamp = new Date().getTime();
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    return `${prefix}-${timestamp}-${random}`;
-  }
-
-  // Format currency
-  formatCurrency(amount: number, currency: string = 'INR'): string {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: currency
-    }).format(amount);
+ 
+  /**
+   * (Admin) Update an existing rate
+   * Corresponds to: PUT /api/billing/rates/:vehicleType
+   */
+  updateRate(vehicleType: string, rateData: {
+    baseRate: number,
+    additionalHourRate: number
+  }): Observable<{ status: string, data: Rate }> {
+    return this.http.put<{ status: string, data: Rate }>(`${this.baseUrl}/rates/${vehicleType}`, rateData);
   }
 }
+ 
