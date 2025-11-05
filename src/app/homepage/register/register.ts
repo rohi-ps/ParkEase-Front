@@ -73,6 +73,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../Services/auth.service';
+import { Login } from '../login/login';
 declare var bootstrap: any;
 
 @Component({
@@ -141,7 +142,9 @@ console.log('Register payload:', payload);
     if (res.success) {
       alert(res.message || 'Registration successful!');
       // this.closeModal();
-      this.router.navigate(['/login']);
+      form.resetForm();
+
+      this.router.navigate(['/']);
     } else {
       alert(res.message || 'Registration failed.');
     }
