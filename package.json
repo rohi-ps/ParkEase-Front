@@ -22,10 +22,11 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^20.2.0",
+    "@angular/common": "^20.3.9",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",
     "@angular/forms": "^20.2.0",
+    "@angular/http": "^7.2.16",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@types/dotenv": "^6.1.1",
