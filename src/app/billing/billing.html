@@ -1,4 +1,12 @@
 <div class="container my-4">
+  <!-- Loading and Error Messages -->
+  <div *ngIf="loading" class="alert alert-info">
+    Loading...
+  </div>
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
   <!-- Page Header -->
   <div class="d-flex align-items-center p-3 mb-4 rounded border bg-white shadow-sm">
     <i class="bi bi-receipt-cutoff text-primary" style="font-size: 2rem"></i>
@@ -9,7 +17,7 @@
   </div>
 
   <!-- Statistics Cards Section -->
-  <div class="container align-items-center">
+  <div class="container align-items-center" *ngIf="!loading && !error">
     <div class="row g-4 mb-4">
       <!-- Total Revenue Card -->
       <div class="col-lg-4 col-md-6">
@@ -50,7 +58,7 @@
               <h6 class="card-subtitle mb-2">Total Invoices</h6>
             </div>
             <div>
-              <h2 class="card-title">{{ totalInvoices}}</h2>
+              <h2 class="card-title">{{ totalInvoices }}</h2>
             </div>
           </div>
         </div>
@@ -58,6 +66,7 @@
     </div>
   </div>
   <br />
+
   <!-- Invoices Table Section -->
   <div><h3>Vehicle Activity Logs</h3></div>
   <div class="table-responsive bg-white border rounded-3 shadow-sm">

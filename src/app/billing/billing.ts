@@ -32,6 +32,7 @@ export class Billing implements OnInit {
   public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
+  public paymentMethods: PaymentMethod[] = [];
   private currentRole: string = '';
   private currentUserEmail: string = ''; // Changed from currentUser
 
@@ -45,6 +46,7 @@ export class Billing implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.loadPaymentMethods();
   }
 
   private loadData(): void {
@@ -147,5 +149,13 @@ export class Billing implements OnInit {
         // Here you would show an error message to the user
       }
     });
+  }
+
+  formatDuration(minutes: number): string {
+    return this.billingService.formatDurationFromMinutes(minutes);
+  }
+
+  formatCurrency(amount: number): string {
+    return this.billingService.formatCurrency(amount);
   }
 }
