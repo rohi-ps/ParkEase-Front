@@ -35,6 +35,8 @@ export class Billing implements OnInit {
   private loadData(): void {
     // Get invoices based on role and username
     this.invoices = this.parkingService.getInvoices(this.currentRole, this.currentUser);
+    console.log(`Fetching invoices for role: ${this.currentRole}, user: ${this.currentUser}`);
+    console.log('Invoices received from service:', this.invoices); 
 
     // Calculate totals based on filtered data
     this.totalRevenue = this.invoices

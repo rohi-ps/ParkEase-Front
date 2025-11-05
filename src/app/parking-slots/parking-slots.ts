@@ -1,13 +1,12 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 import { Router } from '@angular/router';
 
 interface ParkingSlot {
- id: string;
- vehicleType: string;
- availability : 'available' | 'occupied';
- status: 'available' | 'occupied';
+  id: string;
+  vehicleType: string;
+  status: 'available' | 'occupied';
 }
 
 @Component({
@@ -18,48 +17,48 @@ interface ParkingSlot {
   styleUrl: './parking-slots.css'
 })
 export class ParkingSlots implements OnInit {
-  @Output() onBookEvent = new EventEmitter<string>();
 
+  slots: ParkingSlot[] = [];
+  hoveredSlot: ParkingSlot | null = null;
 
-   slots: ParkingSlot[] = [];
-  
-    ngOnInit(): void {
+  constructor(
+    private parkingSlotUserService: ParkingSlotsUserService,
+    private route: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.slots = this.parkingSlotUserService.getAllSlots();
+  }
+
+  createSlots() {
+    this.slots = this.parkingSlotUserService.getCreateSlots();
+  }
+
+  refreshSlots() {
+    this.slots = this.parkingSlotUserService.getRefreshSlots();
+  }
+
+  toggleSlot(slot: ParkingSlot) {
+    const newStatus = slot.status === 'available' ? 'occupied' : 'available';
+    this.parkingSlotUserService.updateSlotStatus(slot.id, newStatus);
     
-    this.slots = this.parkkingSlotUserService.slots;
+    // Also, update the local component data to reflect the change instantly
+    slot.status = newStatus;
   }
 
- constructor(private parkkingSlotUserService : ParkingSlotsUserService, private route:Router) {
-  //  this.createSlots();
- }
-
-
- hoveredSlot : any | null = null;
- rows : string[] = [];
- cols = 0;
- asciiValue = 65;
- 
- createSlots() {
-    this.slots = this.parkkingSlotUserService.getCreateSlots();
- }
-
- refreshSlots() {
- this.slots = this.parkkingSlotUserService.getRefreshSlots();
- }
- toggleSlot(slot: ParkingSlot) {
-   slot.status = slot.status === 'available' ? 'occupied' : 'available';
-   this.parkkingSlotUserService.updateSlot(slot);   
- }
-
- showInfo(slot: ParkingSlot){
-  this.hoveredSlot = slot;
- }
- hideInfo() : void{
-  this.hoveredSlot = null;
- }
- 
-  onBook(slot: ParkingSlot){
-   this.onBookEvent.emit(slot.id);
-   this.route.navigateByUrl('adminsidenav/vehiclelogs')
+  showInfo(slot: ParkingSlot) {
+    this.hoveredSlot = slot;
   }
 
+  hideInfo(): void {
+    this.hoveredSlot = null;
+  }
+  
+  onBook(slot: ParkingSlot) {
+    if (slot.status === 'available') {
+        this.route.navigateByUrl('adminsidenav/vehiclelogs');
+    } else {
+        alert('This slot is already occupied!');
+    }
+  }
 }

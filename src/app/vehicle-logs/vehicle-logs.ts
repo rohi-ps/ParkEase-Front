@@ -17,6 +17,7 @@ export class VehicleLogs implements OnInit {
   
   public parkingRecords: ParkingRecord[] = [];
   public availableSlots: ParkingSlot[] = [];
+  public availableSlotsCount:number=0;
 
   constructor(
     private parkingService: Parkingservice,
@@ -26,12 +27,13 @@ export class VehicleLogs implements OnInit {
   ngOnInit() {
     // Load the initial data when the component loads
     this.loadData();
+    this.availableSlotsCount=this.parkingSlotsService.getTcount()
+
   }
 
   private loadData(): void {
-    // Replace 'admin' and 'username' with actual values as needed
-    const role = 'admin'; // or 'user'
-    const username = ''; // provide username if role is not 'admin'
+    const role = 'admin'; 
+    const username = ''; 
     this.parkingRecords = this.parkingService.getParkingRecords(role, username); 
     this.availableSlots = this.parkingSlotsService.getAvailableSlots();
   }

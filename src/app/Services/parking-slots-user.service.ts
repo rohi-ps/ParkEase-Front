@@ -9,34 +9,67 @@ export class ParkingSlotsUserService {
   slots: ParkingSlot[] = parkingSlots;
   rows: string[] = ["A","B","C","D"];
   cols = 0;
-  asciiValue = 69;
+  asciiValue = 65; // Starts at 'A'
   tAvailCount = 0;
   tReserveCount = 0;
 
   constructor() {
-    
-    
-  
-    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+    // Initialize the service with a predefined set of static slots
+    this._initializeStaticData();
+  }
+
+  /**
+   * Populates the service with a default set of parking slots using the simplified model.
+   */
+  private _initializeStaticData(): void {
+    // Each object now correctly has only id, vehicleType, and status.
+    this.slots = [
+      // --- Row A ---
+      { id: 'A1', vehicleType: '4W', status: 'available' },
+      { id: 'A2', vehicleType: '4W', status: 'occupied' },
+      { id: 'A3', vehicleType: '4W', status: 'available' },
+      { id: 'A4', vehicleType: '2W', status: 'available' },
+
+      // --- Row B ---
+      { id: 'B1', vehicleType: '2W', status: 'occupied' },
+      { id: 'B2', vehicleType: '2W', status: 'occupied' },
+      { id: 'B3', vehicleType: '2W', status: 'available' },
+      { id: 'B4', vehicleType: '4W', status: 'available' },
+      { id: 'B5', vehicleType: '4W', status: 'available' },
+      { id: 'B6', vehicleType: '4W', status: 'available' },
+
+      // --- Row C ---
+      { id: 'C1', vehicleType: '2W', status: 'available' },
+      { id: 'C2', vehicleType: '2W', status: 'available' },
+      { id: 'C3', vehicleType: '4W', status: 'occupied' },
+      { id: 'C4', vehicleType: '2W', status: 'available' },
+      { id: 'C5', vehicleType: '4W', status: 'available' },
+    ];
+
+    // Update service state to match the static data
+    this.rows = ['A', 'B', 'C'];
+    this.cols = 5;
+    this.asciiValue = 68; // Next char is 'D'
+
+    // Calculate initial counts
+    this.updateCounts();
   }
 
   getCreateSlots() {
     let vehicleType = prompt('Enter vehicle type (2W or 4W):');
     if (vehicleType === '2W' || vehicleType === '4W') {
-      if (this.cols === 10 || this.cols === 0) {
+      if (this.cols === 10) {
         const char = String.fromCharCode(this.asciiValue);
         this.rows.push(char);
         this.cols = 0;
         this.asciiValue++;
       }
       this.cols = this.cols + 1;
-      this.getPushSlots(String(vehicleType));
+      this.getPushSlots(vehicleType);
     } else {
-      alert('enter a valid vehicle type');
+      alert('Enter a valid vehicle type');
     }
-    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+    this.updateCounts();
     return this.slots;
   }
 
@@ -45,63 +78,64 @@ export class ParkingSlotsUserService {
     this.slots.push({
       id: text,
       vehicleType: type,
-      availability: 'available',
       status: 'available',
     });
   }
-   // --- NEW METHOD ---
-  // Returns only the slots that are currently available.
+
   getAvailableSlots(): ParkingSlot[] {
     return this.slots.filter(slot => slot.status === 'available');
   }
+  
+  getAllSlots(): ParkingSlot[] {
+    return this.slots;
+  }
 
-  // --- NEW METHOD ---
-  // Finds a slot by its ID and updates its status.
   updateSlotStatus(slotId: string, newStatus: 'available' | 'occupied'): void {
     const slotToUpdate = this.slots.find(slot => slot.id === slotId);
     if (slotToUpdate) {
       slotToUpdate.status = newStatus;
+      this.updateCounts();
       console.log(`Slot ${slotId} status updated to ${newStatus}`);
     } else {
       console.error(`Could not find slot with ID: ${slotId} to update.`);
     }
   }
 
-  updateSlot(updatedSlot: ParkingSlot) {
-    //  this.slots.maps(slot => slot.id === updateSlot.id? slot.status = updateSlot.status : slot.status);
-  this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
-  this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
-  this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
-  
-  }
-
   getRefreshSlots() {
     if (this.slots.length > 0) {
-      const removedSlot = this.slots.pop();
-
+      this.slots.pop();
       if (this.cols === 1) {
-        this.rows.pop();
-        this.asciiValue--;
-        this.cols = 10;
+        if (this.rows.length > 1) {
+            this.rows.pop();
+            this.asciiValue--;
+            this.cols = 10;
+        } else {
+            this.cols = 0;
+        }
       } else {
         this.cols--;
       }
     } else {
-      alert('no slots to remove');
+      alert('No slots to remove');
     }
-    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+    this.updateCounts();
     return this.slots;
   }
 
   getTcount() {
     return this.tAvailCount;
   }
-  getSlots() {
-    return this.tAvailCount;
-  }
-  getOccupiedSlots(){
+
+  getOccupiedSlots() {
     return this.tReserveCount;
   }
 
+  private updateCounts() {
+    this.tAvailCount = this.slots.filter(
+      slot => slot.status === 'available'
+    ).length;
+    this.tReserveCount = this.slots.filter(
+      slot => slot.status === 'occupied'
+    ).length;
+  }
 }
