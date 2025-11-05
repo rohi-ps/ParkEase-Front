@@ -72,13 +72,6 @@
   color: #dc3545; 
 
 }
- .occupied button{
-  display: none;
-}
-
-.available button{
-  display: block;
-} 
 
 .legend {
 

@@ -74,7 +74,9 @@ export class CustomerService {
     updated.Duration = this.formatDurationFromMinutes(durationMinutes);
     updated.Amount = this.calculateAmount(updated.vehicleType, durationMinutes);
     const index = this.customers.findIndex(c => c.id === updated.id);
-    this.customers[index]=updated
+    if (index !== -1) {
+      this.customers[index] = updated;
+    }
   }
   calculateDurationInMinutes(entryDate: string, entryTime: string, exitDate: string, exitTime: string): number {
     const entry = new Date(entryDate + 'T' + entryTime);

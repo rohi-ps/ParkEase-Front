@@ -27,7 +27,7 @@
         <p>Id : {{ slot.id }}</p>
         <p>Type : {{ slot.vehicleType }}</p>
         <p>Availability : {{ slot.status }}</p>
-        <div class="btn" [ngClass]="slot.status">
+        <div class="btn">
           <button class="btn btn2" (click)="onReserve(slot)">RESERVE</button>
         </div>
       </div>
