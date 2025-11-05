@@ -1,78 +1,151 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { BillingService } from '../Services/billing.service';
+import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
+// Corrected paths based on component location
 import { AuthService } from '../Services/auth.service';
-import { Invoice, PaymentMethod } from '../model/billing';
-
+import { BillingService } from '../Services/billing.service';
+import { Invoice } from '../model/billing.model';
+ 
+// Import your interceptor and related providers
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+// Corrected path, assuming 'Interceptors' directory
+import { AuthInterceptor } from '../Services/auth.interceptor';
+ 
 @Component({
   selector: 'app-billing',
-  standalone: true, 
-  imports: [CommonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    HttpClientModule // Add HttpClientModule here for standalone component
+  ],
   templateUrl: './billing.html',
-  styleUrl: './billing.css'
+  styleUrl: './billing.css',
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    BillingService,
+    AuthService,
+  ]
 })
 export class Billing implements OnInit {
-    
+   
   public invoices: Invoice[] = [];
   public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
-  public paymentMethods: PaymentMethod[] = [];
   private currentRole: string = '';
-  private currentUser: string = '';
-  public loading: boolean = false;
-  public error: string | null = null;
-
+  private currentUserEmail: string = ''; // Changed from currentUser
+ 
   constructor(
-    private billingService: BillingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private billingService: BillingService // Inject the new BillingService
   ) {
     this.currentRole = this.authService.getCurrentUserRole();
-    this.currentUser = this.authService.getCurrentUser()?.username || '';
+    this.currentUserEmail = this.authService.getCurrentUserEmail();
   }
-
+ 
   ngOnInit(): void {
     this.loadData();
-    // this.loadPaymentMethods();
   }
-
+ 
   private loadData(): void {
-    // Get invoices based on role and username
-    // this.invoices = this.parkingService.getInvoices(this.currentRole, this.currentUser);
-    console.log(`Fetching invoices for role: ${this.currentRole}, user: ${this.currentUser}`);
-    console.log('Invoices received from service:', this.invoices); 
-
-    // Calculate totals based on filtered data
-    this.totalRevenue = this.invoices
-      .filter(inv => inv.paymentStatus === 'Paid')
-      .reduce((sum, inv) => sum + inv.total, 0);
-
-    this.pendingPayments = this.invoices
-      .filter(inv => inv.paymentStatus === 'Pending')
-      .reduce((sum, inv) => sum + inv.total, 0);
-
-    this.totalInvoices = this.invoices.length;
+    // Get invoices based on role
+    if (this.isAdmin()) {
+      this.billingService.getAllInvoices().subscribe({
+        next: (response) => {
+          this.invoices = response.data;
+          this.calculateTotals(this.invoices);
+        },
+        error: (err) => {
+          console.error('Error fetching invoices:', err);
+          this.invoices = []; // Clear invoices on error
+          this.calculateTotals([]); // Reset totals
+        }
+      });
+    } else {
+      // User logic
+      // The backend doesn't seem to have a "get my invoices" endpoint.
+      // Filtering client-side, which is NOT ideal for production.
+      this.billingService.getAllInvoices().subscribe({
+        next: (response) => {
+          // Filter based on the populated userId object
+          this.invoices = response.data.filter(inv =>
+            typeof inv.userId === 'object' && inv.userId.email === this.currentUserEmail
+          );
+          this.calculateTotals(this.invoices);
+        },
+        error: (err) => {
+          console.error('Error fetching invoices:', err);
+          this.invoices = [];
+          this.calculateTotals([]);
+        }
+      });
+    }
   }
-
-  payInvoice(invoiceNumber: string): void {
-    // this.parkingService.markAsPaid(invoiceNumber);
-    this.loadData();
+ 
+  // Helper function to calculate totals
+  private calculateTotals(invoices: Invoice[]): void {
+    this.totalRevenue = invoices
+      .filter(inv => inv.status === 'paid')
+      .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
+ 
+    this.pendingPayments = invoices
+      .filter(inv => inv.status === 'pending')
+      .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
+ 
+   
+ 
+    this.totalInvoices = invoices.length;
   }
-
-  isAdmin(): boolean {
+ 
+  public formatDuration(checkInTime: Date, checkOutTime: Date): string {
+    const start = new Date(checkInTime);
+    const end = new Date(checkOutTime);
+    const diffMs = end.getTime() - start.getTime();
+    const diffMins = Math.round(diffMs / 60000);
+   
+    const hours = Math.floor(diffMins / 60);
+    const mins = diffMins % 60;
+   
+    if (hours === 0) {
+      return `${mins} min${mins !== 1 ? 's' : ''}`;
+    } else {
+      return `${hours} hr${hours !== 1 ? 's' : ''} ${mins} min${mins !== 1 ? 's' : ''}`;
+    }
+  }
+ 
+  // Helper method to format currency
+  public formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR'
+    }).format(amount);
+  }
+ 
+  public isAdmin(): boolean {
     return this.currentRole === 'admin';
   }
-
-  canPayInvoice(invoice: Invoice): boolean {
-    return this.isAdmin() || invoice.customerName === this.currentUser;
-  }
-
-  formatDuration(minutes: number): string {
-    return this.billingService.formatDurationFromMinutes(minutes);
-  }
-
-  formatCurrency(amount: number): string {
-    return this.billingService.formatCurrency(amount);
+ 
+  public payInvoice(invoiceId: string): void {
+    // Find the invoice by its _id
+    const invoiceToPay = this.invoices.find(inv => inv._id === invoiceId);
+ 
+    if (!invoiceToPay) {
+       console.error('Could not find invoice with id:', invoiceId);
+       return;
+    }
+ 
+    // Use 'CARD' as the default payment method
+    const selectedPaymentMethod = 'CARD';
+   
+    this.billingService.processPayment(invoiceToPay._id, selectedPaymentMethod).subscribe({
+      next: (response) => {
+        console.log('Payment successful:', response);
+        this.loadData(); // Reload data to show updated status
+      },
+      error: (err) => {
+        console.error('Error processing payment:', err);
+        // Here you would show an error message to the user
+      }
+    });
   }
 }

@@ -23,9 +23,9 @@ constructor(private authService:AuthService){}
 myActivityData: Activity[] = [];
 data : number = 20;
   ngOnInit(): void {
-    const currUser=this.authService.getCurrentUser();
+    const currUser=this.authService.decodeToken();
     if(currUser){
-      this.username=currUser.firstname;
+      this.username=currUser.firstName;
     }
   }
 

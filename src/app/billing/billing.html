@@ -1,12 +1,4 @@
 <div class="container my-4">
-  <!-- Loading and Error Messages -->
-  <div *ngIf="loading" class="alert alert-info">
-    Loading...
-  </div>
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
-
   <!-- Page Header -->
   <div class="d-flex align-items-center p-3 mb-4 rounded border bg-white shadow-sm">
     <i class="bi bi-receipt-cutoff text-primary" style="font-size: 2rem"></i>
@@ -15,9 +7,9 @@
       <p class="text-muted mb-0">Manage invoices, payments, and financial records</p>
     </div>
   </div>
-
+ 
   <!-- Statistics Cards Section -->
-  <div class="container align-items-center" *ngIf="!loading && !error">
+  <div class="container align-items-center">
     <div class="row g-4 mb-4">
       <!-- Total Revenue Card -->
       <div class="col-lg-4 col-md-6">
@@ -29,7 +21,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ formatCurrency(totalRevenue) }}
+                {{ totalRevenue | currency : 'INR' : 'symbol' : '1.2-2' }}
               </h2>
             </div>
           </div>
@@ -44,7 +36,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ formatCurrency(pendingPayments) }}
+                {{ pendingPayments | currency : 'INR' : 'symbol' : '1.loc-2' }}
               </h2>
             </div>
           </div>
@@ -58,7 +50,7 @@
               <h6 class="card-subtitle mb-2">Total Invoices</h6>
             </div>
             <div>
-              <h2 class="card-title">{{ totalInvoices }}</h2>
+              <h2 class="card-title">{{ totalInvoices}}</h2>
             </div>
           </div>
         </div>
@@ -66,48 +58,56 @@
     </div>
   </div>
   <br />
-
   <!-- Invoices Table Section -->
-  <div *ngIf="!loading && !error">
-    <h3>Invoices</h3>
-    <div class="table-responsive bg-white border rounded-3 shadow-sm">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="thead-dark">
-          <tr class="table-warning">
-            <th>Invoice #</th>
-            <th *ngIf="isAdmin()">Customer</th>
-            <th>Vehicle</th>
-            <th>Duration</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let invoice of invoices">
-            <td>
-              <strong>{{ invoice.invoiceNumber }}</strong>
-            </td>
-            <td *ngIf="isAdmin()">{{ invoice.customerName }}</td>
-            <td>{{ invoice.vehicleNumber }}</td>
-            <td>{{ formatDuration(invoice.durationMinutes) }}</td>
-            <td>
-              <strong>{{ formatCurrency(invoice.total) }}</strong>
-            </td>
-            <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'bg-success-subtle text-success-emphasis': invoice.paymentStatus === 'Paid',
-                  'bg-danger-subtle text-warning-emphasis': invoice.paymentStatus === 'Pending'
-                }"
-              >{{ invoice.paymentStatus }}</span>
-            </td>
-            <td>
+  <div><h3>Vehicle Activity Logs</h3></div>
+  <div class="table-responsive bg-white border rounded-3 shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="thead-dark">
+        <tr class="table-warning">
+          <th>Invoice #</th>
+          <th *ngIf="isAdmin()">Customer</th>
+          <th>Vehicle</th>
+          <th>Duration</th>
+          <th>Total</th>
+          <th>Status</th>
+         
+          <th *ngIf="!isAdmin()">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--
+          Updated *ngFor to loop through invoices.
+          Updated property names to match the new Invoice model from billing.model.ts
+        -->
+        <tr *ngFor="let invoice of invoices">
+          <td>
+            <strong>{{ invoice.invoiceId }}</strong>
+          </td>
+          <td *ngIf="isAdmin()">
+            {{ (typeof invoice.userId === 'object' ? invoice.userId.name : 'N/A') }}
+          </td>
+          <td>{{ invoice.vehicleType }}</td>
+          <td>{{ formatDuration(invoice.checkInTime, invoice.checkOutTime) }}</td>
+          <td>
+            <strong>{{ invoice.totalAmount.baseRate + (invoice.totalAmount.additionalHourRate * invoice.totalAmount.hours) | currency:'INR':'symbol':'1.2-2' }}</strong>
+          </td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success-subtle text-success-emphasis': invoice.status === 'paid',
+                'bg-danger-subtle text-warning-emphasis': invoice.status === 'pending',
+                'bg-danger-subtle text-danger-emphasis': invoice.status === 'failed'
+              }"
+            >
+              {{ invoice.status | titlecase }}
+            </span>
+          </td>
+          <td *ngIf="!isAdmin()">
             <button
-              *ngIf="invoice.paymentStatus === 'Pending'"
+              *ngIf="invoice.status === 'pending'"
               class="btn btn-sm btn-primary"
-              (click)="payInvoice(invoice.invoiceNumber)"
+              (click)="payInvoice(invoice._id)"
             >
               Pay
             </button>

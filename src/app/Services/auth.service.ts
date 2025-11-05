@@ -1,109 +1,166 @@
-import { Injectable } from '@angular/core';
+// import { Injectable } from '@angular/core';
 
-interface User {
+// interface User {
+//   role: string;
+//   username: string;
+//   password: string;
+//   firstname?: string;
+//   lastname?: string;
+// }
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class AuthService {
+//   private currentUserRole: string = '';
+//   private currentUser: User | null = null;
+
+//   private users: User[] = [
+//     {
+//       "role": "admin",
+//       "username": "admin1",
+//       "password": "adminPass123"
+//     },
+//     {
+//       "role": "user",
+//       "username": "user1",
+//       "password": "userPass123"
+//     },
+//     {
+//       "role": "user",
+//       "username": "user2",
+//       "password": "userPass456"
+//     }
+//   ];
+
+//   authenticateUser(username: string, password: string): { isAuthenticated: boolean; role: string } {
+//     const user = this.users.find(u => u.username === username && u.password === password);
+    
+//     if (user) {
+//       this.currentUserRole = user.role;
+//       this.currentUser = user;
+//       return {
+//         isAuthenticated: true,
+//         role: user.role
+//       };
+//     }
+    
+//     this.currentUserRole = '';
+//     this.currentUser = null;
+//     return {
+//       isAuthenticated: false,
+//       role: ''
+//     };
+//   }
+
+//   getCurrentUserRole(): string {
+//     return this.currentUserRole;
+//   }
+
+//   getCurrentUser(): User | null {
+//     return this.currentUser;
+//   }
+
+//   logout() {
+//     this.currentUserRole = '';
+//     this.currentUser = null;
+//   }
+
+//   registerUser(userData: { email: string; firstname: string; lastname: string; password: string }): boolean {
+//     // Check if user already exists
+//     if (this.users.some(user => user.username === userData.email)) {
+//       return false; // User already exists
+//     }
+
+//     // Add new user
+//     const newUser: User = {
+//       role: 'user', // Default role for new registrations
+//       username: userData.email,
+//       password: userData.password,
+//       firstname: userData.firstname,
+//       lastname: userData.lastname
+//     };
+
+//     this.users.push(newUser);
+//     console.log('Updated users array:', this.users);
+//     return true;
+//   }
+
+//   // Helper method to get all users (for debugging)
+//   getAllUsers(): User[] {
+//     return this.users;
+//   }
+// }
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+interface AuthResponse {
+  token: string;
   role: string;
-  username: string;
-  password: string;
-  firstname?: string;
-  lastname?: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUserRole: string = '';
-  private currentUser: User | null = null;
+  private tokenKey = 'authToken';
 
-  // Added users 'Jagan' and 'Devraj' to match invoice data for easy testing.
-  private users: User[] = [
-    {
-      "role": "admin",
-      "username": "admin@parkease.com",
-      "password": "admin@12"
+  constructor(private http: HttpClient) {}
 
-    },
-    {
-      "role": "user",
-      "username": "Jagan@gmail.com",
-      "password": "password@12",
-      'firstname':"Jagan"
-    },
-    {
-      "role": "user",
-      "username": "Devraj@gmail.com",
-      "password": "password@12",
-      'firstname':'Devraj'
-    }
-  ];
-
-  constructor() {
-    // Load user from storage when the app starts or reloads
-    this.loadUserFromSession();
+  authenticateUser(email: string, password: string): Observable<AuthResponse> {
+    console.log('Sending login payload:', { email, password });
+    return this.http.post<AuthResponse>('http://localhost:3000/api/login', { email, password });
   }
 
-  authenticateUser(username: string, password: string): { isAuthenticated: boolean; role: string } {
-    const user = this.users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-      this.currentUserRole = user.role;
-      this.currentUser = user;
-      
-      // Save the logged-in user to sessionStorage
-      sessionStorage.setItem('currentUser', JSON.stringify(user));
+  registerUser(payload: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+    phone: string;
+  }): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      'http://localhost:3000/api/register',
+      payload
+    );
+  }
 
-      return {
-        isAuthenticated: true,
-        role: user.role
-      };
-    }
-    
-    this.currentUserRole = '';
-    this.currentUser = null;
-    return {
-      isAuthenticated: false,
-      role: ''
-    };
+  storeToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  clearToken(): void {
+    localStorage.removeItem(this.tokenKey);
+  }
+
+decodeToken(): any {
+  const token = this.getToken();
+  if (!token) return null;
+  const payload = token.split('.')[1];
+  if (!payload) return null;
+  try {
+    const decodedPayload = atob(payload); // base64 decode
+    return JSON.parse(decodedPayload);
+  } catch (err) {
+    console.error('Token decoding failed:', err);
+    return null;
+  }
+}
+
+  logout(): void {
+    this.clearToken();
   }
 
   getCurrentUserRole(): string {
-    return this.currentUserRole;
+    const decoded = this.decodeToken();
+    return decoded?.role || '';
   }
 
-  getCurrentUser(): User | null {
-    return this.currentUser;
-  }
-
-  logout() {
-    this.currentUserRole = '';
-    this.currentUser = null;
-    // Remove the user from sessionStorage on logout
-    sessionStorage.removeItem('currentUser');
-  }
-
-  private loadUserFromSession(): void {
-    const storedUser = sessionStorage.getItem('currentUser');
-    if (storedUser) {
-      const user: User = JSON.parse(storedUser);
-      this.currentUser = user;
-      this.currentUserRole = user.role;
-    }
-  }
-
-  registerUser(userData: { email: string; firstname: string; lastname: string; password: string }): boolean {
-    if (this.users.some(user => user.username === userData.email)) {
-      return false; // User already exists
-    }
-
-    const newUser: User = {
-      role: 'user',
-      username: userData.email,
-      password: userData.password,
-      firstname: userData.firstname,
-      lastname: userData.lastname
-    };
-
-    this.users.push(newUser);
-    return true;
+  getCurrentUserEmail(): string {
+    const decoded = this.decodeToken();
+    return decoded?.email || '';
   }
 }
