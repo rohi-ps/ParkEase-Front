@@ -17,13 +17,13 @@
                     <div class="form-group">
                         <label for="name"><strong>FirstName</strong></label>
                         <br>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter username" required="" [(ngModel)]="user.firstname" #fname="ngModel">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter username" required="" [(ngModel)]="user.firstName" #fname="ngModel">
                         <div *ngIf="fname.touched && fname.invalid" class="text-danger">FirstName is required</div>
                     </div>
                     <div class="form-group">
                         <label for="name"><strong>LastName</strong></label>
                         <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter username" required="" [(ngModel)]="user.lastname" #lname="ngModel">
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter username" required="" [(ngModel)]="user.lastName" #lname="ngModel">
                          <div *ngIf="lname.touched && lname.invalid" class="text-danger">LastName is required</div>
                     </div>
                     <div class="form-group">
@@ -40,7 +40,7 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <br>
-                        <input type="text" id="confirmpassword" name="password" class="form-control" placeholder="Enter Password" required="" [(ngModel)]="user.cpassword" #cpass="ngModel">
+                        <input type="text" id="confirmpassword" name="password" class="form-control" placeholder="Enter Password" required="" [(ngModel)]="user.confirmPassword" #cpass="ngModel">
                         </div>
                          <div *ngIf="cpass.touched && cpass.invalid" class="text-danger">Confirm Password is required</div>
                     </div>

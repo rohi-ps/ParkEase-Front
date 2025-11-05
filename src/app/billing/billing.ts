@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Parkingservice } from '../Services/parkingservice';
+import { Observable } from 'rxjs';
+import { BillingService } from '../Services/billing.service';
 import { AuthService } from '../Services/auth.service';
-import { Invoice } from '../model/billing';
+import { Invoice, PaymentMethod } from '../model/billing';
 
 @Component({
   selector: 'app-billing',
@@ -17,11 +18,14 @@ export class Billing implements OnInit {
   public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
+  public paymentMethods: PaymentMethod[] = [];
   private currentRole: string = '';
   private currentUser: string = '';
+  public loading: boolean = false;
+  public error: string | null = null;
 
   constructor(
-    public parkingService: Parkingservice,
+    private billingService: BillingService,
     private authService: AuthService
   ) {
     this.currentRole = this.authService.getCurrentUserRole();
@@ -30,6 +34,7 @@ export class Billing implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.loadPaymentMethods();
   }
 
   private loadData(): void {
@@ -60,7 +65,14 @@ export class Billing implements OnInit {
   }
 
   canPayInvoice(invoice: Invoice): boolean {
-    // Allow payment if user is admin or if the invoice belongs to the current user
     return this.isAdmin() || invoice.customerName === this.currentUser;
+  }
+
+  formatDuration(minutes: number): string {
+    return this.billingService.formatDurationFromMinutes(minutes);
+  }
+
+  formatCurrency(amount: number): string {
+    return this.billingService.formatCurrency(amount);
   }
 }
