@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 import { Router } from '@angular/router';
 import { ParkingSlot } from '../model/parking-slots-module';
-import { ApiService } from '../api-service/api.service';
 
 
 @Component({
@@ -28,7 +27,7 @@ export class ParkingSlots implements OnInit {
     this.isLoading = false;
   }
 
- constructor(private parkkingSlotUserService : ParkingSlotsUserService, private route:Router, private apiService : ApiService) {
+ constructor(private parkkingSlotUserService : ParkingSlotsUserService, private route:Router) {
   //  this.createSlots();
  }
 
