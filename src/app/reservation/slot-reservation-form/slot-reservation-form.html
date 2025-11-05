@@ -7,7 +7,7 @@
             <label>Slot Id</label>
             <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
               <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.id">{{ slot.id }}</option>
+              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">{{ slot.slotName }}</option>
             </select>
           </div>
           <div class="form-col">
