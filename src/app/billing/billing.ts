@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Parkingservice } from '../Services/parkingservice';
+import { Observable } from 'rxjs';
+import { BillingService } from '../Services/billing.service';
 import { AuthService } from '../Services/auth.service';
-import { Invoice } from '../model/billing';
+import { Invoice, PaymentMethod } from '../model/billing';
 
 @Component({
   selector: 'app-billing',
@@ -17,11 +18,14 @@ export class Billing implements OnInit {
   public totalRevenue: number = 0;
   public pendingPayments: number = 0;
   public totalInvoices: number = 0;
+  public paymentMethods: PaymentMethod[] = [];
   private currentRole: string = '';
   private currentUser: string = '';
+  public loading: boolean = false;
+  public error: string | null = null;
 
   constructor(
-    public parkingService: Parkingservice,
+    private billingService: BillingService,
     private authService: AuthService
   ) {
     this.currentRole = this.authService.getCurrentUserRole();
@@ -30,15 +34,39 @@ export class Billing implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.loadPaymentMethods();
   }
 
   private loadData(): void {
-    // Get invoices based on role and username
-    this.invoices = this.parkingService.getInvoices(this.currentRole, this.currentUser);
-    console.log(`Fetching invoices for role: ${this.currentRole}, user: ${this.currentUser}`);
-    console.log('Invoices received from service:', this.invoices); 
+    this.loading = true;
+    this.error = null;
 
-    // Calculate totals based on filtered data
+    this.billingService.getAllInvoices().subscribe({
+      next: (response) => {
+        this.invoices = response.data;
+        this.calculateTotals();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading invoices:', error);
+        this.error = 'Failed to load invoices. Please try again later.';
+        this.loading = false;
+      }
+    });
+  }
+
+  private loadPaymentMethods(): void {
+    this.billingService.getPaymentMethods().subscribe({
+      next: (response) => {
+        this.paymentMethods = response.data;
+      },
+      error: (error) => {
+        console.error('Error loading payment methods:', error);
+      }
+    });
+  }
+
+  private calculateTotals(): void {
     this.totalRevenue = this.invoices
       .filter(inv => inv.paymentStatus === 'Paid')
       .reduce((sum, inv) => sum + inv.total, 0);
@@ -51,8 +79,21 @@ export class Billing implements OnInit {
   }
 
   payInvoice(invoiceNumber: string): void {
-    this.parkingService.markAsPaid(invoiceNumber);
-    this.loadData();
+    this.loading = true;
+    this.error = null;
+
+    // For now, we'll use 'credit_card' as default payment method
+    this.billingService.processPayment(invoiceNumber, 'credit_card').subscribe({
+      next: (response) => {
+        this.loadData(); // Reload data after successful payment
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error processing payment:', error);
+        this.error = 'Failed to process payment. Please try again later.';
+        this.loading = false;
+      }
+    });
   }
 
   isAdmin(): boolean {
@@ -60,7 +101,14 @@ export class Billing implements OnInit {
   }
 
   canPayInvoice(invoice: Invoice): boolean {
-    // Allow payment if user is admin or if the invoice belongs to the current user
     return this.isAdmin() || invoice.customerName === this.currentUser;
+  }
+
+  formatDuration(minutes: number): string {
+    return this.billingService.formatDurationFromMinutes(minutes);
+  }
+
+  formatCurrency(amount: number): string {
+    return this.billingService.formatCurrency(amount);
   }
 }
