@@ -29,13 +29,13 @@ export class ParkingSlotsUser implements OnInit {
  hoveredSlot : any | null = null;
  tCount = 0;
  
- createSlots() {
- this.slots = this.parkkingSlotUserService.getCreateSlots();
- }
+//  createSlots() {
+//  this.slots = this.parkkingSlotUserService.getCreateSlots();
+//  }
 
- refreshSlots() {
-  this.slots = this.parkkingSlotUserService.getRefreshSlots();
- }
+//  refreshSlots() {
+  // this.slots = this.parkkingSlotUserService.getRefreshSlots();
+//  }
 
  tcount(){
   this.tCount = this.parkkingSlotUserService.getTcount();

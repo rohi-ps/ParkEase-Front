@@ -18,7 +18,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   // 1. READ (GET) - Fetches all parking spots
-  async getAllSpots(): Promise<any> {
+  async getAllSlots(): Promise<any> {
     const observable = this.http.get(API_URL + '/');
     // Returns a Promise that resolves with the final data
     return lastValueFrom(observable); 
@@ -26,12 +26,12 @@ export class ApiService {
   
 
   // 2. CREATE (POST) - Adds a new parking spot
-  addSpot(spotData: any): Observable<any> {
+  addSlot(spotData: any): Observable<any> {
     return this.http.post(API_URL + '/', spotData);
   }
 
   // 3. DELETE
-  deleteSpot(id: string): Observable<any> {
+  deleteSlot(id: string): Observable<any> {
     return this.http.delete(API_URL + '/' + id);
   }
 }
