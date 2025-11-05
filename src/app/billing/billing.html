@@ -21,7 +21,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ totalRevenue | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ totalRevenue }}
               </h2>
             </div>
           </div>
@@ -29,14 +29,14 @@
       </div>
       <!-- Pending Payments Card -->
       <div class="col-lg-4 col-md-6">
-        <div class="card text-bg-warning h-60">
+        <div class="card h-100 text-bg-warning ">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
               <h6 class="card-subtitle mb-2">Pending Payments</h6>
             </div>
             <div>
               <h2 class="card-title">
-                {{ pendingPayments | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ pendingPayments  }}
               </h2>
             </div>
           </div>
@@ -65,7 +65,7 @@
       <thead class="thead-dark">
         <tr class="table-warning">
           <th>Invoice #</th>
-          <th *ngIf="isAdmin()" >Customer</th>
+          <th *ngIf="isAdmin()">Customer</th>
           <th>Vehicle</th>
           <th>Duration</th>
           <th>Total</th>
@@ -75,33 +75,39 @@
         </tr>
       </thead>
       <tbody>
+        <!-- 
+          Updated *ngFor to loop through invoices.
+          Updated property names to match the new Invoice model from billing.model.ts
+        -->
         <tr *ngFor="let invoice of invoices">
           <td>
-            <strong>{{ invoice.invoiceNumber }}</strong>
+            <strong>{{ invoice.invoiceId }}</strong>
           </td>
-          <td *ngIf="isAdmin()">{{ invoice.customerName }}</td>
-          <td>{{ invoice.vehicleNumber }}</td>
-
-          <td>{{ parkingService.formatDurationFromMinutes(invoice.durationMinutes) }}</td>
-
+          <td *ngIf="isAdmin()">
+            {{ (typeof invoice.userId === 'object' ? invoice.userId.name : 'N/A') }}
+          </td>
+          <td>{{ invoice.vehicleType }}</td>
+          <td>{{ formatDuration(invoice.checkInTime, invoice.checkOutTime) }}</td>
           <td>
-            <strong>{{ invoice.total | currency : 'INR' : 'symbol' : '1.2-2' }}</strong>
+            <strong>{{ invoice.totalAmount.baseRate + (invoice.totalAmount.additionalHourRate * invoice.totalAmount.hours) | currency:'INR':'symbol':'1.2-2' }}</strong>
           </td>
           <td>
             <span
               class="badge"
               [ngClass]="{
-                            'bg-success-subtle text-success-emphasis': invoice.paymentStatus === 'Paid',
-                            'bg-danger-subtle text-warning-emphasis': invoice.paymentStatus === 'Pending',
-                        }"
-              >{{ invoice.paymentStatus }}</span
+                'bg-success-subtle text-success-emphasis': invoice.status === 'paid',
+                'bg-danger-subtle text-warning-emphasis': invoice.status === 'pending',
+                'bg-danger-subtle text-danger-emphasis': invoice.status === 'failed'
+              }"
             >
+              {{ invoice.status | titlecase }}
+            </span>
           </td>
           <td *ngIf="!isAdmin()">
             <button
-              *ngIf="invoice.paymentStatus === 'Pending'"
+              *ngIf="invoice.status === 'pending'"
               class="btn btn-sm btn-primary"
-              (click)="payInvoice(invoice.invoiceNumber)"
+              (click)="payInvoice(invoice._id)"
             >
               Pay
             </button>
