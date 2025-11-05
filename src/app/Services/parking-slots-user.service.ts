@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ParkingSlot } from '../model/parking-slots-module';
+import { ApiService } from '../api-service/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class ParkingSlotsUserService {
   tAvailCount = 0;
   tReserveCount = 0;
 
-  constructor() {
+  constructor(private apiService: ApiService) {
     const slots = localStorage.getItem('slots');
     const rows = localStorage.getItem('rows');
     const cols = localStorage.getItem('cols');
@@ -39,6 +40,8 @@ export class ParkingSlotsUserService {
     this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   }
 
+
+
   getCreateSlots() {
     let vehicleType = prompt('Enter vehicle type (2W or 4W):');
     if (vehicleType === '2W' || vehicleType === '4W') {
@@ -57,6 +60,11 @@ export class ParkingSlotsUserService {
     this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
     this.saveTasks();
     return this.slots;
+
+    // let vehicleType = prompt('Enter vehicle type (2W or 4W):');
+    // if (vehicleType === '2W' || vehicleType === '4W') {
+
+
   }
 
   getPushSlots(type: string) {
@@ -65,6 +73,11 @@ export class ParkingSlotsUserService {
       slotName: text,
       vehicleType: type,
       // availability: 'available',
+      status: 'available',
+    });
+    this.apiService.addSpot({
+      slotName: text,
+      vehicleType: type,
       status: 'available',
     });
   }
