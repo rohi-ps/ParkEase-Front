@@ -1,183 +1,92 @@
 import { Injectable } from '@angular/core';
-import { Invoice, ParkingRecord } from '../model/billing';
-import { ParkingSlotsUserService } from './parking-slots-user.service';
- 
+import { vehicleLog } from '../model/vehicleLog';
+import { UserSearchResult } from '../model/user-search';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { ParkingSlot } from '../model/parkingSlot';
 @Injectable({
   providedIn: 'root'
 })
+
 export class Parkingservice {
-  private _parkingRecords: ParkingRecord[] = [];
-  private _invoices: Invoice[] = [];
- 
-  private nextId = 1;
-  private nextInvoiceId = 1;
- 
-  constructor(private parkingSlotsService: ParkingSlotsUserService) {
-    this._initializeStaticData();
+  private readonly apiUrl = 'http://localhost:3000/api'; 
+
+// --- Data streams (reactive) ---
+  private readonly _parkingRecords = new BehaviorSubject<vehicleLog[]>([]);
+  public readonly parkingRecords$: Observable<vehicleLog[]> = this._parkingRecords.asObservable();
+
+  constructor(private http: HttpClient) {
+    this.fetchParkingRecords();
   }
  
-  public getParkingRecords(role: string, username?: string): ParkingRecord[] {
-    if (role === 'admin') {
-      return [...this._parkingRecords];
-    } else {
-      return [...this._parkingRecords.filter(record => record.customerName === username)];
-    }
+    // --- DATA FETCHING METHODS ---
+  //For Admin only
+  public fetchParkingRecords(): void {
+    this.http.get<vehicleLog[]>(`${this.apiUrl}/logs`)
+      .pipe(catchError(this.handleError))
+      .subscribe(records => this._parkingRecords.next(records));
   }
- 
-  public getInvoices(role: string, username?: string): Invoice[] {
-    if (role === 'admin') {
-      return [...this._invoices];
-    } else {
-      return [...this._invoices.filter(invoice => invoice.customerName === username)];
-    }
-  }
-  private _initializeStaticData(): void {
-    const now = new Date();
- 
-    // --- STATIC PARKING RECORDS ---
-    this._parkingRecords = [
-      {
-        id: 1,
-        vehicleNumber: 'MH-10-AB-1111',
-        vehicleType: '4W',
-        customerName: 'Dhruv',
-        slotId: 'A1',
-        entryTime: new Date(now.getTime() - 60 * 60 * 1000), // Parked 1 hour ago
-        exitTime: null,
-        status: 'Parked',
-      },
-      {
-        id: 2,
-        vehicleNumber: 'MH-12-CD-2222',
-        vehicleType: '2W',
-        customerName: "Jagan",
-        slotId: 'B2',
-        entryTime: new Date(now.getTime() - 3 * 60 * 60 * 1000), // Entered 3 hours ago
-        exitTime: new Date(now.getTime() - 1 * 60 * 60 * 1000), // Exited 1 hour ago
-        status: 'Completed',
-      },
-      {
-        id: 3,
-        vehicleNumber: 'MH-14-EF-3333',
-        vehicleType: '4W',
-        customerName: 'Devraj@gmail.com',
-        slotId: 'C3',
-        entryTime: new Date(now.getTime() - 26 * 60 * 60 * 1000), // Entered 26 hours ago (yesterday)
-        exitTime: new Date(now.getTime() - 24 * 60 * 60 * 1000), // Exited 24 hours ago (yesterday)
-        status: 'Completed',
-      },
-       {
-        id: 4,
-        vehicleNumber: 'MH-09-GH-4444',
-        vehicleType: '2W',
-        customerName: 'Rohit@gmail.com',
-        slotId: 'D4',
-        entryTime: new Date(now.getTime() - 15 * 60 * 1000), // Parked 15 minutes ago
-        exitTime: null,
-        status: 'Parked',
-      },
-    ];
- 
-    this._invoices = [
-      {
-        invoiceNumber: 'INV-001',
-        parkingRecordId: 2,
-        customerName: 'Jagan@gmail.com',
-        vehicleNumber: 'MH-12-CD-2222',
-        slotId: 'B2',
-        durationMinutes: 120,
-        rate: 1.00,
-        subtotal: 120.00,
-        tax: 9.60,
-        total: 129.60,
-        paymentStatus: 'Pending',
-      },
-      {
-        invoiceNumber: 'INV-002',
-        parkingRecordId: 3,
-        customerName: 'Devraj@gmail.com',
-        vehicleNumber: 'MH-14-EF-3333',
-        slotId: 'C3',
-        durationMinutes: 120,
-        rate: 1.00,
-        subtotal: 120.00,
-        tax: 9.60,
-        total: 129.60,
-        paymentStatus: 'Paid',
-      }
-    ];
- 
-    // --- UPDATE ID COUNTERS ---
-    // Ensuring new records don't have conflicting IDs
-    this.nextId = this._parkingRecords.length + 1;
-    this.nextInvoiceId = this._invoices.length + 1;
-  }
- 
- 
-  private generateInvoice(record: ParkingRecord): void {
-    if (!record.exitTime) return;
- 
-    const durationMs = new Date(record.exitTime).getTime() - new Date(record.entryTime).getTime();
-    const durationMinutes = Math.max(1, Math.round(durationMs / 60000));
+  
+   //Gets all logs for the currently logged-in user.
    
-    const ratePerMinute = 1.00;
-    const subtotal = durationMinutes * ratePerMinute;
-    const tax = subtotal * 0.08;
-    const total = subtotal + tax;
- 
-    const newInvoice: Invoice = {
-        invoiceNumber: `INV-${String(this.nextInvoiceId++).padStart(3, '0')}`,
-        parkingRecordId: record.id,
-        customerName: record.customerName,
-        vehicleNumber: record.vehicleNumber,
-        slotId: record.slotId,
-        durationMinutes,
-        rate: ratePerMinute,
-        subtotal,
-        tax,
-        total,
-        paymentStatus: 'Pending',
-    };
- 
-    this._invoices.push(newInvoice);
+  public getMyVehicleLogs(): Observable<vehicleLog[]> {
+    return this.http.get<vehicleLog[]>(`${this.apiUrl}/logs/my-logs`)
+      .pipe(catchError(this.handleError));
+
   }
+  
+  // --- DATA MUTATION METHODS ---
+
+ public logEntry(logData: {
+    vehicleNumber: string;
+    vehicleType: '4W' | '2W';
+    customerName: string;
+    slotId: string; 
+    userId: string | null; 
+  }): Observable<vehicleLog> {
+    
+    return this.http.post<vehicleLog>(`${this.apiUrl}/logs`, logData)
+      .pipe(
+        tap((newLog) => {
+          // On success, refresh the main log list
+          this.fetchParkingRecords();
+          // We don't refresh invoices, as no invoice is created on entry
+        }),
+        catchError(this.handleError)
+      );
+  }
+
  
-  markAsPaid(invoiceNumber: string): void {
-    const invoiceToPay = this._invoices.find(inv => inv.invoiceNumber === invoiceNumber);
-    if (invoiceToPay) {
-      invoiceToPay.paymentStatus = 'Paid';
+  public logExit(vehicleNumber: string): Observable<vehicleLog> {
+    return this.http.patch<vehicleLog>(`${this.apiUrl}/logs/exit`, { vehicleNumber })
+      .pipe(
+        tap((updatedLog) => {
+          // On success, refresh BOTH lists, as an invoice was just created
+          this.fetchParkingRecords();
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  
+  
+   // Fetches only the available parking slots from the API.
+   
+  public getAvailableSlots(): Observable<ParkingSlot[]> {
+    return this.http.get<ParkingSlot[]>(`${this.apiUrl}/v1/parking-spots/available-slots`)
+      .pipe(catchError(this.handleError));
+  }
+  //search user by phone number
+  public searchUsersByPhone(phone: string): Observable<UserSearchResult[]> {
+    if (!phone || phone.trim().length < 3) {
+      return new BehaviorSubject<UserSearchResult[]>([]).asObservable(); // Return empty observable
     }
+    const params = new HttpParams().set('phone', phone);
+    return this.http.get<UserSearchResult[]>(`${this.apiUrl}/search-user`, { params })
+      .pipe(catchError(this.handleError));
   }
- 
-  logEntry(entryData: { vehicleNumber: string; vehicleType: '4W' | '2W'; customerName: string; slotId: string; }): void {
-    const newRecord: ParkingRecord = {
-      id: this.nextId++,
-      ...entryData,
-      entryTime: new Date(),
-      exitTime: null,
-      status: 'Parked'
-    };
- 
-    this._parkingRecords.push(newRecord);
-     // After logging the entry, update the slot status to 'occupied'
-    this.parkingSlotsService.updateSlotStatus(entryData.slotId, 'occupied');
-    console.log('Service: Vehicle Entered:', newRecord);
-  }
- 
-  logExit(vehicleNumber: string): void {
-    const recordToUpdate = this._parkingRecords.find(
-      record => record.vehicleNumber === vehicleNumber && record.status === 'Parked'
-    );
- 
-    if (recordToUpdate) {
-      recordToUpdate.status = 'Completed';
-      recordToUpdate.exitTime = new Date();
-      // Before generating the invoice, update the slot status back to 'available'
-      this.parkingSlotsService.updateSlotStatus(recordToUpdate.slotId, 'available');
-      this.generateInvoice(recordToUpdate);
-    }
-  }
- 
+
   formatDurationFromMinutes(totalMinutes: number): string {
     if (totalMinutes < 0) return '0m';
     const hours = Math.floor(totalMinutes / 60);
@@ -186,6 +95,12 @@ export class Parkingservice {
       return `${hours}h ${minutes}m`;
     }
     return `${minutes}m`;
+  }
+
+  private handleError(error: any) {
+    console.error('API Error:', error);
+    // Return the error message from the backend, or a generic one
+    return throwError(() => new Error(error.error?.message || 'Server error; please try again.'));
   }
  
  

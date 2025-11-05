@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ParkingSlot } from '../model/parking-slots-module';
-import { parkingSlots } from '../model/parking-data';
-
+// import { parkingSlots } from '../model/parking-data';
 @Injectable({
   providedIn: 'root',
 })
 export class ParkingSlotsUserService {
-  slots: ParkingSlot[] = parkingSlots;
+  slots!: ParkingSlot[] ;
   rows: string[] = ["A","B","C","D"];
   cols = 0;
   asciiValue = 65; // Starts at 'A'

@@ -34,7 +34,7 @@ export class Billing implements OnInit {
 
   private loadData(): void {
     // Get invoices based on role and username
-    this.invoices = this.parkingService.getInvoices(this.currentRole, this.currentUser);
+    // this.invoices = this.parkingService.getInvoices(this.currentRole, this.currentUser);
     console.log(`Fetching invoices for role: ${this.currentRole}, user: ${this.currentUser}`);
     console.log('Invoices received from service:', this.invoices); 
 
@@ -51,7 +51,7 @@ export class Billing implements OnInit {
   }
 
   payInvoice(invoiceNumber: string): void {
-    this.parkingService.markAsPaid(invoiceNumber);
+    // this.parkingService.markAsPaid(invoiceNumber);
     this.loadData();
   }
 
