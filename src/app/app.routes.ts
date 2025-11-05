@@ -10,10 +10,13 @@ import { DashboardComponent } from './dashboard-admin/dashboard-admin';
 import { ParkingSlots } from './parking-slots/parking-slots';
 import { VehicleLogs } from './vehicle-logs/vehicle-logs';
 import { AdminReservations } from './admin-reservations/admin-reservations';
-
+import { Login } from './homepage/login/login';
+import { Register } from './homepage/register/register';
 
 export const routes: Routes = [
   {path:'',component:Homepage},
+  {path:'login',component:Login},
+  {path:'register',component:Register},
   {path:'usersidenav',component:SidenavComponent,
     children:[
         {path:'',component:DashboardUser},

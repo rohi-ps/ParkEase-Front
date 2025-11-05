@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Invoice, ParkingRecord } from '../model/billing';
+import { Invoice, ParkingRecord } from '../model/billing.model';
 import { ParkingSlotsUserService } from './parking-slots-user.service';
  
 @Injectable({
@@ -24,11 +24,13 @@ export class Parkingservice {
     }
   }
  
-  public getInvoices(role: string, username?: string): Invoice[] {
+  public getInvoices(role: string, userEmail?: string): Invoice[] {
     if (role === 'admin') {
       return [...this._invoices];
     } else {
-      return [...this._invoices.filter(invoice => invoice.customerName === username)];
+      return [...this._invoices.filter(invoice =>
+        typeof invoice.userId === 'object' && invoice.userId.email === userEmail
+      )];
     }
   }
   private _initializeStaticData(): void {
@@ -80,30 +82,40 @@ export class Parkingservice {
  
     this._invoices = [
       {
-        invoiceNumber: 'INV-001',
-        parkingRecordId: 2,
-        customerName: 'Jagan',
-        vehicleNumber: 'MH-12-CD-2222',
-        slotId: 'B2',
-        durationMinutes: 120,
-        rate: 1.00,
-        subtotal: 120.00,
-        tax: 9.60,
-        total: 129.60,
-        paymentStatus: 'Pending',
+        _id: '1',
+        invoiceId: 'INV-001',
+        userId: { email: 'jagan@example.com', name: 'Jagan' },
+        parkingSpotId: 'B2',
+        vehicleType: '2W',
+        checkInTime: new Date(now.getTime() - 3 * 60 * 60 * 1000),
+        checkOutTime: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+        totalAmount: {
+          baseRate: 100.00,
+          additionalHourRate: 20.00,
+          hours: 2
+        },
+        status: 'pending',
+        createdAt: new Date(now.getTime() - 3 * 60 * 60 * 1000),
+        updatedAt: new Date(now.getTime() - 3 * 60 * 60 * 1000)
       },
       {
-        invoiceNumber: 'INV-002',
-        parkingRecordId: 3,
-        customerName: 'Devraj',
-        vehicleNumber: 'MH-14-EF-3333',
-        slotId: 'C3',
-        durationMinutes: 120,
-        rate: 1.00,
-        subtotal: 120.00,
-        tax: 9.60,
-        total: 129.60,
-        paymentStatus: 'Paid',
+        _id: '2',
+        invoiceId: 'INV-002',
+        userId: { email: 'devraj@example.com', name: 'Devraj' },
+        parkingSpotId: 'C3',
+        vehicleType: '4W',
+        checkInTime: new Date(now.getTime() - 26 * 60 * 60 * 1000),
+        checkOutTime: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+        totalAmount: {
+          baseRate: 150.00,
+          additionalHourRate: 30.00,
+          hours: 2
+        },
+        status: 'paid',
+        paymentMethod: 'CARD',
+        paymentDate: new Date(now.getTime() - 23 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 26 * 60 * 60 * 1000),
+        updatedAt: new Date(now.getTime() - 23 * 60 * 60 * 1000)
       }
     ];
  
@@ -117,35 +129,51 @@ export class Parkingservice {
   private generateInvoice(record: ParkingRecord): void {
     if (!record.exitTime) return;
  
-    const durationMs = new Date(record.exitTime).getTime() - new Date(record.entryTime).getTime();
-    const durationMinutes = Math.max(1, Math.round(durationMs / 60000));
+    const now = new Date();
+    const checkInTime = new Date(record.entryTime);
+    const checkOutTime = new Date(record.exitTime);
+    const durationMs = checkOutTime.getTime() - checkInTime.getTime();
+    const hours = Math.max(1, Math.ceil(durationMs / (1000 * 60 * 60))); // Round up to nearest hour
    
-    const ratePerMinute = 1.00;
-    const subtotal = durationMinutes * ratePerMinute;
-    const tax = subtotal * 0.08;
-    const total = subtotal + tax;
- 
+    // Base rates based on vehicle type
+    const rates = {
+      '2W': { base: 50, additional: 10 },
+      '4W': { base: 100, additional: 20 }
+    };
+   
+    const rate = rates[record.vehicleType];
+   
     const newInvoice: Invoice = {
-        invoiceNumber: `INV-${String(this.nextInvoiceId++).padStart(3, '0')}`,
-        parkingRecordId: record.id,
-        customerName: record.customerName,
-        vehicleNumber: record.vehicleNumber,
-        slotId: record.slotId,
-        durationMinutes,
-        rate: ratePerMinute,
-        subtotal,
-        tax,
-        total,
-        paymentStatus: 'Pending',
+        _id: String(this.nextInvoiceId++),
+        invoiceId: `INV-${String(this.nextInvoiceId).padStart(3, '0')}`,
+        userId: {
+          email: `${record.customerName.toLowerCase()}@example.com`,
+          name: record.customerName
+        },
+        parkingSpotId: record.slotId,
+        vehicleType: record.vehicleType,
+        checkInTime: checkInTime,
+        checkOutTime: checkOutTime,
+        totalAmount: {
+          baseRate: rate.base,
+          additionalHourRate: rate.additional,
+          hours: hours
+        },
+        status: 'pending',
+        createdAt: now,
+        updatedAt: now
     };
  
     this._invoices.push(newInvoice);
   }
  
-  markAsPaid(invoiceNumber: string): void {
-    const invoiceToPay = this._invoices.find(inv => inv.invoiceNumber === invoiceNumber);
+  markAsPaid(invoiceId: string): void {
+    const invoiceToPay = this._invoices.find(inv => inv._id === invoiceId);
     if (invoiceToPay) {
-      invoiceToPay.paymentStatus = 'Paid';
+      invoiceToPay.status = 'paid';
+      invoiceToPay.paymentMethod = 'CARD';
+      invoiceToPay.paymentDate = new Date();
+      invoiceToPay.updatedAt = new Date();
     }
   }
  
