@@ -25,7 +25,7 @@ export class Billing implements OnInit {
     private authService: AuthService
   ) {
     this.currentRole = this.authService.getCurrentUserRole();
-    this.currentUser = this.authService.getCurrentUser()?.username || '';
+    // this.currentUser = this.authService.getCurrentUser()?.username || '';
   }
 
   ngOnInit(): void {
