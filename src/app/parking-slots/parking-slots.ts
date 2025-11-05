@@ -2,13 +2,8 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 import { Router } from '@angular/router';
+import { ParkingSlot } from '../model/parking-slots-module';
 
-interface ParkingSlot {
- id: string;
- vehicleType: string;
- availability : 'available' | 'occupied';
- status: 'available' | 'occupied';
-}
 
 @Component({
   selector: 'app-parking-slots',
@@ -63,7 +58,7 @@ export class ParkingSlots implements OnInit {
  }
  
   onBook(slot: ParkingSlot){
-   this.onBookEvent.emit(slot.id);
+   this.onBookEvent.emit(slot.slotName);
    this.route.navigateByUrl('adminsidenav/vehiclelogs')
   }
 

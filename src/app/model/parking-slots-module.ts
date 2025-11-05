@@ -1,6 +1,6 @@
 export interface ParkingSlot {
- id: string;
+ slotName: string;
  vehicleType: string;
- availability : 'available' | 'occupied';
+//  availability : 'available' | 'occupied';
  status: 'available' | 'occupied';
 }

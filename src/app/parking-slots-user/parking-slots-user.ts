@@ -49,7 +49,7 @@ export class ParkingSlotsUser implements OnInit {
  }
 
  onReserve(slot: ParkingSlot){
-  this.onReserveEvent.emit(slot.id);
+  this.onReserveEvent.emit(slot.slotName);
   this.route.navigateByUrl('usersidenav/userreservation');
  }
 

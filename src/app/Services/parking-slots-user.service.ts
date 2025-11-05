@@ -62,9 +62,9 @@ export class ParkingSlotsUserService {
   getPushSlots(type: string) {
     const text = this.rows.slice(-1)[0] + this.cols;
     this.slots.push({
-      id: text,
+      slotName: text,
       vehicleType: type,
-      availability: 'available',
+      // availability: 'available',
       status: 'available',
     });
   }
@@ -77,7 +77,7 @@ export class ParkingSlotsUserService {
   // --- NEW METHOD ---
   // Finds a slot by its ID and updates its status.
   updateSlotStatus(slotId: string, newStatus: 'available' | 'occupied'): void {
-    const slotToUpdate = this.slots.find(slot => slot.id === slotId);
+    const slotToUpdate = this.slots.find(slot => slot.slotName === slotId);
     if (slotToUpdate) {
       slotToUpdate.status = newStatus;
       this.saveTasks(); // Persist the change to localStorage
@@ -89,7 +89,7 @@ export class ParkingSlotsUserService {
 
   updateSlot(updatedSlot: ParkingSlot) {
     //  this.slots.maps(slot => slot.id === updateSlot.id? slot.status = updateSlot.status : slot.status);
-  this.slots.map(slot => slot.id === updatedSlot.id ? slot.status = updatedSlot.status : slot.status);
+  this.slots.map(slot => slot.slotName === updatedSlot.slotName ? slot.status = updatedSlot.status : slot.status);
   this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
   this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   this.saveTasks();
