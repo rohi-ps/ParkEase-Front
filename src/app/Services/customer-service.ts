@@ -78,7 +78,6 @@ export class CustomerService {
     const index = this.customers.findIndex(c => c.id === updated.id);
     if (index !== -1) {
       this.customers[index] = updated;
-      this.refreshParkingSlotStatus();
     }
   }
 

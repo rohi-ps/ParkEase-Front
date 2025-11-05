@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Parkingservice } from '../Services/parkingservice';
 import { AuthService } from '../Services/auth.service';
 import { Invoice } from '../model/billing';
@@ -25,7 +27,7 @@ export class Billing implements OnInit {
     private authService: AuthService
   ) {
     this.currentRole = this.authService.getCurrentUserRole();
-    this.currentUser = this.authService.getCurrentUser()?.username || '';
+    // this.currentUser = this.authService.getCurrentUser()?.username || '';
   }
 
   ngOnInit(): void {

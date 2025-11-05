@@ -27,26 +27,26 @@
     <li>
       <a routerLink="userdashboard">
         <i class="fa-regular fa-chart-bar" style="color: #74c0fc"></i>
-        Dashboard
+        <span *ngIf="isOpen" style="cursor: pointer;">Dashboard</span>
       </a>
     </li>
     <li>
       <a routerLink="userparking">
         <i class="fa-solid fa-square-parking" style="color: #74c0fc"></i>
-        Find Parking
+        <span *ngIf="isOpen" style="cursor: pointer;">Find Parking</span>
       </a>
     </li>
     <li>
       <a routerLink="userreservation">
         <i class="fa-solid fa-calendar-days" style="color: #74c0fc"></i>
-         My Reservation
+        <span *ngIf="isOpen" style="cursor: pointer;">My Reservation</span>
       </a>
     </li>
 
     <li>
       <a routerLink="billing">
         <i class="fa-solid fa-book" style="color: #74c0fc"></i>
-        Billing & Payment
+        <span *ngIf="isOpen" style="cursor: pointer;">Billing & Payment</span>
       </a>
     </li>
   </ul> 
