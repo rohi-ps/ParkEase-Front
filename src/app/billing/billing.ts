@@ -34,7 +34,7 @@ export class Billing implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.loadPaymentMethods();
+    // this.loadPaymentMethods();
   }
 
   private loadData(): void {
