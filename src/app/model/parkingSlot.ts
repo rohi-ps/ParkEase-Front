@@ -4,4 +4,4 @@ export interface ParkingSlot {
     vehicleType:"2W" | "4W";
 }
     
-//changes
+//changes new
