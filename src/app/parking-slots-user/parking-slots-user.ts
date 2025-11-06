@@ -17,17 +17,18 @@ export class ParkingSlotsUser implements OnInit {
 
  constructor(private parkkingSlotUserService : ParkingSlotsUserService,private route:Router) { }
 
- ngOnInit(): void {
+ async ngOnInit(): Promise<void> {
     
     this.slots = this.parkkingSlotUserService.slots;
-    this.tCount = this.parkkingSlotUserService.getTcount();
-
+    this.tCount = await this.parkkingSlotUserService.getTcount();
+    await this.fetchSlots();
   }
 
 
  slots : ParkingSlot[] = []
  hoveredSlot : any | null = null;
  tCount = 0;
+ errorMessage: string = '';
  
 //  createSlots() {
 //  this.slots = this.parkkingSlotUserService.getCreateSlots();
@@ -36,9 +37,20 @@ export class ParkingSlotsUser implements OnInit {
 //  refreshSlots() {
   // this.slots = this.parkkingSlotUserService.getRefreshSlots();
 //  }
+//fetching slots from service
+async fetchSlots(): Promise<void> {
+    try {
+      // Await the promise from the service, which returns the array
+      this.slots = await this.parkkingSlotUserService.getAllSlots(); 
+      console.log('Slots loaded:', this.slots);
+    } catch (error) {
+      this.errorMessage = 'Could not load parking slots.';
+      console.error(error);
+    }
+  }
 
- tcount(){
-  this.tCount = this.parkkingSlotUserService.getTcount();
+ async tcount(){
+  this.tCount = await this.parkkingSlotUserService.getTcount();
  }
 
  showInfo(slot: ParkingSlot){

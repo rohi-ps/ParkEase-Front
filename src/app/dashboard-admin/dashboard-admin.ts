@@ -20,10 +20,10 @@ export class DashboardComponent implements OnInit {
   totalSlots: number = 0
   stats: Stat[] = [];
   data = 20;
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
-    this.availableSlots = this.parkingSlotsUserService.getSlots();
-    this.occupiedSlots = this.parkingSlotsUserService.getOccupiedSlots();
+    this.availableSlots = await this.parkingSlotsUserService.getAvailSlots();
+    this.occupiedSlots = await this.parkingSlotsUserService.getOccupiedSlots();
     this.totalSlots = this.availableSlots + this.occupiedSlots;
     this.stats = [
       {
