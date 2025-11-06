@@ -214,6 +214,6 @@ export class VehicleLogs implements OnInit, OnDestroy {
         console.error("Exit error:", err);
       }
     });
-  }
+  }    
 }
-
+//changes
