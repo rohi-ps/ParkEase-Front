@@ -84,7 +84,10 @@
             <strong>{{ invoice._id }}</strong>
           </td>
           <td *ngIf="isAdmin()">
-            {{ invoice.userId?.name || 'Guest User' }}
+            {{
+             
+               invoice.userId ||
+               'Guest User' }}
           </td>
           <td>
             <span [ngClass]="{
