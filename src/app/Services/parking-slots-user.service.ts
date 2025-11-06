@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 
 
 // Define the base URL of your Express API
-const API_URL = 'http://localhost:3000/api/v1/parking-spots'; // Use your actual endpoint URL
+const API_URL = 'http://localhost:3000/api/parking-spots'; // Use your actual endpoint URL
 
 
 @Injectable({
@@ -59,7 +59,7 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
     });
     // Use lastValueFrom to return a Promise instead of Observable
     return lastValueFrom(
-        this.http.post<ParkingSlot[]>("http://localhost:3000/api/v1/parking-spots", {
+        this.http.post<ParkingSlot[]>("http://localhost:3000/api/parking-spots", {
             slotName: text,
             vehicleType: type,
             status: 'available'
