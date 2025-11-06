@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 
 @Component({
@@ -23,9 +23,9 @@ export class ParkingStats implements OnInit {
   reservedPercentage: number = 0;
   
   // Use OnChanges to recalculate percentages whenever an Input property changes
-  ngOnInit(): void {
-    this.availableSlots = this.parkingSlotsUserService.getSlots();
-    this.occupiedSlots = this.parkingSlotsUserService.getOccupiedSlots();
+ async ngOnInit(): Promise<void> {
+    this.availableSlots = await this.parkingSlotsUserService.getAvailSlots();
+    this.occupiedSlots = await this.parkingSlotsUserService.getOccupiedSlots();
     this.calculatePercentages();
   }
 
