@@ -1,4 +1,3 @@
-
 <div class="container">
   <div class="heading">
     <form #slotreserve="ngForm" (ngSubmit)="onSubmit(slotreserve)">
@@ -28,19 +27,19 @@
           </div>
           <div class="form-col">
             <label>Entry Date</label>
-            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" [min]="minDate" required>
+            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.entryDate" [min]="minDate" required>
             <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-col">
             <label>Entry Time</label>
-            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.EntryTime" required>
+            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.entryTime" required>
             <div class="text-danger" *ngIf="entrytime.touched && entrytime.invalid">Entry Time required</div>
           </div>
           <div class="form-col">
             <label>Exit Date</label>
-            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate" [min]="minDate"
+            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.exitDate" [min]="minDate"
               (change)="checkDateDifference()" required>
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
@@ -49,7 +48,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
-            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime"
+            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.exitTime"
               (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>

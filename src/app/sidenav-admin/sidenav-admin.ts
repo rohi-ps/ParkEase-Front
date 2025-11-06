@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,7 +11,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styleUrl: './sidenav-admin.css'
 })
 export class SidenavAdmin {
-isOpen = true; // Initial state is open
+  constructor(private router: Router) {}
+ isOpen = true; // Initial state is open
 
   @Output() toggleEvent = new EventEmitter<boolean>();
   @Output() items = new EventEmitter();
@@ -23,5 +24,8 @@ isOpen = true; // Initial state is open
 
   selectLink( item : string){
     this.items.emit(item);
+  }
+  logout() {
+    this.router.navigate(['/']);
   }
 }

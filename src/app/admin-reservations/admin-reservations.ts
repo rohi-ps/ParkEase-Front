@@ -5,7 +5,6 @@ import { SlotReservationForm } from './slot-reservation-form/slot-reservation-fo
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservationForm } from './modify-reservation-form/modify-reservation-form';
 import { Customer } from '../model/customers';
-import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 @Component({
   selector: 'app-admin-reservations',
   imports: [FormsModule,CommonModule,ModifyReservationForm,SlotReservationForm],
@@ -15,20 +14,25 @@ import { ParkingSlotsUserService } from '../Services/parking-slots-user.service'
 export class AdminReservations {
   customers: any[] = []
   selectedStatus = 'All Status';
-  constructor(private cs: CustomerService, private parkingSlotsService: ParkingSlotsUserService) {
+  constructor(private cs: CustomerService) {
   }
   ngOnInit(): void {
-    this.customers = this.cs.getallUsers();
-  }
+  this.loadCustomers();
+}
   searchTerm: string = '';
   filteredCustomers(): any[] {
-    this.customers = this.cs.getallUsers();
-    return this.customers.filter(customer => {
-      const matchesStatus = this.selectedStatus === 'All Status' || customer.status.toLowerCase() === this.selectedStatus.toLowerCase();
-      const matchesSearch = !this.searchTerm || customer.slotId.toLowerCase().includes(this.searchTerm.toLowerCase()) || customer.vehicleNumber.toLowerCase().includes(this.searchTerm.toLowerCase());
-      return matchesStatus && matchesSearch;
-    });
-  }
+  return this.customers.filter(customer => {
+    const matchesStatus = this.selectedStatus === 'All Status' || customer.status.toLowerCase() === this.selectedStatus.toLowerCase();
+    const matchesSearch = !this.searchTerm || customer.slotId.toLowerCase().includes(this.searchTerm.toLowerCase()) || customer.vehicleNumber.toLowerCase().includes(this.searchTerm.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
+}
+loadCustomers(): void {
+  this.cs.getallUsers().subscribe({
+    next: (data) => this.customers = data,
+    error: (err) => console.error('Failed to load customers', err)
+  });
+}
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {
       case 'upcoming':
@@ -57,16 +61,20 @@ export class AdminReservations {
         return '';
     }
   }
-  deletecustomer(id: number) {
-    const customerToUpdate = this.customers.find(c => c.id === id);
-    if (customerToUpdate) {
-      customerToUpdate.status = 'Cancelled';
-      this.parkingSlotsService.updateSlotStatus(customerToUpdate.slotId, 'available');
-    }
-  }
+ deletecustomer(id: number): void {
+  this.cs.cancelReservation(id).subscribe({
+    next: () => {
+      const customerToUpdate = this.customers.find(user => user.id === id);
+      if (customerToUpdate) {
+        customerToUpdate.status = 'Cancelled';
+      }
+    },
+    error: (err) => console.error('Failed to cancel reservation', err)
+  });
+}
+ 
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
-    this.selectedCustomer = { ...customer }; 
+    this.selectedCustomer = { ...customer };
   }
 }
-
