@@ -93,18 +93,6 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
     } catch (error) {
         throw error;
     }
-    getAvailableSlots():ParkingSlot[] {
-    return this.slots.filter(slot => slot.status === 'available');
-    // const observable = this.http.get<ApiResponse>(API_URL + '/'); // <-- Use ApiResponse here
-   
-    // try {
-    //     // Use lastValueFrom to await the Promise
-    //     const response = await lastValueFrom(observable);
-    //     const availableSlots = response.data.filter(slot => slot.status === 'available');
-    //     return availableSlots; // <-- TS2339 error is gone
-    // } catch (error) {
-    //     throw error;
-    // }
   }
  
   // --- NEW METHOD ---
