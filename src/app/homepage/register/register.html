@@ -44,10 +44,20 @@
                         </div>
                          <div *ngIf="cpass.touched && cpass.invalid" class="text-danger">Confirm Password is required</div>
                     </div>
+                    <div class="form-group">
+    <label for="phone"><strong>Phone Number</strong><span class="asterisk">*</span></label>
+    <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+        <br>
+        <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number" required [(ngModel)]="user.phone" #phone="ngModel">
+    </div>
+    <div *ngIf="phone.touched && phone.invalid" class="text-danger">Phone number is required</div>
+</div>
+
                     <button class="btn btn-primary" [disabled]="register.invalid" type="submit">Submit</button>
                      
                 </form>
             </div>
         </div>
     </div>
-</div> 
+</div>

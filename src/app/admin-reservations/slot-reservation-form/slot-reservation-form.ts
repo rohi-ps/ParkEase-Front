@@ -71,7 +71,10 @@ export class SlotReservationForm {
   onSlotChange(form: NgForm): void {
     const slotId = form.value.slotId;
     if (!slotId) return;
-    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+
+    // Find the full slot object from the selected ID
+    const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
+
     if (selectedSlot) {
       form.form.patchValue({
         vehicleType: selectedSlot.vehicleType

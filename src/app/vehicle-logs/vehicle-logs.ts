@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Parkingservice } from '../Services/parkingservice';
-import { ParkingRecord } from '../model/billing';
+import { ParkingRecord } from '../model/billing.model';
 import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 import { ParkingSlot } from '../model/parking-slots-module';
 
@@ -70,7 +70,7 @@ export class VehicleLogs implements OnInit {
     if (!slotId) return;
 
     // Find the full slot object from the selected ID
-    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+    const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
 
     if (selectedSlot) {
       // Use patchValue to update only the vehicleType field in the form

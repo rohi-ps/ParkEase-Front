@@ -77,7 +77,7 @@ export class ModifyReservationForm {
     const slotId = form.value.slotId;
     if (!slotId) return;
 
-    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+    const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
 
     if (selectedSlot) {
       
