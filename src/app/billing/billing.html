@@ -21,7 +21,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ totalRevenue | currency : 'INR' : 'symbol' : '1.2-2' }}
+                {{ totalRevenue | currency:'INR':'symbol':'1.2-2' }}
               </h2>
             </div>
           </div>
@@ -29,14 +29,14 @@
       </div>
       <!-- Pending Payments Card -->
       <div class="col-lg-4 col-md-6">
-        <div class="card text-bg-warning h-60">
+        <div class="card h-100 text-bg-warning ">
           <div class="d-flex justify-content-evenly align-items-center py-4">
             <div>
               <h6 class="card-subtitle mb-2">Pending Payments</h6>
             </div>
             <div>
               <h2 class="card-title">
-                {{ pendingPayments | currency : 'INR' : 'symbol' : '1.loc-2' }}
+                {{ pendingPayments | currency:'INR':'symbol':'1.2-2' }}
               </h2>
             </div>
           </div>
@@ -81,26 +81,36 @@
         -->
         <tr *ngFor="let invoice of invoices">
           <td>
-            <strong>{{ invoice.invoiceId }}</strong>
+            <strong>{{ invoice._id }}</strong>
           </td>
           <td *ngIf="isAdmin()">
-            {{ (typeof invoice.userId === 'object' ? invoice.userId.name : 'N/A') }}
+            {{ invoice.userId?.name || 'Guest User' }}
           </td>
-          <td>{{ invoice.vehicleType }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge bg-primary': invoice.vehicleType === '4W',
+              'badge bg-info': invoice.vehicleType === '2W'
+            }">
+              {{ invoice.vehicleType }}
+            </span>
+          </td>
           <td>{{ formatDuration(invoice.checkInTime, invoice.checkOutTime) }}</td>
           <td>
-            <strong>{{ invoice.totalAmount.baseRate + (invoice.totalAmount.additionalHourRate * invoice.totalAmount.hours) | currency:'INR':'symbol':'1.2-2' }}</strong>
+            <strong>{{ (invoice.totalAmount.baseRate + (invoice.totalAmount.additionalHourRate * (invoice.totalAmount.hours - 1))) | currency:'INR':'symbol':'1.2-2' }}</strong>
           </td>
           <td>
             <span
               class="badge"
               [ngClass]="{
                 'bg-success-subtle text-success-emphasis': invoice.status === 'paid',
-                'bg-danger-subtle text-warning-emphasis': invoice.status === 'pending',
+                'bg-warning-subtle text-warning-emphasis': invoice.status === 'pending',
                 'bg-danger-subtle text-danger-emphasis': invoice.status === 'failed'
               }"
             >
               {{ invoice.status | titlecase }}
+              <small *ngIf="invoice.paymentMethod" class="d-block">
+                via {{ invoice.paymentMethod | titlecase }}
+              </small>
             </span>
           </td>
           <td *ngIf="!isAdmin()">
@@ -109,7 +119,7 @@
               class="btn btn-sm btn-primary"
               (click)="payInvoice(invoice._id)"
             >
-              Pay
+              Pay Now
             </button>
           </td>
         </tr>
