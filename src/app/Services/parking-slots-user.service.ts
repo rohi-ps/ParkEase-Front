@@ -3,6 +3,7 @@ import { ParkingSlot, ApiResponse } from '../model/parking-slots-module';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
 
 
 // Define the base URL of your Express API
@@ -19,12 +20,10 @@ export class ParkingSlotsUserService {
   asciiValue = 65;
   tAvailCount = 0;
   tReserveCount = 0;
+  tcount = 0;
 
-  constructor(private http: HttpClient) {
-    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
-    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
-
 
 async getCreateSlots(): Promise<ParkingSlot[] | undefined> {
     const vehicleType = prompt('Enter vehicle type (2W or 4W):');
@@ -36,6 +35,7 @@ async getCreateSlots(): Promise<ParkingSlot[] | undefined> {
             this.cols = 0;
             this.asciiValue++;
         }
+        this.cols = await this.getTcount();
         this.cols = this.cols + 1;
         this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
         this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
@@ -59,7 +59,8 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
     });
     // Use lastValueFrom to return a Promise instead of Observable
     return lastValueFrom(
-        this.http.post<ParkingSlot[]>("http://localhost:3000/api/parking-spots", {
+      
+        this.http.post<ParkingSlot[]>("http://localhost:3000/api/parking-spots/", {
             slotName: text,
             vehicleType: type,
             status: 'available'
@@ -70,12 +71,9 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
  //Getting all slots
  async getAllSlots(): Promise<ParkingSlot[]> {
     const observable = this.http.get<ApiResponse>(API_URL + '/'); // <-- Use ApiResponse here
-    
     try {
         // Use lastValueFrom to await the Promise
         const response = await lastValueFrom(observable); 
-        // TypeScript now confirms that 'response' is an ApiResponse, 
-        // which definitely has the 'data' property.
         return response.data; // <-- TS2339 error is gone
     } catch (error) {
         throw error;
@@ -132,13 +130,16 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
 
   }
 
-  getTcount() {
+  async getTcount(): Promise<number> {
+    this.tcount = await this.getAllSlots().then(slots => slots.length);
+    return this.tcount;
+  }
+  async getAvailSlots(): Promise<number> {
+    this.tAvailCount = await this.getAllSlots().then(slots => slots.filter(slot => slot.status === 'available').length);
     return this.tAvailCount;
   }
-  getSlots() {
-    return this.tAvailCount;
-  }
-  getOccupiedSlots(){
+  async getOccupiedSlots(): Promise<number> {
+    this.tReserveCount = await this.getAllSlots().then(slots => slots.filter(slot => slot.status === 'occupied').length);
     return this.tReserveCount;
   }
 }
