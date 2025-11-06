@@ -141,10 +141,10 @@ console.log('Register payload:', payload);
   next: (res) => {
     if (res.success) {
       alert(res.message || 'Registration successful!');
-      // this.closeModal();
+      this.closeModal();
       form.resetForm();
 
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
     } else {
       alert(res.message || 'Registration failed.');
     }

@@ -70,7 +70,7 @@ export class VehicleLogs implements OnInit {
     if (!slotId) return;
 
     // Find the full slot object from the selected ID
-    const selectedSlot = this.availableSlots.find(slot => slot.id === slotId);
+    const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
 
     if (selectedSlot) {
       // Use patchValue to update only the vehicleType field in the form
