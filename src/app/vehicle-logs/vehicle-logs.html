@@ -103,8 +103,8 @@
               (ngModelChange)="onSlotChange(entryForm)"
             >
               <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.id">
-                {{ slot.id }}
+              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">
+                {{ slot.slotName }}
               </option>
             </select>
           </div>
