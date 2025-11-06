@@ -41,7 +41,6 @@ export class Parkingservice {
  public logEntry(logData: {
     vehicleNumber: string;
     vehicleType: '4W' | '2W';
-    customerName: string;
     slotId: string; 
     userId: string | null; 
   }): Observable<vehicleLog> {
@@ -59,10 +58,10 @@ export class Parkingservice {
 
  
   public logExit(vehicleNumber: string): Observable<vehicleLog> {
+    console.log("Exiting vehicle:", vehicleNumber);
     return this.http.patch<vehicleLog>(`${this.apiUrl}/logs/exit`, { vehicleNumber })
       .pipe(
         tap((updatedLog) => {
-          // On success, refresh BOTH lists, as an invoice was just created
           this.fetchParkingRecords();
         }),
         catchError(this.handleError)
@@ -74,7 +73,7 @@ export class Parkingservice {
    // Fetches only the available parking slots from the API.
    
   public getAvailableSlots(): Observable<ParkingSlot[]> {
-    return this.http.get<ParkingSlot[]>(`${this.apiUrl}/v1/parking-spots/available-slots`)
+    return this.http.get<ParkingSlot[]>(`${this.apiUrl}/parking-spots/available-slots`)
       .pipe(catchError(this.handleError));
   }
   //search user by phone number

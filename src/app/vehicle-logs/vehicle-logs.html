@@ -6,10 +6,20 @@
       <p class="text-muted mb-0">Track vehicle entries, exits, and parking duration</p>
     </div>
     <div class="d-flex gap-2">
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#vehicleEntryModal">
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#vehicleEntryModal"
+      >
         <i class="bi bi-box-arrow-in-right"></i> Vehicle Entry
       </button>
-      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#vehicleExitModal">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#vehicleExitModal"
+      >
         <i class="bi bi-box-arrow-right"></i> Vehicle Exit
       </button>
     </div>
@@ -17,10 +27,19 @@
 </div>
 <hr />
 
-
-<div class="modal fade" id="vehicleEntryModal" tabindex="-1" aria-labelledby="vehicleEntryModalLabel" aria-hidden="true">
-  <!-- Increased modal size for the new form -->
-  <div class="modal-dialog modal-dialog-centered modal-lg"> 
+<!-- 
+=========================================
+  VEHICLE ENTRY MODAL (REACTIVE FORM)
+=========================================
+-->
+<div
+  class="modal fade"
+  id="vehicleEntryModal"
+  tabindex="-1"
+  aria-labelledby="vehicleEntryModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <!-- 
         This form is now bound to the 'entryForm' FormGroup in your component.ts 
@@ -28,106 +47,225 @@
       <form [formGroup]="entryForm" (ngSubmit)="onSubmitLogEntry()">
         <div class="modal-header">
           <h5 class="modal-title" id="vehicleEntryModalLabel">Log Vehicle Entry</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="entryForm.reset()"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="resetEntryForm()"
+          ></button>
         </div>
-        
+
         <div class="modal-body">
-          
           <!-- Section 1: User Search (by Phone) -->
           <div class="mb-3">
-            <label for="userSearch" class="form-label">Search Registered User (by Phone)</label>
+            <label for="phoneSearchInput" class="form-label"
+              >Customer Phone Number <span class="text-danger">*</span></label
+            >
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-search"></i></span>
-              <input 
-                type="tel" 
-                class="form-control" 
-                id="userSearch"
-                placeholder="Start typing phone number... (Optional)"
-                formControlName="userSearchInput">
-              <button class="btn btn-outline-secondary" type="button" (click)="clearUserSearch()">Clear</button>
+              <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+              <input
+                type="tel"
+                class="form-control"
+                id="phoneSearchInput"
+                placeholder="Enter 10-digit phone number..."
+                formControlName="phoneSearchInput"
+                [class.is-invalid]="
+                  entryForm.get('phoneSearchInput')?.invalid &&
+                  entryForm.get('phoneSearchInput')?.touched
+                "
+              />
+
+              <!-- "Fetch User" button -->
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                (click)="onFetchUser()"
+                [disabled]="entryForm.get('phoneSearchInput')?.invalid"
+              >
+                <i class="bi bi-search"></i> Fetch User
+              </button>
             </div>
-            
+
+            <!-- Validation Messages for Phone -->
+            <div
+              *ngIf="
+                entryForm.get('phoneSearchInput')?.invalid &&
+                entryForm.get('phoneSearchInput')?.touched
+              "
+              class="invalid-feedback d-block"
+            >
+              <div *ngIf="entryForm.get('phoneSearchInput')?.errors?.['required']">
+                Phone number is required.
+              </div>
+              <div *ngIf="entryForm.get('phoneSearchInput')?.errors?.['pattern']">
+                Must be a 10-digit number.
+              </div>
+            </div>
+
             <!-- User Search Results Dropdown -->
-            <ul *ngIf="userSearchResults.length > 0" class="list-group mt-2 position-absolute" style="z-index: 1056; width: 95%;">
-              <li 
-                *ngFor="let user of userSearchResults" 
+            <ul
+              *ngIf="userSearchResults.length > 0"
+              class="list-group mt-2 position-absolute"
+              style="z-index: 1056; width: 95%"
+            >
+              <li
+                *ngFor="let user of userSearchResults"
                 class="list-group-item list-group-item-action"
-                style="cursor: pointer;"
-                (click)="selectUser(user)">
+                style="cursor: pointer"
+                (click)="selectUser(user)"
+              >
                 <!-- Display name and phone from search results -->
                 <strong>{{ user.name }}</strong> - {{ user.phone }}
               </li>
             </ul>
+
+            <!-- Search Status Messages -->
+            <div *ngIf="userSearchError" class="form-text text-danger mt-2">
+              <i class="bi bi-exclamation-circle"></i> {{ userSearchError }}
+            </div>
+            <div *ngIf="userSearchSuccess" class="form-text text-success mt-2">
+              <i class="bi bi-check-circle-fill"></i> {{ userSearchSuccess }}
+            </div>
           </div>
 
-          <hr classs="my-4">
+          <hr classs="my-4" />
 
           <!-- Section 2: Log Details -->
+           <!-- UserID -->
+          <div class="mb-3">
+            <label for="userIdDisplay" class="form-label">User ID</label>
+            <input
+              type="text"
+              class="form-control"
+              id="userIdDisplay"
+              formControlName="userId"
+              readonly
+            />
+            <div class="form-text">Auto-filled after user is fetched. Leave blank for walk-in.</div>
+          </div>
           <div class="row">
-            <!-- Customer Name (Auto-filled by search, but editable for walk-ins) -->
-            <!-- This field IS in your component.ts, so it must be here -->
-            <div class="col-md-6 mb-3">
-              <label for="customerName" class="form-label">Customer Name</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                id="customerName"
-                placeholder="Enter customer name"
-                formControlName="customerName"
-                [class.is-invalid]="entryForm.get('customerName')?.invalid && entryForm.get('customerName')?.touched">
-              <div *ngIf="entryForm.get('customerName')?.errors?.['required']" class="invalid-feedback">
-                Customer name is required.
-              </div>
-            </div>
-
             <!-- Vehicle Number -->
             <div class="col-md-6 mb-3">
-              <label for="vehicleNumber" class="form-label">Vehicle Number</label>
-              <input 
-                type="text" 
-                class="form-control" 
+              <label for="vehicleNumber" class="form-label"
+                >Vehicle Number <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
                 id="vehicleNumber"
                 placeholder="e.g., MH12GH3456"
                 formControlName="vehicleNumber"
-                [class.is-invalid]="entryForm.get('vehicleNumber')?.invalid && entryForm.get('vehicleNumber')?.touched">
-              <div *ngIf="entryForm.get('vehicleNumber')?.errors?.['required']" class="invalid-feedback">
+                [class.is-invalid]="
+                  entryForm.get('vehicleNumber')?.invalid && entryForm.get('vehicleNumber')?.touched
+                "
+              />
+              <div
+                *ngIf="entryForm.get('vehicleNumber')?.errors?.['required']"
+                class="invalid-feedback"
+              >
                 Vehicle number is required.
               </div>
-              <div *ngIf="entryForm.get('vehicleNumber')?.errors?.['pattern']" class="invalid-feedback">
+              <div
+                *ngIf="entryForm.get('vehicleNumber')?.errors?.['pattern']"
+                class="invalid-feedback"
+              >
                 Format must be MH12GH3456.
+              </div>
+            </div>
+
+            <!-- Vehicle Type -->
+            <div class="col-md-6 mb-3">
+              <label for="vehicleType" class="form-label"
+                >Vehicle Type <span class="text-danger">*</span></label
+              >
+              <select
+                class="form-select"
+                id="vehicleType"
+                formControlName="vehicleType"
+                [class.is-invalid]="
+                  entryForm.get('vehicleType')?.invalid && entryForm.get('vehicleType')?.touched
+                "
+              >
+                <option value="" disabled>Select vehicle type</option>
+                <option value="2W">2W (Two-Wheeler)</option>
+                <option value="4W">4W (Four-Wheeler)</option>
+              </select>
+              <div
+                *ngIf="entryForm.get('vehicleType')?.errors?.['required']"
+                class="invalid-feedback"
+              >
+                Vehicle type is required.
               </div>
             </div>
           </div>
 
-          <div class="mb-3">
-            <label for="slotId" class="form-label">Slot ID</label>
-            <select
-              id="slotId"
-              name="slotId"
-              ngModel
-              class="form-control"
-              required
-              (ngModelChange)="onSlotChange(entryForm)"
-            >
-              <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">
-                {{ slot.slotName }}
-              </option>
-            </select>
+          <div class="row">
+            <!-- Available Slots Dropdown (Now Dynamic) -->
+            <div class="col-md-12 mb-3">
+              <label for="slotId" class="form-label"
+                >Available Slot <span class="text-danger">*</span></label
+              >
+              <select
+                class="form-select"
+                id="slotId"
+                formControlName="slotId"
+                [class.is-invalid]="
+                  entryForm.get('slotId')?.invalid && entryForm.get('slotId')?.touched
+                "
+              >
+                <option value="" disabled>Select a slot</option>
+
+                <ng-container *ngIf="entryForm.get('vehicleType')?.value; else pleaseSelectType">
+                  <ng-container *ngFor="let slot of availableSlots">
+                    <!-- Dynamic Filtering Logic -->
+                    <option
+                      *ngIf="
+                        entryForm.get('vehicleType')?.value === slot.vehicleType ||
+                        (entryForm.get('vehicleType')?.value === '2W' && slot.vehicleType === '4W')
+                      "
+                      [value]="slot._id"
+                    >
+                      <!-- Display human-readable name and type -->
+                      {{ slot.slotName }} ({{ slot.vehicleType }})
+                    </option>
+                  </ng-container>
+                </ng-container>
+                <ng-template #pleaseSelectType>
+                  <option disabled>Please select a vehicle type first</option>
+                </ng-template>
+              </select>
+              <div *ngIf="entryForm.get('slotId')?.errors?.['required']" class="invalid-feedback">
+                Please select an available slot.
+              </div>
+            </div>
           </div>
-          
-          <!-- Hidden field to store the selected user's ID -->
-          <input type="hidden" formControlName="userId">
+
+          <!-- Hidden fields to store the selected user's ID and Name -->
+          <input type="hidden" formControlName="userId" />
+          <input type="hidden" formControlName="customerName" />
 
           <!-- Error message for API calls -->
           <div *ngIf="modalError" class="alert alert-danger mt-2">
             <strong>Error:</strong> {{ modalError }}
           </div>
-
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="entryForm.reset()">Close</button>
-          <button type="submit" class="btn btn-primary" [disabled]="entryForm.invalid">Log Vehicle</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            (click)="resetEntryForm()"
+          >
+            Close
+          </button>
+          <!-- 
+            This button does NOT have data-bs-dismiss.
+            The component.ts file will close the modal on a successful API call.
+          -->
+          <button type="submit" class="btn btn-primary" [disabled]="entryForm.invalid">
+            Log Vehicle
+          </button>
         </div>
       </form>
     </div>
@@ -139,36 +277,66 @@
   VEHICLE EXIT MODAL (TEMPLATE-DRIVEN)
 =========================================
 -->
-<div class="modal fade" id="vehicleExitModal" tabindex="-1" aria-labelledby="vehicleExitModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="vehicleExitModal"
+  tabindex="-1"
+  aria-labelledby="vehicleExitModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <!-- This simple form can still use NgForm -->
       <form #exitForm="ngForm" (ngSubmit)="logExit(exitForm)">
         <div class="modal-header">
           <h5 class="modal-title" id="vehicleExitModalLabel">Log Vehicle Exit</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
             <label for="selectVehicleToExit" class="form-label">Vehicle Number</label>
-            <select class="form-select" id="selectVehicleToExit" name="selectedVehicleNumber" ngModel #selectedVehicleNum="ngModel" required>
+            <select
+              class="form-select"
+              id="selectVehicleToExit"
+              name="selectedVehicleNumber"
+              ngModel
+              #selectedVehicleNum="ngModel"
+              required
+            >
               <option value="" disabled selected>Select vehicle to exit</option>
-              
+
               <!-- Use the async pipe to get data from the parkingRecords$ stream -->
               <ng-container *ngFor="let record of parkingRecords$ | async">
                 <option *ngIf="record.status === 'Parked'" [value]="record.vehicleNumber">
-                  <!-- Display the populated slotName and customerName -->
-                  {{ record.vehicleNumber }} - ({{ record.slotId?.slotName }})
+                  <!-- Display the populated slotName, but NOT customerName -->
+                  {{ record.vehicleNumber }} ({{ record.slotId?.slotName }})
                 </option>
               </ng-container>
             </select>
-            <div *ngIf="selectedVehicleNum.invalid && (selectedVehicleNum.touched || selectedVehicleNum.dirty)" class="text-danger mt-1">
-              <small *ngIf="selectedVehicleNum.errors?.['required']">Please select a vehicle to exit.</small>
+            <div
+              *ngIf="
+                selectedVehicleNum.invalid &&
+                (selectedVehicleNum.touched || selectedVehicleNum.dirty)
+              "
+              class="text-danger mt-1"
+            >
+              <small *ngIf="selectedVehicleNum.errors?.['required']"
+                >Please select a vehicle to exit.</small
+              >
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid" data-bs-dismiss="modal">
+          <!-- 
+            This button does NOT have data-bs-dismiss.
+            The component.ts file will close the modal on a successful API call.
+          -->
+          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid">
             Confirm Exit
           </button>
         </div>
@@ -189,8 +357,9 @@
       <div class="card h-100 text-bg-warning">
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Available Slots</h6></div>
-          <!-- Get length from the component's 'availableSlots' array -->
-          <div><h4 class="card-title">{{ availableSlots.length }}</h4></div>
+          <div>
+            <h4 class="card-title">{{ availableSlots.length }}</h4>
+          </div>
         </div>
       </div>
     </div>
@@ -200,7 +369,9 @@
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Currently Parked</h6></div>
           <!-- Use async pipe to display the value from the observable -->
-          <div><h4 class="card-title">{{ parkingCount$ | async }}</h4></div>
+          <div>
+            <h4 class="card-title">{{ parkingCount$ | async }}</h4>
+          </div>
         </div>
       </div>
     </div>
@@ -210,7 +381,9 @@
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Today's Exits</h6></div>
           <!-- Use async pipe -->
-          <div><h4 class="card-title">{{ exitCount$ | async }}</h4></div>
+          <div>
+            <h4 class="card-title">{{ exitCount$ | async }}</h4>
+          </div>
         </div>
       </div>
     </div>
@@ -219,7 +392,8 @@
       <div class="card h-100 text-bg-dark">
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Reserved Slots</h6></div>
-          <div><h4 class="card-title">0</h4></div> <!-- Hardcoded, update as needed -->
+          <div><h4 class="card-title">0</h4></div>
+          <!-- Hardcoded, update as needed -->
         </div>
       </div>
     </div>
@@ -240,13 +414,14 @@
   </div>
 
   <!-- Use *ngIf with 'as' syntax to unwrap the observable -->
-  <div *ngIf="(parkingRecords$ | async) as records; else loading" class="table-responsive mt-3">
+  <div *ngIf="parkingRecords$ | async as records; else loading" class="table-responsive mt-3">
     <table class="table table-hover" *ngIf="records.length > 0">
       <thead class="thead-dark">
         <tr class="table-primary">
           <th>ID</th>
           <th>Slot</th>
           <th>Vehicle Number</th>
+          <!-- Customer Name column is REMOVED -->
           <th>Entry Time</th>
           <th>Exit Time</th>
           <th>Action</th>
@@ -256,8 +431,10 @@
       <tbody>
         <!-- Loop over the unwrapped 'records' array -->
         <tr *ngFor="let record of records" class="table-default">
-          <td>{{ record._id | slice:-6 }}</td> <!-- Show last 6 chars of _id -->
-          <td>{{ record.slotId?.slotName || 'N/A' }}</td> <!-- Use populated slotName -->
+          <td>{{ record._id | slice : -6 }}</td>
+          <!-- Show last 6 chars of _id -->
+          <td>{{ record.slotId?.slotName || 'N/A' }}</td>
+          <!-- Use populated slotName -->
           <td>{{ record.vehicleNumber }}</td>
           <td>{{ record.entryTime | date : 'short' }}</td>
           <td>{{ record.exitTime ? (record.exitTime | date : 'short') : 'N/A' }}</td>
@@ -271,10 +448,13 @@
             </button>
           </td>
           <td>
-            <span class="badge" [ngClass]="{
-              'bg-info-subtle text-info-emphasis': record.status === 'Parked',
-              'bg-success-subtle text-success-emphasis': record.status === 'Completed'
-            }">
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-info-subtle text-info-emphasis': record.status === 'Parked',
+                'bg-success-subtle text-success-emphasis': record.status === 'Completed'
+              }"
+            >
               {{ record.status }}
             </span>
           </td>
@@ -282,7 +462,7 @@
       </tbody>
     </table>
   </div>
-  
+
   <!-- Loading template for when the data is first being fetched -->
   <ng-template #loading>
     <div class="text-center p-5">
@@ -292,7 +472,4 @@
       <p class="mt-2">Loading records...</p>
     </div>
   </ng-template>
-
 </div>
-
- <!-- changes -->

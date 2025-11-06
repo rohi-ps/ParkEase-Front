@@ -1,5 +1,5 @@
 export interface ParkingSlot {
-    id: string;
+    _id: string;
     slotName: string;
     vehicleType:"2W" | "4W";
 }
