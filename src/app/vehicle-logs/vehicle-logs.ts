@@ -146,42 +146,28 @@ export class VehicleLogs implements OnInit, OnDestroy {
       this.entryForm.markAllAsTouched(); 
       return;
     }
-
-    this.modalError = null;
-
-    // Get the final form values
-    const formValue = this.entryForm.value;
-
-    this.parkingService.logEntry({
-      vehicleNumber: formValue.vehicleNumber,
-      vehicleType: formValue.vehicleType,
-      slotId: formValue.slotId, // This is now the slot's _id
-      customerName: formValue.customerName,
-      userId: this.selectedUserId // This is the customer's _id (or null)
-    }).subscribe({
-      next: () => {
-        // Success!
-        this.entryForm.reset();
-        this.selectedUserId = null;
-        this.userSearchResults = [];
-        this.loadAvailableSlots(); // Refresh slots for the next entry
-        
-        // Find and close the Bootstrap modal (you'll need to get the modal instance)
-        // e.g., Modal.getInstance(document.getElementById('vehicleEntryModal'))?.hide();
-        console.log("Log entry successful!");
-        // (Close modal logic here)
-      },
-      error: (err) => {
-        // Display the error from the service in the modal
-        this.modalError = err.message;
-      }
-    });
+    
+    this.parkingService.logEntry(form.value);
+    form.reset();
+    
+    this.loadData();   // Manually refresh the data after the change
   }
+  // --- NEW METHOD ---
+  // This method is triggered when the user selects a different parking slot.
+  onSlotChange(form: NgForm): void {
+    const slotId = form.value.slotId;
+    if (!slotId) return;
 
-  /**
-   * Handles the "Log Exit" form submission.
-   * This modal is simple, so we can still use NgForm.
-   */
+    // Find the full slot object from the selected ID
+    const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
+
+    if (selectedSlot) {
+      // Use patchValue to update only the vehicleType field in the form
+      form.form.patchValue({
+        vehicleType: selectedSlot.vehicleType
+      });
+    }
+  }
   logExit(form: NgForm): void {
     if (form.invalid) return;
     

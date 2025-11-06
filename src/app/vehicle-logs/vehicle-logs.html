@@ -99,54 +99,21 @@
             </div>
           </div>
 
-          <div class="row">
-            <!-- Vehicle Type -->
-            <div class="col-md-6 mb-3">
-              <label for="vehicleType" class="form-label">Vehicle Type</label>
-              <select 
-                class="form-select" 
-                id="vehicleType"
-                formControlName="vehicleType"
-                [class.is-invalid]="entryForm.get('vehicleType')?.invalid && entryForm.get('vehicleType')?.touched">
-                <option value="" disabled>Select vehicle type</option>
-                <option value="2W">2W (Two-Wheeler)</option>
-                <option value="4W">4W (Four-Wheeler)</option>
-              </select>
-              <div *ngIf="entryForm.get('vehicleType')?.errors?.['required']" class="invalid-feedback">
-                Vehicle type is required.
-              </div>
-            </div>
-
-            <!-- Available Slots Dropdown (Now Dynamic) -->
-            <div class="col-md-6 mb-3">
-              <label for="slotId" class="form-label">Available Slot</label>
-              <select 
-                class="form-select" 
-                id="slotId"
-                formControlName="slotId"
-                [class.is-invalid]="entryForm.get('slotId')?.invalid && entryForm.get('slotId')?.touched">
-                <option value="" disabled>Select a slot</option>
-                
-                <ng-container *ngIf="entryForm.get('vehicleType')?.value; else pleaseSelectType">
-                  <ng-container *ngFor="let slot of availableSlots">
-                    <!-- Dynamic Filtering Logic -->
-                    <option 
-                      *ngIf="entryForm.get('vehicleType')?.value === slot.vehicleType || (entryForm.get('vehicleType')?.value === '2W' && slot.vehicleType === '4W')" 
-                      [value]="slot.id">
-                      <!-- Display human-readable name and type -->
-                      {{ slot.slotName }} ({{ slot.vehicleType }})
-                    </option>
-                  </ng-container>
-                </ng-container>
-                <ng-template #pleaseSelectType>
-                  <option disabled>Please select a vehicle type first</option>
-                </ng-template>
-
-              </select>
-              <div *ngIf="entryForm.get('slotId')?.errors?.['required']" class="invalid-feedback">
-                Please select an available slot.
-              </div>
-            </div>
+          <div class="mb-3">
+            <label for="slotId" class="form-label">Slot ID</label>
+            <select
+              id="slotId"
+              name="slotId"
+              ngModel
+              class="form-control"
+              required
+              (ngModelChange)="onSlotChange(entryForm)"
+            >
+              <option value="" disabled>Select a slot</option>
+              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">
+                {{ slot.slotName }}
+              </option>
+            </select>
           </div>
           
           <!-- Hidden field to store the selected user's ID -->

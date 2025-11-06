@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ParkingSlot } from '../model/parking-slots-module';
-// import { parkingSlots } from '../model/parking-data';
+import { ParkingSlot, ApiResponse } from '../model/parking-slots-module';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
+
+
+// Define the base URL of your Express API
+const API_URL = 'http://localhost:3000/api/parking-spots'; // Use your actual endpoint URL
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,77 +20,81 @@ export class ParkingSlotsUserService {
   tAvailCount = 0;
   tReserveCount = 0;
 
-  constructor() {
-    // Initialize the service with a predefined set of static slots
-    this._initializeStaticData();
+  constructor(private http: HttpClient) {
+    this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+    this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
   }
 
-  /**
-   * Populates the service with a default set of parking slots using the simplified model.
-   */
-  private _initializeStaticData(): void {
-    // Each object now correctly has only id, vehicleType, and status.
-    this.slots = [
-      // --- Row A ---
-      { id: 'A1', vehicleType: '4W', status: 'available' },
-      { id: 'A2', vehicleType: '4W', status: 'occupied' },
-      { id: 'A3', vehicleType: '4W', status: 'available' },
-      { id: 'A4', vehicleType: '2W', status: 'available' },
 
-      // --- Row B ---
-      { id: 'B1', vehicleType: '2W', status: 'occupied' },
-      { id: 'B2', vehicleType: '2W', status: 'occupied' },
-      { id: 'B3', vehicleType: '2W', status: 'available' },
-      { id: 'B4', vehicleType: '4W', status: 'available' },
-      { id: 'B5', vehicleType: '4W', status: 'available' },
-      { id: 'B6', vehicleType: '4W', status: 'available' },
+async getCreateSlots(): Promise<ParkingSlot[] | undefined> {
+    const vehicleType = prompt('Enter vehicle type (2W or 4W):');
 
-      // --- Row C ---
-      { id: 'C1', vehicleType: '2W', status: 'available' },
-      { id: 'C2', vehicleType: '2W', status: 'available' },
-      { id: 'C3', vehicleType: '4W', status: 'occupied' },
-      { id: 'C4', vehicleType: '2W', status: 'available' },
-      { id: 'C5', vehicleType: '4W', status: 'available' },
-    ];
-
-    // Update service state to match the static data
-    this.rows = ['A', 'B', 'C'];
-    this.cols = 5;
-    this.asciiValue = 68; // Next char is 'D'
-
-    // Calculate initial counts
-    this.updateCounts();
-  }
-
-  getCreateSlots() {
-    let vehicleType = prompt('Enter vehicle type (2W or 4W):');
     if (vehicleType === '2W' || vehicleType === '4W') {
-      if (this.cols === 10) {
-        const char = String.fromCharCode(this.asciiValue);
-        this.rows.push(char);
-        this.cols = 0;
-        this.asciiValue++;
-      }
-      this.cols = this.cols + 1;
-      this.getPushSlots(vehicleType);
-    } else {
-      alert('Enter a valid vehicle type');
-    }
-    this.updateCounts();
-    return this.slots;
-  }
+        if (this.cols === 50 || this.cols === 0) {
+            const char = String.fromCharCode(this.asciiValue);
+            this.rows.push(char);
+            this.cols = 0;
+            this.asciiValue++;
+        }
+        this.cols = this.cols + 1;
+        this.tAvailCount = this.slots.filter(slot => slot.status === 'available').length;
+        this.tReserveCount = this.slots.filter(slot => slot.status === 'occupied').length;
 
-  getPushSlots(type: string) {
+        // 2. Await the function call and return the Promise's result
+        return this.getPushSlots(String(vehicleType)); 
+    } else {
+        alert('Enter a valid vehicle type');
+        // 3. Explicitly return a resolved Promise with undefined (or throw error)
+        return Promise.resolve(undefined);
+    }
+}
+
+// Keep this function returning an Observable, but use it inside getCreateSlots
+getPushSlots(type: string): Promise<ParkingSlot[]> { 
     const text = this.rows.slice(-1)[0] + this.cols;
     this.slots.push({
-      id: text,
-      vehicleType: type,
-      status: 'available',
+        slotName: text,
+        vehicleType: type,
+        status: 'available',
     });
-  }
+    // Use lastValueFrom to return a Promise instead of Observable
+    return lastValueFrom(
+        this.http.post<ParkingSlot[]>("http://localhost:3000/api/parking-spots", {
+            slotName: text,
+            vehicleType: type,
+            status: 'available'
+        })
+    );
+}
 
-  getAvailableSlots(): ParkingSlot[] {
+ //Getting all slots
+ async getAllSlots(): Promise<ParkingSlot[]> {
+    const observable = this.http.get<ApiResponse>(API_URL + '/'); // <-- Use ApiResponse here
+    
+    try {
+        // Use lastValueFrom to await the Promise
+        const response = await lastValueFrom(observable); 
+        // TypeScript now confirms that 'response' is an ApiResponse, 
+        // which definitely has the 'data' property.
+        return response.data; // <-- TS2339 error is gone
+    } catch (error) {
+        throw error;
+    }
+}
+   // --- NEW METHOD ---
+  // Returns only the slots that are currently available.
+    getAvailableSlots():ParkingSlot[] {
     return this.slots.filter(slot => slot.status === 'available');
+    // const observable = this.http.get<ApiResponse>(API_URL + '/'); // <-- Use ApiResponse here
+    
+    // try {
+    //     // Use lastValueFrom to await the Promise
+    //     const response = await lastValueFrom(observable); 
+    //     const availableSlots = response.data.filter(slot => slot.status === 'available');
+    //     return availableSlots; // <-- TS2339 error is gone
+    // } catch (error) {
+    //     throw error;
+    // }
   }
   
   getAllSlots(): ParkingSlot[] {
@@ -90,35 +102,36 @@ export class ParkingSlotsUserService {
   }
 
   updateSlotStatus(slotId: string, newStatus: 'available' | 'occupied'): void {
-    const slotToUpdate = this.slots.find(slot => slot.id === slotId);
+    const slotToUpdate = this.slots.find(slot => slot.slotName === slotId);
     if (slotToUpdate) {
       slotToUpdate.status = newStatus;
-      this.updateCounts();
+      // this.saveTasks(); 
       console.log(`Slot ${slotId} status updated to ${newStatus}`);
     } else {
       console.error(`Could not find slot with ID: ${slotId} to update.`);
     }
   }
 
-  getRefreshSlots() {
-    if (this.slots.length > 0) {
-      this.slots.pop();
+  updateSlot(updatedSlot: ParkingSlot) {
+  return lastValueFrom(this.http.put<ApiResponse>(
+    `${API_URL}/${updatedSlot.slotName}/status`,
+    {status: updatedSlot.status}
+  ));  
+
+    
+  }
+
+  async getRefreshSlots( id: string): Promise<void> {
+
       if (this.cols === 1) {
-        if (this.rows.length > 1) {
-            this.rows.pop();
-            this.asciiValue--;
-            this.cols = 10;
-        } else {
-            this.cols = 0;
-        }
+        this.rows.pop();
+        this.asciiValue--;
+        this.cols = 50;
       } else {
         this.cols--;
       }
-    } else {
-      alert('No slots to remove');
-    }
-    this.updateCounts();
-    return this.slots;
+    return lastValueFrom(this.http.delete<void>(`${API_URL}/${id}`));
+
   }
 
   getTcount() {
@@ -127,14 +140,5 @@ export class ParkingSlotsUserService {
 
   getOccupiedSlots() {
     return this.tReserveCount;
-  }
-
-  private updateCounts() {
-    this.tAvailCount = this.slots.filter(
-      slot => slot.status === 'available'
-    ).length;
-    this.tReserveCount = this.slots.filter(
-      slot => slot.status === 'occupied'
-    ).length;
   }
 }
