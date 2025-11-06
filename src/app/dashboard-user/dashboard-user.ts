@@ -5,29 +5,33 @@ import { ParkingStatus } from "./parking-status/parking-status";
 import { DashboardStats } from "./dashboard-stats/dashboard-stats";
 import { SummaryCard } from "./summary-card/summary-card";
 import { RouterOutlet } from '@angular/router';
-
-
+import { AuthService } from '../Services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard-user',
-  imports: [RecentActivity, ParkingStatus, DashboardStats, SummaryCard,RouterOutlet],
+  imports: [RecentActivity, ParkingStatus, DashboardStats, SummaryCard, RouterOutlet, FormsModule],
   templateUrl: './dashboard-user.html',
   styleUrl: './dashboard-user.css'
 })
-export class DashboardUser implements OnInit {
 
+export class DashboardUser implements OnInit {
+public username:string | undefined='';
+
+constructor(private authService:AuthService){}
 
 myActivityData: Activity[] = [];
 data : number = 20;
   ngOnInit(): void {
-    // You can add initialization logic here if needed
+    const currUser=this.authService.decodeToken();
+    if(currUser){
+      this.username=currUser.firstName;
+    }
   }
 
   @Output() newParkingEvent = new EventEmitter<void>();
 
-  createNewParking() {
-    this.newParkingEvent.emit();
-  }
+
   
   handleExtendParking() {
     alert('Parking extended!');
