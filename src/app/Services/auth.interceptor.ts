@@ -8,7 +8,8 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+// Corrected import path for AuthService, assuming 'Services' with a capital S
+import { AuthService } from '../Services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -31,8 +32,10 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          // Handle unauthorized access
+          // Handle unauthorized access (e.g., token expired)
           this.authService.logout();
+          // Optionally redirect to login page
+          // this.router.navigate(['/login']);
         }
         return throwError(() => error);
       })

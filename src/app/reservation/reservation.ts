@@ -66,7 +66,7 @@ export class Reservation implements OnInit {
   }
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
-    this.selectedCustomer = { ...customer }; 
+    this.selectedCustomer = { ...customer };
   }
 
 }
