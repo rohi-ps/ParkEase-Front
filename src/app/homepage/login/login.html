@@ -7,7 +7,7 @@
         <br>
         <h5>Log into your Account</h5>
         <form #loginform="ngForm" (ngSubmit)="onSubmit(loginform)">
-          <div class="form-group">
+          <div class="form-group" autocomplete="off">
             <label for="name"><strong>Email</strong> <span class="asterisk">*</span></label>
             <div class="input-group">
               <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -30,6 +30,7 @@
           </div>
           <button class="btn btn-primary w-100 mt-3" type="submit" [disabled]="loginform.invalid">Log In</button>
         </form>
+        
       </div>
     </div>
   </div>
