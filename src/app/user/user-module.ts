@@ -6,7 +6,7 @@ import { ParkingSlotsUser } from '../parking-slots-user/parking-slots-user';
 import { Reservation } from '../reservation/reservation';
 import { Billing } from '../billing/billing';
 import { AuthGuard } from '../route-guards';
-
+import { SlotReservationForm } from '../reservation/slot-reservation-form/slot-reservation-form';
 const routes: Routes = [
   {
     path: '',
@@ -17,6 +17,7 @@ const routes: Routes = [
       { path: 'userdashboard', component: DashboardUser },
       { path: 'userparking', component: ParkingSlotsUser },
       { path: 'userreservation', component: Reservation },
+      {path: 'userreservation/reserveform/:slotName', component: SlotReservationForm},
       { path: 'billing', component: Billing }
     ]
   }

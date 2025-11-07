@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
 import { ParkingSlot } from '../../model/parking-slots-module';
 import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-slot-reservation-form',
   imports: [FormsModule, CommonModule],
@@ -12,18 +14,16 @@ import { ParkingSlotsUserService } from '../../Services/parking-slots-user.servi
 })
 export class SlotReservationForm {
  public availableSlots: ParkingSlot[] = [];
-
-  constructor(
-    private parkingSlotsService: ParkingSlotsUserService,
-    private customerService: CustomerService
-  ) {}
+  constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService: CustomerService,private router:Router, private route:ActivatedRoute) {}
 
   ngOnInit() {
+    const slotName = this.route.snapshot.paramMap.get('slotName');
+    console.log('Received slotName:', slotName);
     this.loadData();
   }
 
-  private loadData(): void {
-    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
+  async loadData(): Promise<void> {
+    this.availableSlots = await this.parkingSlotsService.getAvailableSlots();
   }
 
   form = {
@@ -84,6 +84,7 @@ export class SlotReservationForm {
     const slotId = form.value.slotId;
     if (!slotId) return;
     const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotId);
+    console.log('Selected Slot:', selectedSlot);
     if (selectedSlot) {
       form.form.patchValue({
         vehicleType: selectedSlot.vehicleType
@@ -108,4 +109,7 @@ export class SlotReservationForm {
       alert('Please fill all required fields correctly.');
     }
   }
+  onReserve():void{
+  this.router.navigateByUrl('usersidenav/userreservation');
+ }
 }

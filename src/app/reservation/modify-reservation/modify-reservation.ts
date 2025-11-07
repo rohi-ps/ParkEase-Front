@@ -69,8 +69,8 @@ export class ModifyReservation {
     }
   }
 
-  private loadData(): void {
-    this.availableSlots = this.parkingSlotsService.getAvailableSlots();
+  async loadData(): Promise<void> {
+    this.availableSlots = await this.parkingSlotsService.getAvailableSlots();
   }
 
   updateAmount(): void {

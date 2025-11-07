@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Customer } from '../model/customers';
 import { HttpClient } from '@angular/common/http';  
 import { Observable } from 'rxjs';
-// import { ParkingSlotsUserService } from './parking-slots-user.service';
+import { ParkingSlotsUserService } from './parking-slots-user.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,6 +12,9 @@ export class CustomerService {
  
   getallUsers(): Observable<Customer[]> {
     return this.http.get<Customer[]>('http://localhost:3000/api/reservations/allusers');
+  }
+  getReservationsByUser(userId: string): Observable<Customer[]> {
+  return this.http.get<Customer[]>(`http://localhost:3000/api/reservations/user/${userId}`);
   }
   addtocustomer(slotId: string, vehicleNumber: string, vehicleType: string, entryDate: string, entryTime: string, exitDate: string, exitTime: string, Duration: string, Amount: string, status: string = "Upcoming"):Observable<any> {
     const durationMinutes = this.calculateDurationInMinutes(entryDate, entryTime, exitDate, exitTime);

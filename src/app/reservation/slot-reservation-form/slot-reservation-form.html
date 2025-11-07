@@ -5,10 +5,11 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
+            <input type="text" id="slotId" name="slotId" ngModel class="form-control" required readonly />
+            <!-- <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
               <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot._id">{{ slot.slotName }}</option>
-            </select>
+              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">{{ slot.slotName }}</option>
+            </select> -->
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
@@ -61,7 +62,7 @@
         </div>
         <div class="button1">
           <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="slotreserve.invalid"
-            data-bs-dismiss="modal">Pay & Reserve</button>
+           (click)="onReserve()" >Pay & Reserve</button>
         </div>
       </div>
     </form>

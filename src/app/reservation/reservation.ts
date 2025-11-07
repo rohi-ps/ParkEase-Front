@@ -6,17 +6,18 @@ import { CustomerService } from '../Services/customer-service';
 import { ModifyReservation } from './modify-reservation/modify-reservation';
 import { Customer } from '../model/customers';
 import { RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-reservation',
-  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation,RouterOutlet],
+  imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation, RouterOutlet],
   templateUrl: './reservation.html',
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
- 
+
   customers: any[] = []
   selectedStatus = 'All Status';
-  constructor(private cs: CustomerService) {
+  constructor(private cs: CustomerService,private router: Router) {
   }
   ngOnInit(): void {
   this.loadCustomers();
@@ -79,5 +80,7 @@ loadCustomers(): void {
   onEdit(customer: Customer) {
     this.selectedCustomer = { ...customer };
   }
- 
+  goToForm(): void {
+  this.router.navigate(['/usersidenav/userreservation/reserveform']);
+}
 }
