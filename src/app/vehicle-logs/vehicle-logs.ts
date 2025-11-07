@@ -46,14 +46,26 @@ export class VehicleLogs implements OnInit, OnDestroy {
 
 
   constructor(
-    private fb: FormBuilder,
-    public parkingService: Parkingservice 
-  ) {
-    this.parkingRecords$ = this.parkingService.parkingRecords$; 
+    private parkingService: Parkingservice,
+    private parkingSlotsService: ParkingSlotsUserService
+  ) {}
 
-    this.parkingCount$ = this.parkingRecords$.pipe(
-      map(records => records.filter(p => p.status === 'Parked').length)
-    );
+  ngOnInit() {
+    // Load the initial data when the component loads
+    this.loadData();
+  }
+
+  private loadData(): void {
+    // Replace 'admin' and 'username' with actual values as needed
+    const role = 'admin'; // or 'user'
+    const username = ''; // provide username if role is not 'admin'
+    this.parkingRecords = this.parkingService.getParkingRecords(role, username); 
+    // this.availableSlots = this.parkingSlotsService.getAvailableSlots();
+  }
+
+  public get parkingCount(): number {
+    return this.parkingRecords.filter(p => p.status === 'Parked').length;
+  }
 
     this.exitCount$ = this.parkingRecords$.pipe(
       map(records => {

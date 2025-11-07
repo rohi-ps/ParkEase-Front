@@ -1,10 +1,5 @@
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  integrity="sha512-..."
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <div class="sidenav-container" [class.collapsed]="!isOpen">
 
 
@@ -12,17 +7,17 @@
     <i class="fa-solid fa-bars fa-xl" style="color:#74c0fc; cursor: pointer;"></i>
   </button>
 
-      <div class="inside_sidebar">
-      <div class="inside_sidebar1">
-        <i class="fa-solid fa-location-dot fa-2xl" style="color: #74c0fc;"></i>
-      </div>
-      <div *ngIf="isOpen" class="inside_sidebar2">
-        <h3 >ParkEase</h3>
-        <small >Admin Portal</small>
-      </div>
+  <div class="inside_sidebar">
+    <div class="inside_sidebar1">
+      <i class="fa-solid fa-location-dot fa-2xl" style="color: #74c0fc;"></i>
     </div>
+    <div *ngIf="isOpen" class="inside_sidebar2">
+      <h3>ParkEase</h3>
+      <small>Admin Portal</small>
+    </div>
+  </div>
 
-  <ul class="nav-list" >
+  <ul class="nav-list">
     <li>
       <a routerLink="admindashboard" >
         <i class="fa-regular fa-chart-bar" style="color: #74c0fc"></i>
@@ -53,15 +48,15 @@
         <span *ngIf="isOpen" style="cursor: pointer;">Billing & Payment</span>
       </a>
     </li>
-   <li>
-  <a (click)="logout()" style="cursor: pointer;">
-    <i class="fa-solid fa-arrow-right-from-bracket" style="color: #74c0fc"></i>
-    <span *ngIf="isOpen">Log out</span>
-  </a>
-</li>
+    <li (click)="logout()">
+      <a>
+        <i class="fa-solid fa-right-from-bracket" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Logout</span>
+      </a>
+    </li>
   </ul>
 
 </div>
 <div class="main-content" [class.collapsed]="!isOpen">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
+</div>

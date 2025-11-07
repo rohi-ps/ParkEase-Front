@@ -1,8 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { AuthService } from '../Services/auth.service';
 import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-sidenav',
@@ -12,8 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidenav.css']
 })
 export class SidenavComponent {
-  isOpen = true; 
-  isLogoutModalVisible = false;
+  constructor(private router: Router) {}
+  isOpen = true; // Initial state is open
 
   constructor(
     private authService: AuthService, 
@@ -32,5 +33,7 @@ export class SidenavComponent {
     this.authService.logout();
     this.router.navigate(['/']); 
   }
-  
+  logout() {
+    this.router.navigate(['/']);
+  }
 }
