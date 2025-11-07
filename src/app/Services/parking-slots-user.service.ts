@@ -110,7 +110,7 @@ getPushSlots(type: string): Promise<ParkingSlot[]> {
  
   updateSlot(updatedSlot: ParkingSlot) {
   return lastValueFrom(this.http.put<ApiResponse>(
-    `${API_URL}/${updatedSlot.slotName}/status`,
+    `${API_URL}/${updatedSlot.slotName}`,
     {status: updatedSlot.status}
   ));  
  
