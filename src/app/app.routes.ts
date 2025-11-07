@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { Homepage } from './homepage/homepage';
 import { Login } from './homepage/login/login';
 import { Register } from './homepage/register/register';
-import { AuthGuard } from './route-guards';
+import { authGuard,roleGuard } from './Services/authGuards';
 export const routes: Routes = [
   { path: '', component: Homepage },
   { path: 'login', component: Login },
@@ -10,11 +10,11 @@ export const routes: Routes = [
   {
     path: 'usersidenav',
     loadChildren: () => import('./user/user-module').then(m => m.UserRoutingModule),
-    canActivate: [AuthGuard]
+    canActivate: [authGuard, roleGuard('user')]
   },
   {
     path: 'adminsidenav',
     loadChildren: () => import('./admin/admin-module').then(m => m.AdminRoutingModule),
-    canActivate: [AuthGuard]
+    canActivate: [authGuard, roleGuard('admin')]
   }
 ];

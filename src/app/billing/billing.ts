@@ -86,13 +86,20 @@ export class Billing implements OnInit {
   private calculateTotals(invoices: Invoice[]): void {
     this.totalRevenue = invoices
       .filter(inv => inv.status === 'paid')
-      .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
+      .reduce((sum, inv) => {
+        // Base rate plus additional hours (subtract 1 from hours since first hour is covered by base rate)
+        const amount = inv.totalAmount.baseRate + 
+                      (inv.totalAmount.additionalHourRate * (inv.totalAmount.hours - 1));
+        return sum + amount;
+      }, 0);
  
     this.pendingPayments = invoices
       .filter(inv => inv.status === 'pending')
-      .reduce((sum, inv) => sum + (inv.totalAmount?.baseRate || inv.totalAmount?.additionalHourRate || 0), 0);
- 
-   
+      .reduce((sum, inv) => {
+        const amount = inv.totalAmount.baseRate + 
+                      (inv.totalAmount.additionalHourRate * (inv.totalAmount.hours - 1));
+        return sum + amount;
+      }, 0);
  
     this.totalInvoices = invoices.length;
   }
@@ -148,4 +155,11 @@ export class Billing implements OnInit {
       }
     });
   }
+
+  public getUserName(userId: string | { email: string, name: string } | null): string {
+    if (!userId) return 'Guest User';
+    if (typeof userId === 'object') return userId.name;
+    return 'Guest User';
+  }
+
 }

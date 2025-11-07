@@ -1,5 +1,3 @@
-<!-- ParkEase Homepage: Single Page, Blue & White Palette, No Cards/Containers -->
-
 <div class="page-bg">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
@@ -18,10 +16,10 @@
           <li class="nav-item"><a class="nav-link fw-semibold nav-link-custom" href="#features">Features</a></li>
           <li class="nav-item"><a class="nav-link fw-semibold nav-link-custom" href="#contact">Contact</a></li>
           <li class="nav-item">
-            <button class="btn btn-outline-primary px-4" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+            <a routerLink="/login"><button class="btn btn-outline-primary px-4">Login</button></a>
           </li>
           <li class="nav-item">
-            <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+            <a routerLink="/register"><button class="btn btn-primary px-4">Register</button></a>
           </li>
         </ul>
       </div>
@@ -103,7 +101,7 @@
 </div>
 
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -116,10 +114,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Register Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -131,5 +129,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <router-outlet></router-outlet>

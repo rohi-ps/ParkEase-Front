@@ -140,11 +140,9 @@ console.log('Register payload:', payload);
    this.authService.registerUser(payload).subscribe({
   next: (res) => {
     if (res.success) {
-      alert(res.message || 'Registration successful!');
-      this.closeModal();
-      form.resetForm();
-
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login']).then(() => {
+        form.resetForm();
+      });
     } else {
       alert(res.message || 'Registration failed.');
     }
@@ -154,9 +152,7 @@ console.log('Register payload:', payload);
     alert('Something went wrong. Please try again.');
   }
 });
-  } else {
-    alert('Please complete all fields correctly.');
-  }
-}
+
 
 }
+  }}

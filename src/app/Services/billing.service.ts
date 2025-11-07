@@ -19,6 +19,7 @@ export class BillingService {
    * Corresponds to: GET /api/billing/invoices
    */
   getAllInvoices(): Observable<{ status: string, results: number, data: Invoice[] }> {
+    console.log('Fetching all invoices from', `${this.baseUrl}/invoices`);
     return this.http.get<{ status: string, results: number, data: Invoice[] }>(`${this.baseUrl}/invoices`);
   }
  
@@ -27,6 +28,7 @@ export class BillingService {
    * Corresponds to: GET /api/billing/invoices/:id
    */
   getInvoiceById(id: string): Observable<{ status: string, data: Invoice }> {
+    console.log('Fetching invoice by ID from', `${this.baseUrl}/invoices/${id}`);
     return this.http.get<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices/${id}`);
   }
  
@@ -35,12 +37,13 @@ export class BillingService {
    * Corresponds to: POST /api/billing/invoices
    */
   generateInvoice(invoiceData: {
-    userId: string,
+    userId: string ,
     parkingSpotId: string,
     vehicleType: string,
     checkInTime: Date,
     checkOutTime: Date
   }): Observable<{ status: string, data: Invoice }> {
+    console.log('Generating invoice with data:', invoiceData);
     return this.http.post<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices`, invoiceData);
   }
  
@@ -49,6 +52,7 @@ export class BillingService {
    * Corresponds to: PUT /api/billing/invoices/:id/payment
    */
   processPayment(invoiceId: string, paymentMethod: string): Observable<{ status: string, data: Invoice }> {
+    console.log('Processing payment for invoice ID:', invoiceId, 'with method:', paymentMethod);
     return this.http.put<{ status: string, data: Invoice }>(
       `${this.baseUrl}/invoices/${invoiceId}/payment`,
       { paymentMethod }

@@ -22,6 +22,7 @@ export class Reservation implements OnInit {
   ngOnInit(): void {
   this.loadCustomers();
 }
+
   searchTerm: string = '';
   filteredCustomers(): any[] {
   return this.customers.filter(customer => {
