@@ -194,8 +194,6 @@ export class VehicleLogs implements OnInit, OnDestroy {
         this.loadAvailableSlots(); 
         console.log("Log entry successful!");
         
-        // --- REMOVED: this.entryModal?.hide(); ---
-        // The modal will be closed by the HTML attribute on the button
       },
       error: (err) => {
         this.modalError = err.message;

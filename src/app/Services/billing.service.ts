@@ -37,7 +37,7 @@ export class BillingService {
    * Corresponds to: POST /api/billing/invoices
    */
   generateInvoice(invoiceData: {
-    userId: string,
+    userId: string ,
     parkingSpotId: string,
     vehicleType: string,
     checkInTime: Date,
