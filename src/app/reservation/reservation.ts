@@ -22,6 +22,7 @@ export class Reservation implements OnInit {
   ngOnInit(): void {
   this.loadCustomers();
 }
+
   searchTerm: string = '';
   filteredCustomers(): any[] {
   return this.customers.filter(customer => {
@@ -78,7 +79,6 @@ loadCustomers(): void {
  
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
-    this.selectedCustomer = { ...customer };
     this.selectedCustomer = { ...customer };
   }
   goToForm(): void {

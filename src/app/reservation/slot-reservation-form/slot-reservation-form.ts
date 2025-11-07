@@ -1,9 +1,9 @@
-import { Component, Input} from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
-import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 import { ParkingSlot } from '../../model/parking-slots-module';
+import { ParkingSlotsUserService } from '../../Services/parking-slots-user.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 @Component({
@@ -13,13 +13,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './slot-reservation-form.css'
 })
 export class SlotReservationForm {
-  public availableSlots: ParkingSlot[] = [];
-  // @Input selectedSlotName: string = slotName;
+ public availableSlots: ParkingSlot[] = [];
   constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService: CustomerService,private router:Router, private route:ActivatedRoute) {}
 
   ngOnInit() {
     const slotName = this.route.snapshot.paramMap.get('slotName');
     console.log('Received slotName:', slotName);
+    this.form.slotId = slotName ? slotName : '';
+    this.form.vehicleType = this.availableSlots.find(slot => slot.slotName === slotName)?.vehicleType || '';
     this.loadData();
   }
 

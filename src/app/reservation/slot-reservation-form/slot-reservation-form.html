@@ -5,11 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input type="text" id="slotId" name="slotId" ngModel class="form-control" required readonly />
-            <!-- <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
-              <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">{{ slot.slotName }}</option>
-            </select> -->
+            <input type="text" id="slotId" class="form-control" [(ngModel)]="form.slotId" name="slotId" readonly />
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
@@ -24,7 +20,7 @@
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control" required readonly />
+            <input type="text" id="vehicleType" name="vehicleType" [(ngModel)]="form.vehicleType" class="form-control"  readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
