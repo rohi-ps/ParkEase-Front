@@ -4,7 +4,7 @@
       <h1><i class="fas fa-calendar-check"></i> My Reservations</h1>
       <p>Manage your parking reservations and bookings</p>
     </div>
-    <button class="btn btn-primary" data-bs-target="#reservation" data-bs-toggle="modal">+ New Reservation</button>
+    <!-- <button class="btn btn-primary" data-bs-target="#reservation" data-bs-toggle="modal">+ New Reservation</button>
     <div class="modal fade" id="reservation" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -17,7 +17,8 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+    <button class="btn btn-primary" (click)="goToForm()">+ New Reservation</button>
   </header>
 
 <div class="reservation">
@@ -99,3 +100,4 @@
       </div>
     </div>
   </div>
+  <router-outlet></router-outlet>
