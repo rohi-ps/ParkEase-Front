@@ -163,4 +163,11 @@ decodeToken(): any {
     const decoded = this.decodeToken();
     return decoded?.email || '';
   }
+
+  getCurrentUserId(): string {
+    const decoded = this.decodeToken();
+    console.log('Decoded token for user ID:', decoded);
+    return decoded?.id || '';
+  }
+
 }

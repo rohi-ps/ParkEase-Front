@@ -67,6 +67,7 @@ export class BillingService {
     return this.http.get<{ status: string, data: PaymentMethod[] }>(`${this.baseUrl}/payment-methods`);
   }
  
+
   // --- Rate Endpoints (Admin) ---
  
   /**
@@ -100,4 +101,3 @@ export class BillingService {
     return this.http.put<{ status: string, data: Rate }>(`${this.baseUrl}/rates/${vehicleType}`, rateData);
   }
 }
- 
