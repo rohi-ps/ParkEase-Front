@@ -5,75 +5,95 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ParkingSlot } from '../model/parkingSlot';
+import { BillingService } from './billing.service';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class Parkingservice {
-  private readonly apiUrl = 'http://localhost:3000/api'; 
+  private readonly apiUrl = 'http://localhost:3000/api';
 
-// --- Data streams (reactive) ---
+  // --- Data streams (reactive) ---
   private readonly _parkingRecords = new BehaviorSubject<vehicleLog[]>([]);
   public readonly parkingRecords$: Observable<vehicleLog[]> = this._parkingRecords.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private billingService: BillingService) {
     this.fetchParkingRecords();
   }
- 
-    // --- DATA FETCHING METHODS ---
+
+  // --- DATA FETCHING METHODS ---
   //For Admin only
   public fetchParkingRecords(): void {
-    this.http.get<vehicleLog[]>(`${this.apiUrl}/logs`)
+    this.http
+      .get<vehicleLog[]>(`${this.apiUrl}/logs`)
       .pipe(catchError(this.handleError))
-      .subscribe(records => this._parkingRecords.next(records));
+      .subscribe((records) => this._parkingRecords.next(records));
   }
-  
-   //Gets all logs for the currently logged-in user.
-   
-  public getMyVehicleLogs(): Observable<vehicleLog[]> {
-    return this.http.get<vehicleLog[]>(`${this.apiUrl}/logs/my-logs`)
-      .pipe(catchError(this.handleError));
 
+  //Gets all logs for the currently logged-in user.
+
+  public getMyVehicleLogs(): Observable<vehicleLog[]> {
+    return this.http
+      .get<vehicleLog[]>(`${this.apiUrl}/logs/my-logs`)
+      .pipe(catchError(this.handleError));
   }
-  
+
   // --- DATA MUTATION METHODS ---
 
- public logEntry(logData: {
+  public logEntry(logData: {
     vehicleNumber: string;
     vehicleType: '4W' | '2W';
-    slotId: string; 
-    userId: string | null; 
+    slotId: string;
+    userId: string;
   }): Observable<vehicleLog> {
-    
-    return this.http.post<vehicleLog>(`${this.apiUrl}/logs`, logData)
-      .pipe(
-        tap((newLog) => {
-          // On success, refresh the main log list
-          this.fetchParkingRecords();
-          // We don't refresh invoices, as no invoice is created on entry
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.post<vehicleLog>(`${this.apiUrl}/logs`, logData).pipe(
+      tap((newLog) => {
+        // On success, refresh the main log list
+        this.fetchParkingRecords();
+        // We don't refresh invoices, as no invoice is created on entry
+      }),
+      catchError(this.handleError)
+    );
   }
 
- 
   public logExit(vehicleNumber: string): Observable<vehicleLog> {
-    console.log("Exiting vehicle:", vehicleNumber);
-    return this.http.patch<vehicleLog>(`${this.apiUrl}/logs/exit`, { vehicleNumber })
-      .pipe(
-        tap((updatedLog) => {
-          this.fetchParkingRecords();
-        }),
-        catchError(this.handleError)
-      );
+    console.log('Exiting vehicle:', vehicleNumber);
+    return this.http.patch<vehicleLog>(`${this.apiUrl}/logs/exit`, { vehicleNumber }).pipe(
+      tap((updatedLog) => {
+        this.fetchParkingRecords();
+        console.log('Updated Log after exit:', updatedLog);
+        const parkingSpotId =
+          typeof updatedLog.slotId === 'object' && updatedLog.slotId !== null
+            ? updatedLog.slotId._id
+            : updatedLog.slotId;
+
+        if (!parkingSpotId) {
+          console.error('Missing parkingSpotId in updatedLog:', updatedLog);
+          return;
+        }
+        const invoicePayload = {
+          userId: updatedLog.userId,
+          parkingSpotId,
+          vehicleType: updatedLog.vehicleType,
+          checkInTime: updatedLog.entryTime,
+          checkOutTime: updatedLog.exitTime!,
+        };
+
+        console.log('Invoice Payload:', invoicePayload);
+        this.billingService.generateInvoice(invoicePayload).subscribe({
+          next: (res) => console.log('Invoice generated:', res),
+          error: (err) => console.error('Invoice error:', err),
+        });
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  
-  
-   // Fetches only the available parking slots from the API.
-   
+  // Fetches only the available parking slots from the API.
+
   public getAvailableSlots(): Observable<ParkingSlot[]> {
-    return this.http.get<ParkingSlot[]>(`${this.apiUrl}/parking-spots/available-slots`)
+    return this.http
+      .get<ParkingSlot[]>(`${this.apiUrl}/parking-spots/available-slots`)
       .pipe(catchError(this.handleError));
   }
   //search user by phone number
@@ -82,7 +102,8 @@ export class Parkingservice {
       return new BehaviorSubject<UserSearchResult[]>([]).asObservable(); // Return empty observable
     }
     const params = new HttpParams().set('phone', phone);
-    return this.http.get<UserSearchResult[]>(`${this.apiUrl}/search-user`, { params })
+    return this.http
+      .get<UserSearchResult[]>(`${this.apiUrl}/search-user`, { params })
       .pipe(catchError(this.handleError));
   }
 
@@ -101,8 +122,6 @@ export class Parkingservice {
     // Return the error message from the backend, or a generic one
     return throwError(() => new Error(error.error?.message || 'Server error; please try again.'));
   }
- 
- 
 }
 
 //changes

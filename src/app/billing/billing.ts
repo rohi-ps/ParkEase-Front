@@ -155,4 +155,11 @@ export class Billing implements OnInit {
       }
     });
   }
+
+  public getUserName(userId: string | { email: string, name: string } | null): string {
+    if (!userId) return 'Guest User';
+    if (typeof userId === 'object') return userId.name;
+    return 'Guest User';
+  }
+
 }
