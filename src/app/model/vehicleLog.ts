@@ -9,6 +9,6 @@ export interface vehicleLog {
     _id: string;
     slotName: string;
   };
-  userId: string | null; 
+  userId: string ; 
 }
 //changes 

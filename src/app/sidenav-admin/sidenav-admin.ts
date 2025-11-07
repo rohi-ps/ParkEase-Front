@@ -4,6 +4,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../Services/auth.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-sidenav-admin',
   imports: [CommonModule, RouterLink, RouterOutlet],
@@ -11,13 +12,8 @@ import { Router } from '@angular/router';
   styleUrl: './sidenav-admin.css'
 })
 export class SidenavAdmin {
-isOpen = true; 
-isLogoutModalVisible = false;
-constructor(
-    private authService: AuthService, 
-    private router: Router
-  ) {}
-
+  constructor(private authService:AuthService,private router: Router) {}
+ isOpen = true; // Initial state is open
 
   @Output() toggleEvent = new EventEmitter<boolean>();
   @Output() items = new EventEmitter();
@@ -31,5 +27,4 @@ constructor(
     this.router.navigate(['/']); 
   }
 
- 
 }

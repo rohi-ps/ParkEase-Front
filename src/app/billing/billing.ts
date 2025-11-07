@@ -48,8 +48,9 @@ export class Billing implements OnInit {
   }
  
   private loadData(): void {
-    // Get invoices based on role
+    console.log('Loading billing data for role:', this.currentRole);
     if (this.isAdmin()) {
+      // Admin sees all invoices
       this.billingService.getAllInvoices().subscribe({
         next: (response) => {
           this.invoices = response.data;
@@ -57,24 +58,29 @@ export class Billing implements OnInit {
         },
         error: (err) => {
           console.error('Error fetching invoices:', err);
-          this.invoices = []; // Clear invoices on error
-          this.calculateTotals([]); // Reset totals
+          this.invoices = [];
+          this.calculateTotals([]);
         }
       });
     } else {
-      // User logic
-      // The backend doesn't seem to have a "get my invoices" endpoint.
-      // Filtering client-side, which is NOT ideal for production.
-      this.billingService.getAllInvoices().subscribe({
+      // Get the current user's ID from the JWT token
+      const userId = this.authService.getCurrentUserId();
+      if (!userId) {
+        console.error('No user ID found in token');
+        this.invoices = [];
+        this.calculateTotals([]);
+        return;
+      }
+
+      // Get user's specific invoice using getInvoiceById
+      this.billingService.getInvoiceById(userId).subscribe({
         next: (response) => {
-          // Filter based on the populated userId object
-          this.invoices = response.data.filter(inv =>
-            typeof inv.userId === 'object' && inv.userId.email === this.currentUserEmail
-          );
+          // If single invoice, wrap in array, otherwise use as is
+          this.invoices = response.data ? [response.data] : [];
           this.calculateTotals(this.invoices);
         },
         error: (err) => {
-          console.error('Error fetching invoices:', err);
+          console.error('Error fetching user invoice:', err);
           this.invoices = [];
           this.calculateTotals([]);
         }
@@ -155,4 +161,11 @@ export class Billing implements OnInit {
       }
     });
   }
+
+  public getUserName(userId: string | { email: string, name: string } | null): string {
+    if (!userId) return 'Guest User';
+    if (typeof userId === 'object') return userId.name;
+    return 'Guest User';
+  }
+
 }

@@ -62,7 +62,9 @@ async fetchSlots(): Promise<void> {
 
  onReserve(slot: ParkingSlot){
   this.onReserveEvent.emit(slot.slotName);
-  this.route.navigateByUrl('usersidenav/userreservation');
+  console.log('Reserving slot:', this.hoveredSlot?.slotName);
+  this.route.navigate(['/usersidenav/userreservation/reserveform', this.hoveredSlot?.slotName]);
  }
+ 
 
 }

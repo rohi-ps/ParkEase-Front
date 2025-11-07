@@ -5,7 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input type="text" id="slotId" name="slotId" ngModel class="form-control" (ngModelChange)="onSlotChange(modifyreserve)"  [(ngModel)]="form.slotId" required
+            <input type="text" id="slotId" name="slotId" ngModel class="form-control" (ngModelChange)="onSlotChange(modifyreserve)" [(ngModel)]="form.slotId" required
               readonly />
           </div>
           <div class="form-col">
@@ -19,23 +19,23 @@
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
             <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control"
-              [(ngModel)]="form.VehicleType" required readonly />
+              [(ngModel)]="form.vehicleType" required readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
-            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" required>
+            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.entryDate" required>
             <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-col">
             <label>Entry Time</label>
-            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.EntryTime" required>
+            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.entryTime" required>
             <div class="text-danger" *ngIf="entrytime.touched && entrytime.invalid">Entry Time required</div>
           </div>
           <div class="form-col">
             <label>Exit Date</label>
-            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate"
+            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.exitDate"
               (change)="checkDateDifference()" required>
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
@@ -44,15 +44,15 @@
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
-            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime"
+            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.exitTime"
               (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>
         </div>
-        <div class="form-row" *ngIf="totalAmount">
+        <div class="form-row" *ngIf="additionalAmount">
           <div class="form-col text-end">
             <label><strong>Total Amount:</strong></label>
-            <div class="amount-display">{{ totalAmount }}</div>
+            <div class="amount-display">{{additionalAmount}}</div>
           </div>
         </div>
         <div class="button3">

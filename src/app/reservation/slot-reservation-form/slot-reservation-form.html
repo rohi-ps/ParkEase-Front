@@ -5,10 +5,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
-              <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">{{ slot.slotName }}</option>
-            </select>
+            <input type="text" id="slotId" class="form-control" [(ngModel)]="form.slotId" name="slotId" readonly />
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
@@ -23,23 +20,23 @@
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control" required readonly />
+            <input type="text" id="vehicleType" name="vehicleType" [(ngModel)]="form.vehicleType" class="form-control"  readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
-            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.EntryDate" [min]="minDate" required>
+            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.entryDate" [min]="minDate" required>
             <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-col">
             <label>Entry Time</label>
-            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.EntryTime" required>
+            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.entryTime" required>
             <div class="text-danger" *ngIf="entrytime.touched && entrytime.invalid">Entry Time required</div>
           </div>
           <div class="form-col">
             <label>Exit Date</label>
-            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.ExitDate" [min]="minDate"
+            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.exitDate" [min]="minDate"
               (change)="checkDateDifference()" required>
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
@@ -48,7 +45,7 @@
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
-            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.ExitTime"
+            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.exitTime"
               (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>
@@ -61,7 +58,7 @@
         </div>
         <div class="button1">
           <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="slotreserve.invalid"
-            data-bs-dismiss="modal">Pay & Reserve</button>
+           (click)="onReserve()" >Pay & Reserve</button>
         </div>
       </div>
     </form>

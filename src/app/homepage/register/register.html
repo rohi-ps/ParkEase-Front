@@ -31,7 +31,7 @@
                         <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <br>
-                        <input type="password" id="password" class="form-control" name="password" placeholder="Enter Password" required="" [(ngModel)]="user.password" #pass="ngModel">
+                        <input type="password" id="password" class="form-control" name="password" placeholder="Enter Password" required="" [(ngModel)]="user.password" #pass="ngModel" autocomplete="off">
                         </div>
                          <div *ngIf="pass.touched && pass.invalid && !passwordvalidate(user.password)" class="text-danger">Password is required</div>
                     </div>
@@ -40,7 +40,7 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <br>
-                        <input type="text" id="confirmpassword" name="password" class="form-control" placeholder="Enter Password" required="" [(ngModel)]="user.confirmPassword" #cpass="ngModel">
+                        <input type="password" id="confirmpassword" name="password" class="form-control" placeholder="Enter Password" required="" [(ngModel)]="user.confirmPassword" #cpass="ngModel" autocomplete="off">
                         </div>
                          <div *ngIf="cpass.touched && cpass.invalid" class="text-danger">Confirm Password is required</div>
                     </div>
