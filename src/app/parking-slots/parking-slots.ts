@@ -115,5 +115,4 @@ async fetchSlots(): Promise<void> {
    this.onBookEvent.emit(slot.slotName);
    this.route.navigateByUrl('adminsidenav/vehiclelogs')
   }
-
 }
