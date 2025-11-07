@@ -61,18 +61,29 @@ export class Parkingservice {
     return this.http.patch<vehicleLog>(`${this.apiUrl}/logs/exit`, { vehicleNumber }).pipe(
       tap((updatedLog) => {
         this.fetchParkingRecords();
-        this.billingService
-          .generateInvoice({
-            userId: updatedLog.userId,
-            parkingSpotId: updatedLog.slotId.slotName,
-            vehicleType: updatedLog.vehicleType,
-            checkInTime: updatedLog.entryTime,
-            checkOutTime: updatedLog.exitTime!,
-          })
-          .subscribe({
-            next: (res) => console.log('Invoice generated:', res),
-            error: (err) => console.error('Invoice error:', err),
-          });
+        console.log('Updated Log after exit:', updatedLog);
+        const parkingSpotId =
+          typeof updatedLog.slotId === 'object' && updatedLog.slotId !== null
+            ? updatedLog.slotId._id
+            : updatedLog.slotId;
+
+        if (!parkingSpotId) {
+          console.error('Missing parkingSpotId in updatedLog:', updatedLog);
+          return;
+        }
+        const invoicePayload = {
+          userId: updatedLog.userId,
+          parkingSpotId,
+          vehicleType: updatedLog.vehicleType,
+          checkInTime: updatedLog.entryTime,
+          checkOutTime: updatedLog.exitTime!,
+        };
+
+        console.log('Invoice Payload:', invoicePayload);
+        this.billingService.generateInvoice(invoicePayload).subscribe({
+          next: (res) => console.log('Invoice generated:', res),
+          error: (err) => console.error('Invoice error:', err),
+        });
       }),
       catchError(this.handleError)
     );
