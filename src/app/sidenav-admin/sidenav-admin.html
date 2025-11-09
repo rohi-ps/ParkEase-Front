@@ -48,6 +48,12 @@
         <span *ngIf="isOpen" style="cursor: pointer;">Billing & Payment</span>
       </a>
     </li>
+    <li>
+      <a routerLink="rates">
+        <i class="fa-solid fa-dollar-sign" style="color: #74c0fc"></i>
+        <span *ngIf="isOpen" style="cursor: pointer;">Rate Management</span>
+      </a>
+    </li>
     <li (click)="logout()">
       <a>
         <i class="fa-solid fa-right-from-bracket" style="color: #74c0fc"></i>

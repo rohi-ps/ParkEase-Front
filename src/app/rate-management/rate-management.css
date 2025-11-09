@@ -1,0 +1,27 @@
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+:host {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5em 0.8em;
+}
+
+.table th {
+  font-weight: 600;
+}
+
+.bi {
+  line-height: 1;
+}
