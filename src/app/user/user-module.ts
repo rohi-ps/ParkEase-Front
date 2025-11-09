@@ -5,13 +5,18 @@ import { DashboardUser } from '../dashboard-user/dashboard-user';
 import { ParkingSlotsUser } from '../parking-slots-user/parking-slots-user';
 import { Reservation } from '../reservation/reservation';
 import { Billing } from '../billing/billing';
+<<<<<<< Updated upstream
 import { AuthGuard } from '../route-guards';
 import { SlotReservationForm } from '../reservation/slot-reservation-form/slot-reservation-form';
+=======
+import { authGuard, roleGuard } from '../Services/authGuards';
+
+>>>>>>> Stashed changes
 const routes: Routes = [
   {
     path: '',
     component: SidenavComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard,roleGuard],
     children: [
       { path: '', component: DashboardUser },
       { path: 'userdashboard', component: DashboardUser },

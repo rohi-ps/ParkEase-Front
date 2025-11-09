@@ -7,6 +7,10 @@ import { ModifyReservation } from './modify-reservation/modify-reservation';
 import { Customer } from '../model/customers';
 import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
+<<<<<<< Updated upstream
+=======
+import{ AuthService } from '../Services/auth.service';
+>>>>>>> Stashed changes
 @Component({
   selector: 'app-reservation',
   imports: [FormsModule, CommonModule, SlotReservationForm, ModifyReservation, RouterOutlet],
@@ -14,15 +18,23 @@ import { Router } from '@angular/router';
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
-
+ 
   customers: any[] = []
   selectedStatus = 'All Status';
+<<<<<<< Updated upstream
   constructor(private cs: CustomerService,private router: Router) {
+=======
+  constructor(private cs: CustomerService,private router: Router, private authService: AuthService) {
+>>>>>>> Stashed changes
   }
   ngOnInit(): void {
   this.loadCustomers();
 }
+<<<<<<< Updated upstream
 
+=======
+ 
+>>>>>>> Stashed changes
   searchTerm: string = '';
   filteredCustomers(): any[] {
   return this.customers.filter(customer => {
@@ -32,10 +44,20 @@ export class Reservation implements OnInit {
   });
 }
 loadCustomers(): void {
+<<<<<<< Updated upstream
   this.cs.getallUsers().subscribe({
     next: (data) => this.customers = data,
     error: (err) => console.error('Failed to load customers', err)
   });
+=======
+  const userId = this.authService.getCurrentUserId();
+  if (userId) {
+    this.cs.getReservationsByUser(userId).subscribe({
+      next: (data) => this.customers = data,
+      error: (err) => console.error('Failed to load customers', err)
+    });
+  }
+>>>>>>> Stashed changes
 }
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {

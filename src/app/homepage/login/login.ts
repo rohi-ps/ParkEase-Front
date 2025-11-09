@@ -40,11 +40,11 @@ export class Login {
 
     this.authService.authenticateUser(username, password).subscribe({
       next: (res) => {
-        console.log('Login response:', res);
+        // console.log('Login response:', res);
 
         if (res.token) {
-          this.authService.storeToken(res.token); // Save token
-          this.closeModal(); // Close modal
+          this.authService.storeToken(res.token); 
+          // this.closeModal(); 
 
           if (res.role === 'admin') {
             this.router.navigate(['adminsidenav']);
@@ -57,13 +57,18 @@ export class Login {
           alert('Invalid login response');
         }
       },
-      error: (err) => {
-        console.error('Login error:', err);
-        alert('Invalid username or password');
-      }
-    });
+       error: (err) => {
+  console.error('Unexpected error:', err);
+  const validationErrors = err?.error?.errors;
+  if (Array.isArray(validationErrors)) {
+    const messages = validationErrors.map(e => e.msg).join('\n');
+    alert(messages);
   } else {
+    const fallback = err?.error?.message || 'Registration failed.';
+    alert(fallback);
+  }
+    }
+  }) }else {
     console.warn('Form is invalid');
   }
-}
-}
+}}

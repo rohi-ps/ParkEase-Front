@@ -20,21 +20,16 @@ export class AuthInterceptor implements HttpInterceptor {
     const authToken = this.authService.getToken();
 
     if (authToken) {
-      // Clone the request and add the authorization header
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${authToken}`
         }
       });
     }
-
-    // Handle the request and catch any errors
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          // Handle unauthorized access (e.g., token expired)
           this.authService.logout();
-          // Optionally redirect to login page
           // this.router.navigate(['/login']);
         }
         return throwError(() => error);
