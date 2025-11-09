@@ -6,6 +6,7 @@ import { ParkingSlots } from '../parking-slots/parking-slots';
 import { VehicleLogs } from '../vehicle-logs/vehicle-logs';
 import { AdminReservations } from '../admin-reservations/admin-reservations';
 import { Billing } from '../billing/billing';
+import { RateManagement } from '../rate-management/rate-management';
 import { AuthGuard } from '../route-guards';
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
       { path: 'adminparking', component: ParkingSlots },
       { path: 'adminreservation', component: AdminReservations },
       { path: 'vehiclelogs', component: VehicleLogs },
-      { path: 'billing', component: Billing }
+      { path: 'billing', component: Billing },
+      { path: 'rates', component: RateManagement }
     ]
   }
 ];

@@ -71,7 +71,6 @@ export class BillingService {
   // --- Rate Endpoints (Admin) ---
  
   /**
-   * (Admin) Get all vehicle rates
    * Corresponds to: GET /api/billing/rates
    */
   getRates(): Observable<{ status: string, data: Rate[] }> {

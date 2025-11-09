@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../Services/auth.service';
 import { Router } from '@angular/router';
+import { RateManagement } from '../rate-management/rate-management';
 
 
 @Component({
