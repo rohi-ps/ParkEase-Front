@@ -12,6 +12,7 @@ import { Invoice, Rate,
 export class BillingService {
   // Base URL for all billing-related API calls
   private baseUrl = 'http://localhost:3000/api/billing';
+  private rateUrl = 'http://localhost:3000/api/rates';
  
   constructor(private http: HttpClient) { }
  
@@ -77,7 +78,7 @@ export class BillingService {
    * Corresponds to: GET /api/billing/rates
    */
   getRates(): Observable<{ status: string, data: Rate[] }> {
-    return this.http.get<{ status: string, data: Rate[] }>(`${this.baseUrl}/rates`);
+    return this.http.get<{ status: string, data: Rate[] }>(`${this.rateUrl}/`);
   }
  
   /**
@@ -89,7 +90,7 @@ export class BillingService {
     baseRate: number,
     additionalHourRate: number
   }): Observable<{ status: string, data: Rate }> {
-    return this.http.post<{ status: string, data: Rate }>(`${this.baseUrl}/rates`, rateData);
+    return this.http.post<{ status: string, data: Rate }>(`${this.rateUrl}/`, rateData);
   }
  
   /**
@@ -100,6 +101,6 @@ export class BillingService {
     baseRate: number,
     additionalHourRate: number
   }): Observable<{ status: string, data: Rate }> {
-    return this.http.put<{ status: string, data: Rate }>(`${this.baseUrl}/rates/${vehicleType}`, rateData);
+    return this.http.put<{ status: string, data: Rate }>(`${this.rateUrl}/${vehicleType}`, rateData);
   }
 }
