@@ -69,10 +69,22 @@ export function calculateBillingTotals(invoices: Invoice[]) {
       return sum + amount;
     }, 0);
 
+  const avgDuration = invoices
+  .filter(inv => inv.status === 'paid' && inv.checkInTime && inv.checkOutTime)
+  .reduce((sum, inv) => {
+    const checkIn = new Date(inv.checkInTime).getTime();
+    const checkOut = new Date(inv.checkOutTime).getTime();
+    const durationMins = Math.round((checkOut - checkIn) / 60000);
+    return sum + durationMins;
+  },0 
+  );
+  const avg = avgDuration/invoices.length;
+  console.log('Avg Duration Calculation:', avgDuration, invoices.length, avg);
   return {
     totalRevenue,
     pendingPayments,
-    totalInvoices: invoices.length
+    totalInvoices: invoices.length,
+    avg
   };
 }
 

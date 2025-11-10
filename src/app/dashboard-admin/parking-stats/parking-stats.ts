@@ -12,6 +12,7 @@ export class ParkingStats implements OnInit {
   availableSlots: number = 0;
   occupiedSlots: number = 0;
   reservedSlots: number = 0;
+
   
   constructor() { }
   public parkingSlotsUserService = inject(ParkingSlotsUserService);
@@ -20,7 +21,7 @@ export class ParkingStats implements OnInit {
   // Properties to hold the calculated percentages
   availablePercentage: number = 0;
   occupiedPercentage: number = 0;
-  reservedPercentage: number = 0;
+  // reservedPercentage: number = 0;
   
   // Use OnChanges to recalculate percentages whenever an Input property changes
  async ngOnInit(): Promise<void> {
@@ -34,11 +35,11 @@ export class ParkingStats implements OnInit {
     if (totalSlots > 0) {
       this.availablePercentage = (this.availableSlots / totalSlots) * 100;
       this.occupiedPercentage = (this.occupiedSlots / totalSlots) * 100;
-      this.reservedPercentage = (this.reservedSlots / totalSlots) * 100;
+      // this.reservedPercentage = (this.reservedSlots / totalSlots) * 100;
     } else {
       this.availablePercentage = 0;
       this.occupiedPercentage = 0;
-      this.reservedPercentage = 0;
+      // this.reservedPercentage = 0;
     }
   }
 
