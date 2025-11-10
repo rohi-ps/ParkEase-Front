@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-// Corrected paths based on component location
+import { CommonModule, TitleCasePipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../Services/auth.service';
 import { BillingService } from '../Services/billing.service';
 import { Invoice } from '../model/billing.model';
- 
-// Import your interceptor and related providers
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-// Corrected path, assuming 'Interceptors' directory
 import { AuthInterceptor } from '../Services/auth.interceptor';
+import { 
+  formatDuration,
+  formatCurrency,
+  calculateInvoiceAmount,
+  calculateBillingTotals,
+  getUserDisplayName
+} from '../utils/billing.utils';
+declare var bootstrap: any;
  
 @Component({
   selector: 'app-billing',
@@ -24,6 +28,7 @@ import { AuthInterceptor } from '../Services/auth.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     BillingService,
     AuthService,
+    TitleCasePipe
   ]
 })
 export class Billing implements OnInit {
@@ -34,6 +39,15 @@ export class Billing implements OnInit {
   public totalInvoices: number = 0;
   private currentRole: string = '';
   private currentUserEmail: string = ''; // Changed from currentUser
+  
+  // Payment modal related properties
+  public paymentMethods: {
+    name: string;
+    enabled: boolean;
+  }[] = [];
+  public selectedPaymentMethod: string = '';
+  public selectedInvoice: Invoice | null = null;
+  private paymentModal: any;
  
   constructor(
     private authService: AuthService,
@@ -88,71 +102,56 @@ export class Billing implements OnInit {
     }
   }
  
-  // Helper function to calculate totals
   private calculateTotals(invoices: Invoice[]): void {
-    this.totalRevenue = invoices
-      .filter(inv => inv.status === 'paid')
-      .reduce((sum, inv) => {
-        // Base rate plus additional hours (subtract 1 from hours since first hour is covered by base rate)
-        const amount = inv.totalAmount.baseRate + 
-                      (inv.totalAmount.additionalHourRate * (inv.totalAmount.hours - 1));
-        return sum + amount;
-      }, 0);
- 
-    this.pendingPayments = invoices
-      .filter(inv => inv.status === 'pending')
-      .reduce((sum, inv) => {
-        const amount = inv.totalAmount.baseRate + 
-                      (inv.totalAmount.additionalHourRate * (inv.totalAmount.hours - 1));
-        return sum + amount;
-      }, 0);
- 
-    this.totalInvoices = invoices.length;
-  }
- 
-  public formatDuration(checkInTime: Date, checkOutTime: Date): string {
-    const start = new Date(checkInTime);
-    const end = new Date(checkOutTime);
-    const diffMs = end.getTime() - start.getTime();
-    const diffMins = Math.round(diffMs / 60000);
-   
-    const hours = Math.floor(diffMins / 60);
-    const mins = diffMins % 60;
-   
-    if (hours === 0) {
-      return `${mins} min${mins !== 1 ? 's' : ''}`;
-    } else {
-      return `${hours} hr${hours !== 1 ? 's' : ''} ${mins} min${mins !== 1 ? 's' : ''}`;
-    }
-  }
- 
-  // Helper method to format currency
-  public formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR'
-    }).format(amount);
+    const totals = calculateBillingTotals(invoices);
+    this.totalRevenue = totals.totalRevenue;
+    this.pendingPayments = totals.pendingPayments;
+    this.totalInvoices = totals.totalInvoices;
   }
  
   public isAdmin(): boolean {
     return this.currentRole === 'admin';
   }
  
-  public payInvoice(invoiceId: string): void {
-    // Find the invoice by its _id
-    const invoiceToPay = this.invoices.find(inv => inv._id === invoiceId);
- 
-    if (!invoiceToPay) {
-       console.error('Could not find invoice with id:', invoiceId);
-       return;
+  public openPaymentModal(invoice: Invoice): void {
+    this.selectedInvoice = invoice;
+    this.selectedPaymentMethod = '';
+    
+    // Fetch payment methods
+    this.billingService.getPaymentMethods().subscribe({
+      next: (response) => {
+        console.log(response)
+        this.paymentMethods = response.data.map((method: any) => ({
+          name: method,
+          enabled:false
+        }));
+        console.log('Available payment methods:', this.paymentMethods);
+        // Initialize and show the modal
+        if (!this.paymentModal) {
+          const modalEl = document.getElementById('paymentModal');
+          this.paymentModal = new bootstrap.Modal(modalEl);
+        }
+        this.paymentModal.show();
+      },
+      error: (err) => {
+        console.error('Error fetching payment methods:', err);
+      }
+    });
+  }
+
+  public selectPaymentMethod(methodId: string): void {
+    this.selectedPaymentMethod = methodId;
+  }
+
+  public confirmPayment(): void {
+    if (!this.selectedInvoice || !this.selectedPaymentMethod) {
+      return;
     }
- 
-    // Use 'CARD' as the default payment method
-    const selectedPaymentMethod = 'CARD';
-   
-    this.billingService.processPayment(invoiceToPay._id, selectedPaymentMethod).subscribe({
+
+    this.billingService.processPayment(this.selectedInvoice._id, this.selectedPaymentMethod).subscribe({
       next: (response) => {
         console.log('Payment successful:', response);
+        this.paymentModal.hide();
         this.loadData(); // Reload data to show updated status
       },
       error: (err) => {
@@ -163,9 +162,11 @@ export class Billing implements OnInit {
   }
 
   public getUserName(userId: string | { email: string, name: string } | null): string {
-    if (!userId) return 'Guest User';
-    if (typeof userId === 'object') return userId.name;
-    return 'Guest User';
+    return getUserDisplayName(userId);
+  }
+
+  public calculateInvoiceAmount(invoice: Invoice | null): number {
+    return calculateInvoiceAmount(invoice);
   }
 
 }
