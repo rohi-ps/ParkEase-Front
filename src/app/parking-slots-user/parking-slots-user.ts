@@ -30,13 +30,7 @@ export class ParkingSlotsUser implements OnInit {
  tCount = 0;
  errorMessage: string = '';
  
-//  createSlots() {
-//  this.slots = this.parkkingSlotUserService.getCreateSlots();
-//  }
 
-//  refreshSlots() {
-  // this.slots = this.parkkingSlotUserService.getRefreshSlots();
-//  }
 //fetching slots from service
 async fetchSlots(): Promise<void> {
     try {
@@ -62,7 +56,6 @@ async fetchSlots(): Promise<void> {
 
  onReserve(slot: ParkingSlot){
   this.onReserveEvent.emit(slot.slotName);
-  console.log('Reserving slot:', this.hoveredSlot?.slotName);
   this.route.navigate(['/usersidenav/userreservation/reserveform', this.hoveredSlot?.slotName]);
  }
  

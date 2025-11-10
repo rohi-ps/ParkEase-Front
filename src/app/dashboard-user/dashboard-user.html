@@ -1,32 +1,32 @@
 <header>
   <div class="title">
-    <h2>Welcome back, {{username}}!</h2>
+    <h2>Welcome back, {{name}}!</h2>
   <p>Here's your parking overview for today</p>
   </div>
 </header>
 <hr>
 
-<app-summary-card 
+<!-- <app-summary-card 
  [slotNumber]="'A-15'"
         [vehicleNumber]="'ABC-123'"
         [duration]="'2h 15m'"
         [estimatedCost]="'$11.25'"
         (extendParking)="handleExtendParking()"
         (endParking)="handleEndParking()"
-        ></app-summary-card>
+        ></app-summary-card> -->
 
 
 
-<!-- <app-dashboard-stats
-  [thisMonthSessions]="55"
-  [totalSpent]="'$210.50'"
-  [avgDuration]="'2h 30m'"
+<app-dashboard-stats
+  [thisMonthSessions]="totalInvoices"
+  [totalSpent]="totalRevenue"
+  [avgDuration]="avgDuration"
   [favoriteSlot]="'B-05'"
-  ></app-dashboard-stats> -->
+  ></app-dashboard-stats>
 
-  <app-dashboard-stats></app-dashboard-stats>
+  <!-- <app-dashboard-stats></app-dashboard-stats> -->
 
-<app-recent-activity  [activities]="myActivityData"></app-recent-activity>
+<!-- <app-recent-activity  [activities]="myActivityData"></app-recent-activity> -->
 
 <app-parking-status
   [availableSlots]="data"
