@@ -1,14 +1,25 @@
 *{
   margin: 0;
 }
+/* .container {
+  margin: 0;
+  padding: 0;
+  text-align: center; 
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+} */
+
 .container {
   margin: 0;
   padding: 0;
   /* text-align: center; */
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-family: Arial, sans-serif;
 }
+
 
 .container2{
     /* border: 1px solid black; */
@@ -53,6 +64,7 @@
 .parking-slot.available{
   border: 2px solid #28a745;
   background-color: #abefbb;
+
 }
 
 .parking-slot.occupied{
@@ -140,6 +152,11 @@
     /* background-color: #171818; */
     transition: 0.5s;
 }
+
+.slot-info .occupied button{
+    display: none;
+}
+
 .btn1{
     background-color: #007bff;
     color: white;

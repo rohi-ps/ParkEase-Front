@@ -14,6 +14,7 @@ import { ParkingSlot } from '../model/parking-slots-module';
 })
 export class ParkingSlots implements OnInit {
   @Output() onBookEvent = new EventEmitter<string>();
+  @Output() onReserveEvent = new EventEmitter<string>();
  
  
   slots: ParkingSlot[] = [];
@@ -115,6 +116,11 @@ async fetchSlots(): Promise<void> {
    this.onBookEvent.emit(slot.slotName);
    this.route.navigateByUrl('adminsidenav/vehiclelogs')
   }
+  onReserve(slot: ParkingSlot){
+  this.onReserveEvent.emit(slot.slotName);
+  console.log('Reserving slot:', this.hoveredSlot?.slotName);
+  this.route.navigate(['/usersidenav/userreservation/reserveform', this.hoveredSlot?.slotName]);
+ }
 }
  
  

@@ -141,6 +141,11 @@
     /* background-color: #171818; */
     transition: 0.5s;
 }
+
+.slot-info .occupied button{
+    display: none;
+}
+
 .btn1{
     background-color: #007bff;
     color: white;
