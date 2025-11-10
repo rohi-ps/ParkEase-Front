@@ -112,6 +112,17 @@ export class Billing implements OnInit {
   public isAdmin(): boolean {
     return this.currentRole === 'admin';
   }
+
+  public formatCurrency(amount: number): string {
+    // This calls the 'formatCurrency' function you imported
+    return formatCurrency(amount);
+  }
+
+  // FIX: Expose the formatDuration utility function to the template
+  public formatDuration(checkInTime: Date, checkOutTime: Date): string {
+    // This calls the 'formatDuration' function you imported
+    return formatDuration(checkInTime, checkOutTime);
+  }
  
   public openPaymentModal(invoice: Invoice): void {
     this.selectedInvoice = invoice;
