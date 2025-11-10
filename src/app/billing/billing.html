@@ -21,7 +21,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ totalRevenue | currency:'INR':'symbol':'1.2-2' }}
+                {{ formatCurrency(totalRevenue) }}
               </h2>
             </div>
           </div>
@@ -36,7 +36,7 @@
             </div>
             <div>
               <h2 class="card-title">
-                {{ pendingPayments | currency:'INR':'symbol':'1.2-2' }}
+                {{ formatCurrency(pendingPayments) }}
               </h2>
             </div>
           </div>
@@ -117,7 +117,7 @@
             <button
               *ngIf="invoice.status === 'pending'"
               class="btn btn-sm btn-primary"
-              (click)="payInvoice(invoice._id)"
+              (click)="openPaymentModal(invoice)"
             >
               Pay Now
             </button>
@@ -128,5 +128,47 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <!-- Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel">Process Payment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <h6>Amount to Pay:</h6>
+            <p class="h4 text-primary">{{ calculateInvoiceAmount(selectedInvoice) | currency:'INR':'symbol':'1.2-2' }}</p>
+          </div>
+          <div class="mb-3">
+            <h6>Select Payment Method:</h6>
+            <div class="list-group">
+              <button
+                *ngFor="let method of paymentMethods"
+                type="button"
+                class="list-group-item list-group-item-action"
+                [class.active]="selectedPaymentMethod === method.name"
+                (click)="selectPaymentMethod(method.name)"
+              >
+                {{ method.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            [disabled]="!selectedPaymentMethod"
+            (click)="confirmPayment()"
+          >
+            Confirm Payment
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
