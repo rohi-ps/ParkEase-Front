@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './reservation.css'
 })
 export class Reservation implements OnInit {
-
+ 
   customers: any[] = []
   selectedStatus = 'All Status';
   constructor(private cs: CustomerService,private router: Router) {
@@ -22,7 +22,6 @@ export class Reservation implements OnInit {
   ngOnInit(): void {
   this.loadCustomers();
 }
-
   searchTerm: string = '';
   filteredCustomers(): any[] {
   return this.customers.filter(customer => {

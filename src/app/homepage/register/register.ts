@@ -92,11 +92,8 @@ export class Register {
   confirmPassword: "",
   phone: ""
 };
-
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  closeModal() {
+constructor(private authService: AuthService, private router: Router) {}
+closeModal() {
     const modalElement = document.getElementById('registerModal');
     if (modalElement) {
       const modal = bootstrap.Modal.getInstance(modalElement);
@@ -124,35 +121,35 @@ export class Register {
       alert('Password and Confirm Password do not match.');
       return;
     }
-
-    // Create payload without confirmPassword
- const payload = {
-  email: this.user.email,
-  firstName: this.user.firstName,
-  lastName: this.user.lastName,
-  password: this.user.password,
-  confirmPassword: this.user.confirmPassword,
-  phone: this.user.phone
+ const payload = {email: this.user.email,firstName: this.user.firstName,lastName: this.user.lastName,password: this.user.password,confirmPassword: this.user.confirmPassword,phone: this.user.phone
 };
 
-console.log('Register payload:', payload);
+// console.log('Register payload:', payload);
 
    this.authService.registerUser(payload).subscribe({
   next: (res) => {
-    if (res.success) {
-      this.router.navigate(['/login']).then(() => {
-        form.resetForm();
-      });
-    } else {
-      alert(res.message || 'Registration failed.');
-    }
-  },
-  error: (err) => {
-    console.error('Unexpected error:', err);
-    alert('Something went wrong. Please try again.');
+  if (res.message === 'User registered successfully') {
+    form.resetForm();
+    this.router.navigate(['/login']);
+  } else {
+    alert(res.message || 'Registration failed.');
   }
-});
+},
+ error: (err) => {
+  console.error('Unexpected error:', err);
+  const validationErrors = err?.error?.errors;
+  if (Array.isArray(validationErrors)) {
+    const messages = validationErrors.map(e => e.msg).join('\n');
+    alert(messages);
+  } else {
+    const fallback = err?.error?.message || 'Registration failed.';
+    alert(fallback);
+  }
+}
+
+})
+};
 
 
 }
-  }}
+}

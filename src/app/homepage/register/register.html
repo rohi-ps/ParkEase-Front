@@ -15,15 +15,15 @@
                         <div *ngIf="fname.touched && fname.invalid" class="text-danger">Email is required</div>
                     </div>
                     <div class="form-group">
-                        <label for="name"><strong>FirstName</strong></label>
+                        <label for="fname"><strong>FirstName</strong><span class="asterisk">*</span></label>
                         <br>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter username" required="" [(ngModel)]="user.firstName" #fname="ngModel">
+                        <input type="text" class="form-control" id="fname" name="name" placeholder="Enter username" required="" [(ngModel)]="user.firstName" #fname="ngModel">
                         <div *ngIf="fname.touched && fname.invalid" class="text-danger">FirstName is required</div>
                     </div>
                     <div class="form-group">
-                        <label for="name"><strong>LastName</strong></label>
+                        <label for="lname"><strong>LastName</strong><span class="asterisk">*</span></label>
                         <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter username" required="" [(ngModel)]="user.lastName" #lname="ngModel">
+                        <input type="text" id="lname" name="name" class="form-control" placeholder="Enter username" required="" [(ngModel)]="user.lastName" #lname="ngModel">
                          <div *ngIf="lname.touched && lname.invalid" class="text-danger">LastName is required</div>
                     </div>
                     <div class="form-group">

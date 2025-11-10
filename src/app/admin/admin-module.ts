@@ -6,14 +6,13 @@ import { ParkingSlots } from '../parking-slots/parking-slots';
 import { VehicleLogs } from '../vehicle-logs/vehicle-logs';
 import { AdminReservations } from '../admin-reservations/admin-reservations';
 import { Billing } from '../billing/billing';
-import { RateManagement } from '../rate-management/rate-management';
-import { AuthGuard } from '../route-guards';
+import { authGuard,roleGuard } from '../Services/authGuards';
 
 const routes: Routes = [
   {
     path: '',
     component: SidenavAdmin,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard, roleGuard('admin')],
     children: [
       { path: '', component: DashboardComponent },
       { path: 'admindashboard', component: DashboardComponent },
