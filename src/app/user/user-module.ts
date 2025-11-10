@@ -7,7 +7,6 @@ import { Reservation } from '../reservation/reservation';
 import { Billing } from '../billing/billing';
 import { authGuard, roleGuard } from '../Services/authGuards';
 import { SlotReservationForm } from '../reservation/slot-reservation-form/slot-reservation-form';
-
 const routes: Routes = [
   {
     path: '',

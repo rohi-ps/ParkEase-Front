@@ -8,7 +8,6 @@ import { AdminReservations } from '../admin-reservations/admin-reservations';
 import { Billing } from '../billing/billing';
 import { authGuard,roleGuard } from '../Services/authGuards';
 import { RateManagement } from '../rate-management/rate-management';
-
 const routes: Routes = [
   {
     path: '',
