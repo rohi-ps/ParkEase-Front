@@ -3,6 +3,7 @@ import { Customer } from '../model/customers';
 import { HttpClient } from '@angular/common/http';  
 import { Observable } from 'rxjs';
 import { ParkingSlotsUserService } from './parking-slots-user.service';
+import { Rate } from '../model/billing.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,10 +12,13 @@ export class CustomerService {
   constructor(private http: HttpClient) {}
  
   getallUsers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>('http://localhost:3000/api/reservations/allusers');
+    return this.http.get<Customer[]>('http://localhost:3000/api/reservations/getall');
   }
   getReservationsByUser(userId: string): Observable<Customer[]> {
   return this.http.get<Customer[]>(`http://localhost:3000/api/reservations/user/${userId}`);
+  }
+  getrate():Observable<Rate[]>{
+    return this.http.get<Rate[]>('http://localhost:3000/api/rates')
   }
   addtocustomer(slotId: string, vehicleNumber: string, vehicleType: string, entryDate: string, entryTime: string, exitDate: string, exitTime: string, Duration: string, Amount: string, status: string = "Upcoming"):Observable<any> {
     const durationMinutes = this.calculateDurationInMinutes(entryDate, entryTime, exitDate, exitTime);

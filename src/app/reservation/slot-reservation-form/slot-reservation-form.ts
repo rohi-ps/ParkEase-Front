@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Output,EventEmitter } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../Services/customer-service';
@@ -13,19 +13,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './slot-reservation-form.css'
 })
 export class SlotReservationForm {
+  @Output() reservationCreated = new EventEmitter<void>();
+
  public availableSlots: ParkingSlot[] = [];
   constructor(private parkingSlotsService: ParkingSlotsUserService,private customerService: CustomerService,private router:Router, private route:ActivatedRoute) {}
-
-  ngOnInit() {
+ngOnInit() {
     const slotName = this.route.snapshot.paramMap.get('slotName');
     console.log('Received slotName:', slotName);
     this.form.slotId = slotName ? slotName : '';
-    this.form.vehicleType = this.availableSlots.find(slot => slot.slotName === slotName)?.vehicleType || '';
-    this.loadData();
+    this.loadData(slotName); // pass slotName to loadData
   }
-
-  async loadData(): Promise<void> {
+ 
+  async loadData(slotName: string | null): Promise<void> {
     this.availableSlots = await this.parkingSlotsService.getAvailableSlots();
+    if (slotName) {
+      const selectedSlot = this.availableSlots.find(slot => slot.slotName === slotName);
+      if (selectedSlot) {
+        this.form.vehicleType = selectedSlot.vehicleType;
+      }
+    }
   }
 
   form = {
@@ -98,10 +104,13 @@ export class SlotReservationForm {
 
   onSubmit(fo: any): void {
     if (fo.valid) {
+      console.log("form submitted",this.form)
       this.customerService.addtocustomer(this.form.slotId,this.form.vehicleNumber,this.form.vehicleType,this.form.entryDate,this.form.entryTime,this.form.exitDate,this.form.exitTime,'','')
         .subscribe({
           next: response => {
             console.log('Slot booked successfully', response);
+            this.router.navigateByUrl('usersidenav/userreservation');
+            this.reservationCreated.emit();
           },
           error: error => {
             console.error('Error booking slot', error);
@@ -111,7 +120,7 @@ export class SlotReservationForm {
       alert('Please fill all required fields correctly.');
     }
   }
-  onReserve():void{
-  this.router.navigateByUrl('usersidenav/userreservation');
- }
+//   onReserve():void{
+//   this.router.navigateByUrl('usersidenav/userreservation');
+//  }
 }
