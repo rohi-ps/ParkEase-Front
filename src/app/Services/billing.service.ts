@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Invoice, Rate, PaymentMethod } from '../model/billing.model';
+import { Invoice, Rate, 
+  // PaymentMethod 
+
+} from '../model/billing.model';
  
 @Injectable({
   providedIn: 'root'
@@ -63,12 +66,12 @@ export class BillingService {
    * (User) Get available payment methods
    * Corresponds to: GET /api/billing/payment-methods
    */
-  getPaymentMethods(): Observable<{ status: string, data: PaymentMethod[] }> {
-    return this.http.get<{ status: string, data: PaymentMethod[] }>(`${this.baseUrl}/payment-methods`);
+  getPaymentMethods(): Observable<{ status: string, data: [] }> {
+    return this.http.get<{ status: string, data: [] }>(`${this.baseUrl}/payment-methods`);
   }
  
 
-  // --- Rate Endpoints (Admin) ---
+  // --- Rate Endpoints---
  
   /**
    * Corresponds to: GET /api/billing/rates
