@@ -90,7 +90,7 @@ export class Billing implements OnInit {
       this.billingService.getInvoiceById(userId).subscribe({
         next: (response) => {
           // If single invoice, wrap in array, otherwise use as is
-          this.invoices = response.data ? [response.data] : [];
+          this.invoices = response.data 
           this.calculateTotals(this.invoices);
         },
         error: (err) => {
