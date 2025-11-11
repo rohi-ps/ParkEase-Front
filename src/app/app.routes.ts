@@ -16,5 +16,9 @@ export const routes: Routes = [
     path: 'adminsidenav',
     loadChildren: () => import('./admin/admin-module').then(m => m.AdminRoutingModule),
     canActivate: [authGuard, roleGuard('admin')]
+  },
+  {
+    path:"**",
+    component:Homepage
   }
 ];
