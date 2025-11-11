@@ -2,65 +2,61 @@
   <div class="modifying">
     <form #modifyreserve="ngForm" (ngSubmit)="onModify(modifyreserve)">
       <div class="form-group">
+
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <input type="text" id="slotId" name="slotId" ngModel class="form-control" (ngModelChange)="onSlotChange(modifyreserve)" [(ngModel)]="form.slotId" required
-              readonly />
+            <input type="text" id="slotId" name="slotId" class="form-control" [(ngModel)]="form.slotId" required readonly />
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
-            <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber" required>
-            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
-            </div>
+            <input type="text" name="vehicleNumber" [(ngModel)]="form.vehicleNumber" class="form-control" required readonly />
           </div>
         </div>
         <div class="form-row">
-          <div class="form-col style=flex: 1;">
+          <div class="form-col">
             <label>Vehicle Type</label>
-            <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control"
-              [(ngModel)]="form.vehicleType" required readonly />
+            <input type="text" id="vehicleType" name="vehicleType" class="form-control" [(ngModel)]="form.vehicleType" ngModel required readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
-            <input #entrydate="ngModel" type="date" name="enD" [(ngModel)]="form.entryDate" required>
+            <input #entrydate="ngModel" type="date" name="entryDate" class="form-control" [(ngModel)]="form.entryDate" required>
             <div class="text-danger" *ngIf="entrydate.touched && entrydate.invalid">Entry Date required</div>
           </div>
         </div>
+
         <div class="form-row">
           <div class="form-col">
             <label>Entry Time</label>
-            <input #entrytime="ngModel" type="time" name="exD" [(ngModel)]="form.entryTime" required>
+            <input #entrytime="ngModel" type="time" name="entryTime" class="form-control" [(ngModel)]="form.entryTime" required>
             <div class="text-danger" *ngIf="entrytime.touched && entrytime.invalid">Entry Time required</div>
           </div>
           <div class="form-col">
             <label>Exit Date</label>
-            <input #exitdate="ngModel" type="date" name="enT" [(ngModel)]="form.exitDate"
-              (change)="checkDateDifference()" required>
+            <input #exitdate="ngModel" type="date" name="exitDate" class="form-control" [(ngModel)]="form.exitDate" (change)="checkDateDifference()" required>
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
         </div>
+
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
-            <input #exittime="ngModel" type="time" name="exT" [(ngModel)]="form.exitTime"
-              (change)="checkTimeDifference()" required>
+            <input #exittime="ngModel" type="time" name="exitTime" class="form-control" [(ngModel)]="form.exitTime" (change)="checkTimeDifference()" required>
             <div class="text-danger" *ngIf="exittime.touched && exittime.invalid">Exit Time required</div>
           </div>
         </div>
+
         <div class="form-row" *ngIf="additionalAmount">
           <div class="form-col text-end">
-            <label><strong>Total Amount:</strong></label>
+            <label><strong>Additional Amount to be Paid:</strong></label>
             <div class="amount-display">{{ additionalAmount }}</div>
           </div>
         </div>
+
         <div class="button3">
-          <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="modifyreserve.invalid"
-            data-bs-dismiss="modal">pay & update Reservation</button>
+          <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="modifyreserve.invalid" data-bs-dismiss="modal">Pay & Update Reservation</button>
         </div>
-
       </div>
-
     </form>
   </div>
 </div>
