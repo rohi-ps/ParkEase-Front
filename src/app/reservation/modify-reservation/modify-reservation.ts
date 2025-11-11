@@ -38,9 +38,10 @@ export class ModifyReservation {
   }
 
   ngOnChanges(): void {
+    const name :any = this.customer?.slotId
     if (this.customer) {
       this.form = {
-        slotId: this.customer.slotId,
+        slotId: name.slotName,
         vehicleType: this.customer.vehicleType,
         vehicleNumber: this.customer.vehicleNumber,
         entryDate: this.customer.entryDate,

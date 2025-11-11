@@ -45,7 +45,7 @@ export class CustomerService {
     tap(() => {
       const userId = this.authService.getCurrentUserId();
       const invoicePayload = {
-        userId: userId, // make sure you have this
+        userId: userId, 
         parkingSpotId: slotId,
         vehicleType,
         checkInTime: new Date(`${entryDate}T${entryTime}`),
@@ -63,7 +63,7 @@ export class CustomerService {
     updated.Duration = this.formatDurationFromMinutes(durationMinutes);
     updated.Amount = this.calculateAmount(updated.vehicleType, durationMinutes);
  
-    return this.http.put<any>(`http://localhost:3000/api/reservations/update/${updated.id}`, updated);
+    return this.http.put<any>(`http://localhost:3000/api/reservations/update/${updated.slotId}`, updated);
   }
   calculateDurationInMinutes(entryDate: string, entryTime: string, exitDate: string, exitTime: string): number {
     const entry = new Date(entryDate + 'T' + entryTime);
@@ -107,5 +107,6 @@ export class CustomerService {
   cancelReservation(slotId: string): Observable<any> {
   return this.http.delete(`http://localhost:3000/api/reservations/delete/${slotId}`);
 }
+
 
 }
