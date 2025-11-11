@@ -8,6 +8,7 @@ import { AdminReservations } from '../admin-reservations/admin-reservations';
 import { Billing } from '../billing/billing';
 import { authGuard,roleGuard } from '../Services/authGuards';
 import { RateManagement } from '../rate-management/rate-management';
+import { SlotReservationForm } from '../admin-reservations/slot-reservation-form/slot-reservation-form';
 const routes: Routes = [
   {
     path: '',
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'admindashboard', component: DashboardComponent },
       { path: 'adminparking', component: ParkingSlots },
       { path: 'adminreservation', component: AdminReservations },
+      {path:'adminreservation/reserveform',component:SlotReservationForm},
       { path: 'vehiclelogs', component: VehicleLogs },
       { path: 'billing', component: Billing },
       { path: 'rates', component: RateManagement }
