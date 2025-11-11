@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { Parkingservice } from '../Services/parkingservice'; // Adjust path
-import { ParkingSlot } from '../model/parkingSlot';
+// import { ParkingSlot } from '../model/parkingSlot';
+import { ParkingSlot } from '../model/parking-slots-module';
 import { UserSearchResult } from '../model/user-search';
 import { vehicleLog } from '../model/vehicleLog';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, from } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
- 
+import { ParkingSlotsUserService } from '../Services/parking-slots-user.service';
 // --- REMOVED: import { Modal } from 'bootstrap'; ---
  
 @Component({
@@ -47,7 +48,8 @@ export class VehicleLogs implements OnInit, OnDestroy {
  
   constructor(
     private fb: FormBuilder,
-    public parkingService: Parkingservice
+    public parkingService: Parkingservice,
+    public parkingSlotService:ParkingSlotsUserService
   ) {
     this.parkingRecords$ = this.parkingService.parkingRecords$;
  
@@ -111,13 +113,20 @@ export class VehicleLogs implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
  
-  loadAvailableSlots(): void {
-    const slotSub = this.parkingService.getAvailableSlots().subscribe(slots => {
+ loadAvailableSlots(): void {
+  const slotObservable = from(this.parkingSlotService.getAvailableSlots());
+
+  const slotSub = slotObservable.subscribe({
+    next: (slots) => {
       this.availableSlots = slots;
-    });
-    this.subscriptions.add(slotSub);
-  }
- 
+    },
+    error: (err) => {
+      console.error('Failed to load available slots:', err);
+    }
+  });
+
+  this.subscriptions.add(slotSub);
+}
   onFetchUser(): void {
     const phoneControl = this.entryForm.get('phoneSearchInput');
     if (phoneControl?.invalid) {
