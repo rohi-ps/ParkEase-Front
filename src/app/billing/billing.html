@@ -69,9 +69,8 @@
           <th>Vehicle</th>
           <th>Duration</th>
           <th>Total</th>
-          <th>Status</th>
-         
-          <th *ngIf="!isAdmin()">Action</th>
+          <th>Status</th> 
+          <th >Action</th>
         </tr>
       </thead>
       <tbody>
@@ -113,7 +112,7 @@
               </small>
             </span>
           </td>
-          <td *ngIf="!isAdmin()">
+          <td>
             <button
               *ngIf="invoice.status === 'pending'"
               class="btn btn-sm btn-primary"
