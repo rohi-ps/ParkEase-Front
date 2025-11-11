@@ -5,17 +5,13 @@
         <div class="form-row">
           <div class="form-col">
             <label>Slot Id</label>
-            <!-- <input type="text" class="form-control" [(ngModel)]="form.slotId" name="slotId" readonly /> -->
-            <select id="slotId" name="slotId" ngModel class="form-control" required (ngModelChange)="onSlotChange(slotreserve)" [(ngModel)]="form.slotId">
-              <option value="" disabled>Select a slot</option>
-              <option *ngFor="let slot of availableSlots" [value]="slot.slotName">{{ slot.slotName }}</option>
-            </select>
+            <input type="text" id="slotId" class="form-control" [(ngModel)]="form.slotId" name="slotId" readonly />
           </div>
           <div class="form-col">
             <label>Vehicle Number</label>
             <input #vehiclenumber="ngModel" type="text" name="vN" [(ngModel)]="form.vehicleNumber"
               placeholder="eg: TN12GH3456" required>
-            <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
+             <div class="text-danger" *ngIf="vehiclenumber.touched && vehiclenumber.invalid">Vehicle Number required
             </div>
             <div class="text-danger" *ngIf="vehiclenumber.errors?.['pattern']">Vehicle Number Format must be TN12GH3456
             </div>
@@ -24,7 +20,7 @@
         <div class="form-row">
           <div class="form-col style=flex: 1;">
             <label>Vehicle Type</label>
-            <input type="text" id="vehicleType" name="vehicleType" ngModel class="form-control" required readonly />
+            <input type="text" id="vehicleType" name="vehicleType" [(ngModel)]="form.vehicleType" class="form-control"  readonly />
           </div>
           <div class="form-col">
             <label>Entry Date</label>
@@ -45,7 +41,7 @@
             <div class="text-danger" *ngIf="exitdate.touched && exitdate.invalid">Exit Date required</div>
           </div>
         </div>
-
+ 
         <div class="form-row">
           <div class="form-col">
             <label>Exit Time</label>
@@ -62,7 +58,7 @@
         </div>
         <div class="button1">
           <button class="btn btn-primary text-center d-grid gap-2" type="submit" [disabled]="slotreserve.invalid"
-           (click)="onReserve()" >Pay & Reserve</button>
+            >Pay & Reserve</button>
         </div>
       </div>
     </form>
