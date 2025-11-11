@@ -105,23 +105,7 @@ export class SlotReservationForm {
             console.log('Slot booked successfully', response);
 
             //  Generate invoice immediately after booking
-            const invoicePayload = {
-              userId: userId,
-              parkingSpotId: this.form.slotId,
-              vehicleType: this.form.vehicleType,
-              checkInTime: new Date(`${this.form.entryDate}T${this.form.entryTime}`),
-              checkOutTime: new Date(`${this.form.exitDate}T${this.form.exitTime}`)
-            };
-            this.billingService.generateInvoice(invoicePayload).subscribe({
-              next: invoiceRes => {
-                console.log('Invoice generated:', invoiceRes);
-                this.router.navigateByUrl('usersidenav/userreservation');
-              },
-              error: invoiceErr => {
-                console.error('Invoice generation failed:', invoiceErr);
-                this.router.navigateByUrl('usersidenav/userreservation'); // Still navigate even if invoice fails
-              }
-            });
+            this.router.navigateByUrl('usersidenav/userreservation');
           },
           error: error => {
             console.error('Error booking slot', error);
