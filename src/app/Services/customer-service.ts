@@ -90,18 +90,14 @@ export class CustomerService {
   }
 
     const totalHours = durationMinutes / 60;
-    const fullHours = Math.floor(totalHours);
-    const remainingMinutes = durationMinutes % 60;
+let total = rate.baseRate;
 
-    let total = rate.baseRate;
+if (totalHours > 1) {
+  const extraHours = Math.ceil(totalHours - 1); // Round up partial hours
+  total += extraHours * rate.additionalHourRate;
+}
 
-    if (fullHours > 1 || (fullHours === 1 && remainingMinutes > 0)) {
-      const extraHours = totalHours - 1;
-      total += extraHours * rate.additionalHourRate;
-    }
-    const finalAmount = total 
-
-    return `₹${finalAmount.toFixed(2)}`;
+return `₹${total.toFixed(2)}`;
   }
 
   cancelReservation(slotId: string): Observable<any> {
