@@ -42,7 +42,11 @@ export class DashboardComponent implements OnInit {
     this.availableSlots = await this.parkingSlotsUserService.getAvailSlots();
     this.occupiedSlots = await this.parkingSlotsUserService.getOccupiedSlots();
     this.totalSlots = this.availableSlots + this.occupiedSlots;
-    this.onLoadData();
+    await this.onLoadData();
+  }
+
+
+  updateStats(): void {
     this.stats = [
       {
         title: 'Total Parking Slots',
@@ -64,7 +68,6 @@ export class DashboardComponent implements OnInit {
       },
       {
         title: 'Today\'s Revenue',
-        // Value is kept as a string to match the '$1,240' format
         value: this.totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'INR' }),
         iconClass: 'fas fa-dollar-sign', 
         iconColor: '#007bff', 
@@ -72,7 +75,7 @@ export class DashboardComponent implements OnInit {
       },
       {
         title: 'Total Users',
-        value: this.totalInvoices,
+        value: this.totalInvoices, // Assuming you meant a different property here? Both are totalInvoices
         iconClass: 'fas fa-users', 
         iconColor: '#6f42c1' 
       },
@@ -85,8 +88,7 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-
-  onLoadData(): void {
+  async onLoadData(): Promise<void> {
     // Logic to load or refresh data can be added here
     // {this.totalRevenue, this.pendingPayments, this.totalInvoices} = calculateBillingTotals();
 
@@ -99,11 +101,13 @@ export class DashboardComponent implements OnInit {
         next: (response) => {
           this.invoices = response.data;
           this.calculateTotals(this.invoices);
+          this.updateStats();
         },
         error: (err) => {
           console.error('Error fetching invoices:', err);
           this.invoices = [];
           this.calculateTotals([]);
+          this.updateStats();
         }
       });
     } else {
@@ -113,6 +117,7 @@ export class DashboardComponent implements OnInit {
         console.error('No user ID found in token');
         this.invoices = [];
         this.calculateTotals([]);
+        this.updateStats();
         return;
       }
 
@@ -122,14 +127,19 @@ export class DashboardComponent implements OnInit {
           // If single invoice, wrap in array, otherwise use as is
           this.invoices = response.data ? [response.data] : [];
           this.calculateTotals(this.invoices);
+          this.updateStats();
         },
         error: (err) => {
           console.error('Error fetching user invoice:', err);
           this.invoices = [];
           this.calculateTotals([]);
+          this.updateStats();
         }
       });
+      
     }
+
+    // this.updateStats();
 
   }
 
