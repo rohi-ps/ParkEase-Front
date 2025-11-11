@@ -31,9 +31,8 @@ export class BillingService {
    * (User/Admin) Get a specific invoice by its ID
    * Corresponds to: GET /api/billing/invoices/:id
    */
-  getInvoiceById(id: string): Observable<{ status: string, data: Invoice }> {
-    console.log('Fetching invoice by ID from', `${this.baseUrl}/invoices/${id}`);
-    return this.http.get<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices/${id}`);
+  getInvoiceById(id: string): Observable<{ status: string, data: Invoice[] }> {
+    return this.http.get<{ status: string, data: Invoice[] }>(`${this.baseUrl}/invoices/${id}`);
   }
  
   /**
