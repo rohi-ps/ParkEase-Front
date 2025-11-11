@@ -5,6 +5,8 @@ import { SlotReservationForm } from './slot-reservation-form/slot-reservation-fo
 import { CustomerService } from '../Services/customer-service';
 import { ModifyReservationForm } from './modify-reservation-form/modify-reservation-form';
 import { Customer } from '../model/customers';
+import { Router } from '@angular/router';
+import { AuthService } from '../Services/auth.service'; 
 @Component({
   selector: 'app-admin-reservations',
   imports: [FormsModule,CommonModule,ModifyReservationForm,SlotReservationForm],
@@ -14,7 +16,7 @@ import { Customer } from '../model/customers';
 export class AdminReservations {
   customers: any[] = []
   selectedStatus = 'All Status';
-  constructor(private cs: CustomerService) {
+  constructor(private cs: CustomerService,private router: Router, private authService: AuthService) {
   }
   ngOnInit(): void {
   this.loadCustomers();
@@ -33,6 +35,7 @@ loadCustomers(): void {
     error: (err) => console.error('Failed to load customers', err)
   });
 }
+
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {
       case 'upcoming':
@@ -61,13 +64,22 @@ loadCustomers(): void {
         return '';
     }
   }
- deletecustomer(id: number): void {
-  this.cs.cancelReservation(id).subscribe({
+//  deletecustomer(id: number): void {
+//   this.cs.cancelReservation(id).subscribe({
+//     next: () => {
+//       const customerToUpdate = this.customers.find(user => user.id === id);
+//       if (customerToUpdate) {
+//         customerToUpdate.status = 'Cancelled';
+//       }
+//     },
+//     error: (err) => console.error('Failed to cancel reservation', err)
+//   });
+// }
+deletecustomer(customer: Customer): void {
+  this.cs.cancelReservation(customer.slotId).subscribe({
     next: () => {
-      const customerToUpdate = this.customers.find(user => user.id === id);
-      if (customerToUpdate) {
-        customerToUpdate.status = 'Cancelled';
-      }
+      console.log('Reservation cancelled successfully');
+      customer.status = 'Cancelled'; // update UI immediately
     },
     error: (err) => console.error('Failed to cancel reservation', err)
   });
@@ -76,5 +88,8 @@ loadCustomers(): void {
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
     this.selectedCustomer = { ...customer };
+  }
+  goToForm(): void {
+  this.router.navigate(['/usersidenav/userreservation/reserveform']);
   }
 }

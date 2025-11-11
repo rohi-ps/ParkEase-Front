@@ -1,5 +1,5 @@
 export interface Customer {
-  id: number;
+  id?: number;
   slotId: string;
   vehicleNumber: string;
   vehicleType: string;
@@ -11,4 +11,5 @@ export interface Customer {
   Amount:string;
   status : string;
   userId:string;
+  _id?: string;
 }
