@@ -10,4 +10,5 @@ export interface Customer {
   Duration:string;
   Amount:string;
   status : string;
+  userId:string;
 }

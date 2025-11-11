@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { Router } from '@angular/router';
 interface AuthResponse {
   token: string;
   role: string;
@@ -11,7 +11,7 @@ interface AuthResponse {
 export class AuthService {
   private tokenKey = 'authToken';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router:Router) {}
 
   authenticateUser(email: string, password: string): Observable<AuthResponse> {
     console.log('Sending login payload:', { email, password });
@@ -41,7 +41,10 @@ export class AuthService {
 
   clearToken(): void {
     sessionStorage.removeItem(this.tokenKey);
+    this.router.navigate(['/login']);
   }
+  
+
 
 decodeToken(): any {
   const token = this.getToken();
@@ -57,9 +60,16 @@ decodeToken(): any {
   }
 }
 
-  logout(): void {
-    this.clearToken();
-  }
+ logout(): void {
+  const token = this.getToken(); // from localStorage or service
+  this.http.post<{ message: string }>('http://localhost:3000/api/logout', {}, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).subscribe({
+    next: () => this.clearToken(),
+    error: err => console.error('Logout failed:', err)
+  });
+}
+
 
   getCurrentUserRole(): string {
     const decoded = this.decodeToken();
