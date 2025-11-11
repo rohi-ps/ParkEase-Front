@@ -31,24 +31,6 @@ export class Reservation implements OnInit {
     return matchesStatus && matchesSearch;
   });
 }
-// loadCustomers(): void {
-//   const userId = this.authService.getCurrentUserId();
-//   this.cs.getallUsers().subscribe({
-//     next: (data) => this.customers = data,
-//     error: (err) => console.error('Failed to load customers', err)
-//   });
-// }
-// loadCustomers(): void {
-//   const userId = this.authService.getCurrentUserId();
-//   this.cs.getallUsers().pipe(
-//    map(users => users.find(user => user.userId === userId))  // filter in frontend
-//  ).subscribe({
-//    next: (user) => {
-//      console.log('Filtered user:', user);
-//      this.customers = user;  // store in a variable if needed
-//    },
-//    error: (err) => console.error('Failed to load user', err)
-//  });
 loadCustomers(): void {
   const userId = this.authService.getCurrentUserId();
   if (userId) {
@@ -86,17 +68,7 @@ loadCustomers(): void {
         return '';
     }
   }
-//  deletecustomer(id: number): void {
-//   this.cs.cancelReservation(id).subscribe({
-//     next: () => {
-//       const customerToUpdate = this.customers.find(user => user.id === id);
-//       if (customerToUpdate) {
-//         customerToUpdate.status = 'Cancelled';
-//       }
-//     },
-//     error: (err) => console.error('Failed to cancel reservation', err)
-//   });
-// }
+
 deletecustomer(slotId: string): void {
   this.cs.cancelReservation(slotId).subscribe({
     next: () => {
@@ -109,7 +81,7 @@ deletecustomer(slotId: string): void {
     error: (err) => console.error('Failed to cancel reservation', err)
   });
 }
- 
+
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
     this.selectedCustomer = { ...customer };
