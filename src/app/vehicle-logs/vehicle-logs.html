@@ -121,8 +121,14 @@
             </ul>
 
             <!-- Search Status Messages -->
-            <div *ngIf="userSearchError" class="form-text text-danger mt-2">
-              <i class="bi bi-exclamation-circle"></i> {{ userSearchError }}
+            <div
+              *ngIf="
+                userSearchError &&
+                entryForm.get('userId')?.value === entryForm.get('phoneSearchInput')?.value
+              "
+              class="form-text text-danger mt-2"
+            >
+              <i class="bi bi-exclamation-circle"></i> Using phone number as User ID.
             </div>
             <div *ngIf="userSearchSuccess" class="form-text text-success mt-2">
               <i class="bi bi-check-circle-fill"></i> {{ userSearchSuccess }}
@@ -132,7 +138,7 @@
           <hr classs="my-4" />
 
           <!-- Section 2: Log Details -->
-           <!-- UserID -->
+          <!-- UserID -->
           <div class="mb-3">
             <label for="userIdDisplay" class="form-label">User ID</label>
             <input
@@ -142,7 +148,9 @@
               formControlName="userId"
               readonly
             />
-            <div class="form-text">Auto-filled after user is fetched. Leave blank for walk-in.</div>
+            <div class="form-text">
+              Auto-filled after user is fetched. If no user is found, phone number will be used.
+            </div>
           </div>
           <div class="row">
             <!-- Vehicle Number -->
@@ -220,10 +228,7 @@
                   <ng-container *ngFor="let slot of availableSlots">
                     <!-- Dynamic Filtering Logic -->
                     <option
-                      *ngIf="
-                        entryForm.get('vehicleType')?.value === slot.vehicleType ||
-                        (entryForm.get('vehicleType')?.value === '2W' && slot.vehicleType === '4W')
-                      "
+                      *ngIf="entryForm.get('vehicleType')?.value === slot.vehicleType"
                       [value]="slot._id"
                     >
                       <!-- Display human-readable name and type -->
@@ -263,7 +268,12 @@
             This button does NOT have data-bs-dismiss.
             The component.ts file will close the modal on a successful API call.
           -->
-          <button type="submit" class="btn btn-primary" [disabled]="entryForm.invalid">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="entryForm.invalid"
+            data-bs-dismiss="modal"
+          >
             Log Vehicle
           </button>
         </div>
@@ -336,7 +346,12 @@
             This button does NOT have data-bs-dismiss.
             The component.ts file will close the modal on a successful API call.
           -->
-          <button type="submit" class="btn btn-success w-100" [disabled]="!exitForm.valid">
+          <button
+            type="submit"
+            class="btn btn-success w-100"
+            [disabled]="!exitForm.valid"
+            data-bs-dismiss="modal"
+          >
             Confirm Exit
           </button>
         </div>
@@ -353,7 +368,7 @@
 <div class="container">
   <div class="row g-4 mb-5">
     <!-- Available Slots Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
       <div class="card h-100 text-bg-warning">
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Available Slots</h6></div>
@@ -364,7 +379,7 @@
       </div>
     </div>
     <!-- Currently Parked Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
       <div class="card h-100 text-bg-primary">
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Currently Parked</h6></div>
@@ -376,7 +391,7 @@
       </div>
     </div>
     <!-- Today's Exits Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
       <div class="card h-100 text-bg-success">
         <div class="card-body d-flex justify-content-evenly align-items-center">
           <div><h6 class="card-subtitle mb-2">Today's Exits</h6></div>
@@ -384,16 +399,6 @@
           <div>
             <h4 class="card-title">{{ exitCount$ | async }}</h4>
           </div>
-        </div>
-      </div>
-    </div>
-    <!-- Reserved Slots Card (Static Example) -->
-    <div class="col-lg-3 col-md-12">
-      <div class="card h-100 text-bg-dark">
-        <div class="card-body d-flex justify-content-evenly align-items-center">
-          <div><h6 class="card-subtitle mb-2">Reserved Slots</h6></div>
-          <div><h4 class="card-title">0</h4></div>
-          <!-- Hardcoded, update as needed -->
         </div>
       </div>
     </div>
@@ -413,9 +418,21 @@
     No vehicle records found. Please log a new vehicle entry.
   </div>
 
+  <!-- For search bar -->
+  <div *ngIf="(parkingRecords$ | async)?.length !== 0">
+    <div class="input-group mb-3 vehicle-search-bar">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by vehicle number..."
+        (input)="onSearchChange($event.target.value)"
+      />
+    </div>
+  </div>
   <!-- Use *ngIf with 'as' syntax to unwrap the observable -->
-  <div *ngIf="parkingRecords$ | async as records; else loading" class="table-responsive mt-3">
-    <table class="table table-hover" *ngIf="records.length > 0">
+  <div *ngIf="filteredRecords$ | async as records; else loading" class="table-responsive mt-3">
+    <table class="table table-hover" >
       <thead class="thead-dark">
         <tr class="table-primary">
           <th>ID</th>
