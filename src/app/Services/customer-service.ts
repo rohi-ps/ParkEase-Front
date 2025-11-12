@@ -42,12 +42,14 @@ export class CustomerService {
     const userId = this.authService.getCurrentUserId();
     const newCustomer = { slotId,userId,vehicleNumber, vehicleType, entryDate, entryTime, exitDate, exitTime, Duration:duration, Amount:amount, status };
     return this.http.post<any>('http://localhost:3000/api/reservations/create', newCustomer).pipe(
-    tap(() => {
+    tap((reservationResponse) => {
+      console.log("Reservation response:", reservationResponse.data._id);
       const userId = this.authService.getCurrentUserId();
       const invoicePayload = {
         userId: userId, 
         parkingSpotId: slotId,
         vehicleType,
+        reservationId: reservationResponse.data._id,
         checkInTime: new Date(`${entryDate}T${entryTime}`),
         checkOutTime: new Date(`${exitDate}T${exitTime}`)
       };
@@ -62,8 +64,8 @@ export class CustomerService {
     const durationMinutes = this.calculateDurationInMinutes(updated.entryDate, updated.entryTime, updated.exitDate, updated.exitTime);
     updated.Duration = this.formatDurationFromMinutes(durationMinutes);
     updated.Amount = this.calculateAmount(updated.vehicleType, durationMinutes);
- 
-    return this.http.put<any>(`http://localhost:3000/api/reservations/update/${updated.slotId}`, updated);
+    console.log('Updating reservation with data:', updated);
+    return this.http.put<any>(`http://localhost:3000/api/reservations/update/${updated._id}`, updated);
   }
   calculateDurationInMinutes(entryDate: string, entryTime: string, exitDate: string, exitTime: string): number {
     const entry = new Date(entryDate + 'T' + entryTime);
@@ -100,8 +102,8 @@ if (totalHours > 1) {
 return `₹${total.toFixed(2)}`;
   }
 
-  cancelReservation(slotId: string): Observable<any> {
-  return this.http.delete(`http://localhost:3000/api/reservations/delete/${slotId}`);
+  cancelReservation(id: string): Observable<any> {
+  return this.http.delete(`http://localhost:3000/api/reservations/delete/${id}`);
 }
 
 

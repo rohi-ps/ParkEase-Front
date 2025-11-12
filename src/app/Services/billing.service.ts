@@ -44,7 +44,8 @@ export class BillingService {
     parkingSpotId: string,
     vehicleType: string,
     checkInTime: Date,
-    checkOutTime: Date
+    checkOutTime: Date,
+    reservationId?:string
   }): Observable<{ status: string, data: Invoice }> {
     console.log('Generating invoice with data:', invoiceData);
     return this.http.post<{ status: string, data: Invoice }>(`${this.baseUrl}/invoices`, invoiceData);

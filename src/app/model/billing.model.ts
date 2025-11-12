@@ -23,11 +23,12 @@ export interface Invoice {
     additionalHourRate: number;
     hours: number;
   };
-  status: 'pending' | 'paid' | 'failed';
+  status: 'pending' | 'paid' | 'failed' | 'cancelled';
   paymentMethod?: string;
   paymentDate?: Date;
   createdAt: Date;
   updatedAt: Date;
+  reservationId?: string | null;
 }
  
 export interface Rate {

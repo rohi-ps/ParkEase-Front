@@ -69,11 +69,11 @@ loadCustomers(): void {
     }
   }
 
-deletecustomer(slotId: string): void {
-  this.cs.cancelReservation(slotId).subscribe({
+deletecustomer(id: string): void {
+  this.cs.cancelReservation(id).subscribe({
     next: () => {
       console.log('Reservation cancelled successfully');
-      const customerToUpdate = this.customers.find(c => c.slotId === slotId);
+      const customerToUpdate = this.customers.find(c => c._id === id);
       if (customerToUpdate) {
         customerToUpdate.status = 'Cancelled';
       }

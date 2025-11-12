@@ -65,7 +65,7 @@
     </button>
   </td>
   <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
-    <button class="btn btn-icon text-danger" (click)="deletecustomer(customer.slotId)">
+    <button class="btn btn-icon text-danger" (click)="deletecustomer(customer._id)">
       <i class="fas fa-trash-alt"></i>
     </button>
   </td>
