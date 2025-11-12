@@ -31,7 +31,9 @@ export class AdminReservations {
 }
 loadCustomers(): void {
   this.cs.getallUsers().subscribe({
-    next: (data) => this.customers = data,
+    next: (data) => {
+      console.log('Fetched customers:', data);
+      this.customers = data},
     error: (err) => console.error('Failed to load customers', err)
   });
 }
@@ -75,11 +77,14 @@ loadCustomers(): void {
 //     error: (err) => console.error('Failed to cancel reservation', err)
 //   });
 // }
-deletecustomer(customer: Customer): void {
-  this.cs.cancelReservation(customer.slotId).subscribe({
+deletecustomer(id: string): void {
+  this.cs.cancelReservation(id).subscribe({
     next: () => {
       console.log('Reservation cancelled successfully');
-      customer.status = 'Cancelled'; // update UI immediately
+      const customerToUpdate = this.customers.find(c => c._id === id);
+      if (customerToUpdate) {
+        customerToUpdate.status = 'Cancelled';
+      }
     },
     error: (err) => console.error('Failed to cancel reservation', err)
   });

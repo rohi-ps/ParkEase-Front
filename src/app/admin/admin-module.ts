@@ -18,6 +18,7 @@ const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'admindashboard', component: DashboardComponent },
       { path: 'adminparking', component: ParkingSlots },
+      { path: 'adminreservations', component: AdminReservations },
       { path: 'vehiclelogs', component: VehicleLogs },
       { path: 'billing', component: Billing },
       { path: 'rates', component: RateManagement },

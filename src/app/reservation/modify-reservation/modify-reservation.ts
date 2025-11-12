@@ -154,24 +154,6 @@ export class ModifyReservation {
       this.customerService.updateCustomer(updatedCustomer).subscribe({
         next: response => {
           console.log('Reservation updated successfully', response);
-          if (this.customer) {
-            const invoicePayload = {
-              userId: this.customer.userId,
-              parkingSpotId: this.form.slotId,
-              vehicleType: this.form.vehicleType,
-              checkInTime: new Date(`${this.form.entryDate}T${this.form.entryTime}`),
-              checkOutTime: new Date(`${this.form.exitDate}T${this.form.exitTime}`)
-            };
-
-            this.billingService.generateInvoice(invoicePayload).subscribe({
-              next: invoiceRes => {
-                console.log('Updated invoice generated:', invoiceRes);
-              },
-              error: invoiceErr => {
-                console.error('Invoice update failed:', invoiceErr);
-              }
-            });
-          }
 
         },
         error: error => {
