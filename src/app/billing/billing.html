@@ -103,7 +103,8 @@
               [ngClass]="{
                 'bg-success-subtle text-success-emphasis': invoice.status === 'paid',
                 'bg-warning-subtle text-warning-emphasis': invoice.status === 'pending',
-                'bg-danger-subtle text-danger-emphasis': invoice.status === 'failed'
+                'bg-danger-subtle text-danger-emphasis': invoice.status === 'failed',
+                'bg-secondary-subtle text-secondary-emphasis': invoice.status === 'cancelled'
               }"
             >
               {{ invoice.status | titlecase }}
