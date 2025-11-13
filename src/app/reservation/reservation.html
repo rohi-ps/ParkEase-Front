@@ -4,7 +4,6 @@
       <h1><i class="fas fa-calendar-check"></i> My Reservations</h1>
       <p>Manage your parking reservations and bookings</p>
     </div>
-    <button class="btn btn-primary" (click)="goToForm()">+ New Reservation</button>
   </header>
  
 <div class="reservation">
@@ -39,7 +38,7 @@
         <th>Amount</th>
         <th>Status</th>
         <th>Actions</th>
-        <th></th>
+        <!-- <th></th> -->
       </tr>
     </thead>
     <tbody class="text-center">
@@ -59,13 +58,13 @@
       <span>{{ customer.status }}</span>
     </span>
   </td>
-  <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
-    <button class="btn btn-icon text-primary" data-bs-target="#" data-bs-toggle="modal" (click)="onEdit(customer)">
+  <!-- <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
+    <button class="btn btn-icon text-primary" data-bs-target="#edit" data-bs-toggle="modal" (click)="onEdit(customer)">
       <i class="fas fa-edit"></i>
     </button>
-  </td>
+  </td> -->
   <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
-    <button class="btn btn-icon text-danger" (click)="deletecustomer(customer.slotId)">
+    <button class="btn btn-icon text-danger" (click)="deletecustomer(customer._id)">
       <i class="fas fa-trash-alt"></i>
     </button>
   </td>
