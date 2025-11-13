@@ -1,8 +1,8 @@
 import { Component, OnInit , Input} from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-dashboard-stats',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard-stats.html',
   styleUrl: './dashboard-stats.css'
 })

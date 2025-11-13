@@ -107,7 +107,7 @@ data : number = 20;
       this.pendingPayments = totals.pendingPayments;
       this.totalInvoices = totals.totalInvoices;
       this.avgDuration = totals.avg;
-      console.log('Average Duration:', this.avgDuration);
+      // console.log('Average Duration:', this.avgDuration);
     }
   
     public isAdmin(): boolean {
