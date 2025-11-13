@@ -84,7 +84,7 @@ deletecustomer(id: string): void {
 
   selectedCustomer: Customer | null = null;
   onEdit(customer: Customer) {
-    this.selectedCustomer = { ...customer };
+    this.selectedCustomer = customer ;
   }
   goToForm(): void {
   this.router.navigate(['/usersidenav/userreservation/reserveform']);
