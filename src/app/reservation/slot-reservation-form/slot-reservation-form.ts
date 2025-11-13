@@ -108,6 +108,7 @@ export class SlotReservationForm {
             this.router.navigateByUrl('usersidenav/userreservation');
           },
           error: error => {
+            alert('Error booking slot: ' + error.error.message);
             console.error('Error booking slot', error);
           }
         });

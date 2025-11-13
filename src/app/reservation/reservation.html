@@ -5,79 +5,102 @@
       <p>Manage your parking reservations and bookings</p>
     </div>
   </header>
- 
-<div class="reservation">
-  <div class="down">
-    <p>Your Reservations</p>
-  </div>
-  <div class="holder">
-    <div class="input-icon">
-      <i class="fas fa-search"></i>
-      <input type="text" name="placeHold" placeholder="Search by slot Id or Vehicle Number...." [(ngModel)]="searchTerm">
+
+  <div class="reservation">
+    <div class="down">
+      <p>Your Reservations</p>
     </div>
-    <div class="status-container">
-      <select id="state" [(ngModel)]="selectedStatus" >
-        <option>All Status</option>
-        <option>Upcoming</option>
-        <option>Active</option>
-        <option>Completed</option>
-        <option>Cancelled</option>
-      </select>
+
+    <div class="holder">
+      <!-- Search Input -->
+      <div class="input-icon">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          name="placeHold"
+          placeholder="Search by slot Id or Vehicle Number...."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+
+      <!-- Status Dropdown -->
+      <div class="status-container">
+        <select id="state" [(ngModel)]="selectedStatus">
+          <option>All Status</option>
+          <option>Upcoming</option>
+          <option>Active</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
     </div>
-    <table class="table" >
-    <thead>
-      <tr>
-        <th>Slot Id</th>
-        <th>Vehicle Number</th>
-        <th>Vehicle Type</th>
-        <th>Entry Date</th>
-        <th>Entry Time</th>
-        <th>Exit Date</th>
-        <th>Exit Time</th>
-        <th>Duration</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Actions</th>
-        <!-- <th></th> -->
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr *ngFor="let customer of filteredCustomers()">
-  <td>{{ customer.slotId?.slotName || customer.slotId }}</td>
-  <td>{{ customer.vehicleNumber }}</td>
-  <td>{{ customer.vehicleType }}</td>
-  <td>{{ customer.entryDate | date: 'mediumDate' }}</td>
-  <td>{{ customer.entryTime }}</td>
-  <td>{{ customer.exitDate | date: 'mediumDate' }}</td>
-  <td>{{ customer.exitTime }}</td>
-  <td>{{ customer.Duration }}</td>
-  <td>{{ customer.Amount }}</td>
-  <td>
-    <span [ngClass]="getStatusClass(customer.status)" class="status-box d-inline-flex align-items-center gap-2">
-      <i [ngClass]="getStatusIcon(customer.status)" class="me-1"></i>
-      <span>{{ customer.status }}</span>
-    </span>
-  </td>
-  <!-- <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
-    <button class="btn btn-icon text-primary" data-bs-target="#edit" data-bs-toggle="modal" (click)="onEdit(customer)">
-      <i class="fas fa-edit"></i>
-    </button>
-  </td> -->
-  <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
-    <button class="btn btn-icon text-danger" (click)="deletecustomer(customer._id)">
-      <i class="fas fa-trash-alt"></i>
-    </button>
-  </td>
-</tr>
-    </tbody>
-  </table>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Slot Id</th>
+            <th>Vehicle Number</th>
+            <th>Vehicle Type</th>
+            <th>Entry Date</th>
+            <th>Entry Time</th>
+            <th>Exit Date</th>
+            <th>Exit Time</th>
+            <th>Duration</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let customer of filteredCustomers()">
+            <td>{{ customer.slotId?.slotName || customer.slotId }}</td>
+            <td>{{ customer.vehicleNumber }}</td>
+            <td>{{ customer.vehicleType }}</td>
+            <td>{{ customer.entryDate | date: 'mediumDate' }}</td>
+            <td>{{ customer.entryTime }}</td>
+            <td>{{ customer.exitDate | date: 'mediumDate' }}</td>
+            <td>{{ customer.exitTime }}</td>
+            <td>{{ customer.Duration }}</td>
+            <td>{{ customer.Amount }}</td>
+            <td>
+              <span
+                [ngClass]="getStatusClass(customer.status)"
+                class="status-box d-inline-flex align-items-center gap-2"
+              >
+                <i [ngClass]="getStatusIcon(customer.status)" class="me-1"></i>
+                <span>{{ customer.status }}</span>
+              </span>
+            </td>
+            <!-- <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
+              <button
+                class="btn btn-icon text-primary"
+                data-bs-target="#edit"
+                data-bs-toggle="modal"
+                (click)="onEdit(customer)"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td> -->
+            <td *ngIf="customer.status === 'Active' || customer.status === 'Upcoming'">
+              <button class="btn btn-icon text-danger" (click)="deletecustomer(customer._id)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="modal fade" id="edit" >
+
+  <!-- Modal -->
+  <div class="modal fade" id="edit">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Update Reservation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <app-modify-reservation [customer]="selectedCustomer"></app-modify-reservation>
@@ -85,4 +108,6 @@
       </div>
     </div>
   </div>
+
   <router-outlet></router-outlet>
+</div>
